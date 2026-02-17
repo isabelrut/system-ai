@@ -29,19 +29,24 @@
 
         <div class="form-group">
             <label for="activity">2. What does your organization do?</label>
-            <input id="activity" type="text" placeholder="Small manufacturer of ~20 people">
+            <input id="activity" type="text" placeholder="Small wooden toys manufacturer of ~20 people">
         </div>
 
         <div class="form-group">
             <label for="maturity">3. What is your digital maturity?</label>
-            <input id="maturity" type="text" placeholder="Only use spreadsheets">
+            <input id="maturity" type="text" placeholder="We store the basic product information in Excel sheets">
         </div>
 
         <div class="form-group">
             <label for="technical">4. How technical is your background?</label>
-            <input id="technical" type="text" placeholder="Little technical background">
+            <input id="technical" type="text" placeholder="Common ICT knowledge">
         </div>
 
+        <div class="form-group">
+            <label for="implementation">5. What level of DPP implementation do you aim to achieve in your organization? <br> (with 1: Entity level compliance, 2: Ecosystem level compliance, 3: Value adding, 4: Competitive advantage)</label>
+            <input id="implementation" type="number" min="1" max="4" placeholder="2">
+        </div>
+        
         <button class="main-button" onclick="submitForm()">
             DISCOVER YOUR ACTION PLAN<br>TO IMPLEMENT THE DPP
         </button>
@@ -78,9 +83,10 @@ async function submitForm() {
     const activity = document.getElementById("activity").value.trim();
     const maturity = document.getElementById("maturity").value.trim();
     const technical = document.getElementById("technical").value.trim();
+    const implementation = document.getElementById("implementation").value.trim();
 
     // Basic validation (optional)
-    if (!sector || !activity || !maturity || !technical) {
+    if (!sector || !activity || !maturity || !technical|| !implementation) {
         alert("Please fill out all fields.");
         return;
     }
@@ -91,6 +97,7 @@ async function submitForm() {
 2. Organization: ${activity}
 3. Digital maturity: ${maturity}
 4. Level of technical background: ${technical}
+5. Aim of implementation level (with 1: Entity level compliance, 2: Ecosystem level compliance, 3: Value adding, 4: Competitive advantage):  ${implementation}
 `;
 
     // Show a loading indicator
@@ -276,6 +283,7 @@ function showCopyButtonIfNeeded() {
 </body>
 
 </html>
+
 
 
 
