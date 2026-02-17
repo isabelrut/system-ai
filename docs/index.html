@@ -107,7 +107,7 @@ async function submitForm() {
         } else {
             outputDiv.innerHTML = formatOutput(data.output);
             showCopyButtonIfNeeded();
-            showFormsIfNeeded();
+            // showFormsIfNeeded();
         }
     } catch (err) {
         outputDiv.innerHTML = "Request failed: " + escapeHTML(err.message);
@@ -230,17 +230,17 @@ function showCopyButtonIfNeeded() {
     }
 }
 
-// Show the MS Forms only when there is content
-function showFormsIfNeeded() {
-    const outputDiv = document.getElementById("llm-output");
-    const msForms = document.getElementById("msforms");
+// // Show the MS Forms only when there is content
+// function showFormsIfNeeded() {
+//     const outputDiv = document.getElementById("llm-output");
+//     const msForms = document.getElementById("msforms");
 
-    if (outputDiv.textContent.trim() !== "") {
-        msForms.style.display = "inline-block";
-    } else {
-        msForms.style.display = "none";
-    }
-}
+//     if (outputDiv.textContent.trim() !== "") {
+//         msForms.style.display = "inline-block";
+//     } else {
+//         msForms.style.display = "none";
+//     }
+// }
 
 
 </script>
@@ -250,5 +250,6 @@ function showFormsIfNeeded() {
 </body>
 
 </html>
+
 
 
