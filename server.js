@@ -32,9 +32,9 @@ app.post("/generate", async (req, res) => {
     const userInput = req.body.input;
 
     const completion = await groq.chat.completions.create({
-      model: "llama-3.3-70b-versatile",
+      model: "openai/gpt-oss-120b",
       messages: [
-        { role: "system", content: "You are an expert AI assistant helping organizations implement the Digital Product Passport (DPP). Based on the user input about the organization, provide a clear customized action plan with concrete steps." },
+        { role: "system", content: "You are an expert AI assistant helping organizations implement the Digital Product Passport (DPP). Based on the user input about the organization, provide a clear customized action plan with concrete steps. Make sure that the action plan fits with the (digital) capabilities and sector-specific needs of the stakeholder." },
         { role: "user", content: userInput }
       ],
     });
@@ -52,3 +52,4 @@ const PORT = process.env.PORT || 3000; // Use environment port for hosting
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
