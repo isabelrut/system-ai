@@ -58,6 +58,7 @@
     </div>
     
     <div class="footer">
+        <p style="color:grey">Version 0.1</p> 
         Created by <strong>Isabel Rutten</strong> as thesis intern of <strong>TNO Vector</strong>,  <br>
         presented at the <strong>Data Sharing Festival 2026</strong>.
     </div>
@@ -84,9 +85,9 @@ async function submitForm() {
     // Build prompt text combining all answers
     const prompt = `
 1. Sector: ${sector}
-2. Activity: ${activity}
+2. Organization: ${activity}
 3. Digital maturity: ${maturity}
-4. Technical background: ${technical}
+4. Level of technical background: ${technical}
 `;
 
     // Show a loading indicator
@@ -251,6 +252,7 @@ function showCopyButtonIfNeeded() {
 </body>
 
 </html>
+
 
 
 
