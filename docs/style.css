@@ -194,3 +194,12 @@ input, textarea, select {
   .main-button { font-size: 1.125rem }
   .copy-button { font-size: 1rem }
 }
+
+
+/* ===========================
+   Microsoft Forms
+=========================== */
+.msforms {
+   padding: 1rem; 
+}
+
