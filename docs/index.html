@@ -3,6 +3,9 @@
     <title>DPPathfinder</title>
     <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Prepare html output for html -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
 </head>
 
 <body>
@@ -125,42 +128,63 @@ function escapeHTML(str) {
 
 // Helper: format text output nicely
 function formatOutput(text) {
-    // Escape HTML first
-    let escaped = text
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
+    if (!text || typeof text !== "string") return "";
 
-    // Convert bold: **text** -> <strong>text</strong>
-    escaped = escaped.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+    // Configure marked (GitHub-flavored markdown)
+    marked.setOptions({
+        breaks: true,        // convert \n to <br>
+        gfm: true            // enable tables, strikethrough, etc.
+    });
 
-    // Convert bullets starting with -, *, or • into <ul><li>
-    const lines = escaped.split("\n");
-    let inList = false;
-    let html = "";
+    // Step 1: Markdown → HTML
+    const rawHtml = marked.parse(text);
 
-    for (let line of lines) {
-        if (/^(\s*[-*•]\s+)/.test(line)) {
-            if (!inList) {
-                inList = true;
-                html += "<ul>";
-            }
-            html += "<li>" + line.replace(/^(\s*[-*•]\s+)/, "") + "</li>";
-        } else {
-            if (inList) {
-                inList = false;
-                html += "</ul>";
-            }
-            // Wrap paragraphs
-            if (line.trim() !== "") {
-                html += "<p>" + line + "</p>";
-            }
-        }
-    }
-    if (inList) html += "</ul>";
+    // Step 2: Sanitize HTML to prevent XSS
+    const safeHtml = DOMPurify.sanitize(rawHtml, {
+        USE_PROFILES: { html: true }
+    });
 
-    return html;
+    return safeHtml;
 }
+
+
+// function formatOutput(text) {
+//     // Escape HTML first
+//     let escaped = text
+//         .replace(/&/g, "&amp;")
+//         .replace(/</g, "&lt;")
+//         .replace(/>/g, "&gt;");
+
+//     // Convert bold: **text** -> <strong>text</strong>
+//     escaped = escaped.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+
+//     // Convert bullets starting with -, *, or • into <ul><li>
+//     const lines = escaped.split("\n");
+//     let inList = false;
+//     let html = "";
+
+//     for (let line of lines) {
+//         if (/^(\s*[-*•]\s+)/.test(line)) {
+//             if (!inList) {
+//                 inList = true;
+//                 html += "<ul>";
+//             }
+//             html += "<li>" + line.replace(/^(\s*[-*•]\s+)/, "") + "</li>";
+//         } else {
+//             if (inList) {
+//                 inList = false;
+//                 html += "</ul>";
+//             }
+//             // Wrap paragraphs
+//             if (line.trim() !== "") {
+//                 html += "<p>" + line + "</p>";
+//             }
+//         }
+//     }
+//     if (inList) html += "</ul>";
+
+//     return html;
+// }
 
 // function copyOutput() {
 //     const outputDiv = document.getElementById("llm-output");
@@ -252,6 +276,7 @@ function showCopyButtonIfNeeded() {
 </body>
 
 </html>
+
 
 
 
