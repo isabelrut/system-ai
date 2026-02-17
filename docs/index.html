@@ -29,16 +29,25 @@
 
         <div class="form-group">
             <label for="activity">2. What does your organization do?</label>
+            <small class="form-text">
+                (e.g. company size, supply chain role)  <br>
+            </small>
             <input id="activity" type="text" placeholder="Small wooden toys manufacturer of ~20 people">
         </div>
 
         <div class="form-group">
-            <label for="maturity">3. What is your digital maturity?</label>
+            <label for="maturity">3. What is the digital maturity level of your organization?</label>
+            <small class="form-text">
+                (e.g. process automation, product information storage)  <br>
+            </small>
             <input id="maturity" type="text" placeholder="We store the basic product information in Excel sheets">
         </div>
 
         <div class="form-group">
-            <label for="technical">4. How technical is your background?</label>
+            <label for="technical">4. How strong is your computer science background?</label>
+            <small class="form-text">
+                (used to customize the output to your background)  <br>
+            </small>
             <input id="technical" type="text" placeholder="Common ICT knowledge">
         </div>
 
@@ -99,7 +108,7 @@ async function submitForm() {
 1. Sector: ${sector}
 2. Organization: ${activity}
 3. Digital maturity: ${maturity}
-4. Level of technical background: ${technical}
+4. Level of ICT knowledge (i.e. level of technical detail in output): ${technical}
 5. Aim of implementation level (with 1: Entity level compliance, 2: Ecosystem level compliance, 3: Value adding, 4: Competitive advantage):  ${implementation}
 `;
 
@@ -286,6 +295,7 @@ function showCopyButtonIfNeeded() {
 </body>
 
 </html>
+
 
 
 
