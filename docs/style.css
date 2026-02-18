@@ -159,6 +159,7 @@ input, textarea, select {
   color: #333;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   line-height: 1.6;
+  text-align: left; 
 }
 
 #llm-output:empty {
@@ -218,6 +219,7 @@ input, textarea, select {
 .msforms {
    margin-top: 1.5rem;
 }
+
 
 
 
