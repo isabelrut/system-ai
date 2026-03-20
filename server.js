@@ -52,6 +52,7 @@ if (!fs.existsSync(DB_PATH)) {
 const chroma = new ChromaClient({
   persistDirectory: DB_PATH, // folder containing legacy DB
   embeddingFunction: new DefaultEmbeddingFunction(),
+  chromaServer: false, 
 });
 
 let collection;
