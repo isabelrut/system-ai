@@ -147,7 +147,7 @@ app.post("/generate", async (req, res) => {
       })
       .join("\n");
 
-    print(sourcesList) 
+    console.log(sourcesList);
 
     const completion = await groq.chat.completions.create({
       model: "openai/gpt-oss-120b",
