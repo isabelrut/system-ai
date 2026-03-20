@@ -14,7 +14,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
+  apiKey: process.env.GROQ_API_KEY, // Only for LLM completions
 });
 
 // Enable CORS for frontend
@@ -40,77 +40,41 @@ try {
 }
 
 // ------------------------------
-// Cosine similarity helper
+// Simple keyword scoring helper
 // ------------------------------
-function cosineSimilarity(a, b) {
-  let dot = 0.0, normA = 0.0, normB = 0.0;
-  for (let i = 0; i < a.length; i++) {
-    dot += a[i] * b[i];
-    normA += a[i] * a[i];
-    normB += b[i] * b[i];
+function scoreChunkByQuery(chunkText, query) {
+  const words = query.toLowerCase().split(/\s+/);
+  const textLower = chunkText.toLowerCase();
+  // Count number of query words present in the chunk
+  let score = 0;
+  for (const word of words) {
+    if (textLower.includes(word)) score += 1;
   }
-  return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+  return score;
 }
 
 // ------------------------------
-// Retrieve top chunks safely
+// Retrieve top chunks using hybrid keyword search
 // ------------------------------
-async function retrieveContext(query, docType = null, topK = 4) {
+function retrieveContext(query, docType = null, topK = 4) {
   if (!chunks.length) return { docs: [], metadata: [] };
 
   // Step 1: filter by Doc_Type
   let candidates = chunks.filter(c => !docType || c.metadata?.Doc_Type === docType);
 
-  // Step 2: keyword filter
-  const qLower = query.toLowerCase();
-  let filtered = candidates.filter(c => c.text.toLowerCase().includes(qLower));
-
-  // fallback if keyword removed all
-  if (!filtered.length) filtered = candidates;
-
-  // Step 3: limit candidates to avoid 413
-  const MAX_CANDIDATES = 500;
-  const candidatesToEmbed = filtered.slice(0, MAX_CANDIDATES);
-  const textsToEmbed = candidatesToEmbed.map(c => c.text);
-
-  if (!textsToEmbed.length) return { docs: [], metadata: [] };
-
-  // Step 4: embed candidate texts
-  let candidateEmbeddings;
-  try {
-    const embeddingResponse = await groq.embeddings.create({
-      model: "text-embedding-3-small",
-      input: textsToEmbed,
-    });
-    candidateEmbeddings = embeddingResponse.data.map(e => e.embedding);
-  } catch (err) {
-    console.error("Embedding API error:", err);
-    return { docs: [], metadata: [] };
-  }
-
-  // Step 5: embed query
-  let queryEmbedding;
-  try {
-    const queryEmbeddingResp = await groq.embeddings.create({
-      model: "text-embedding-3-small",
-      input: query,
-    });
-    queryEmbedding = queryEmbeddingResp.data[0].embedding;
-  } catch (err) {
-    console.error("Query embedding error:", err);
-    return { docs: [], metadata: [] };
-  }
-
-  // Step 6: cosine similarity scoring
-  const scored = candidatesToEmbed.map((c, i) => ({
+  // Step 2: score candidates by query keyword overlap
+  const scored = candidates.map(c => ({
     text: c.text,
     metadata: c.metadata,
-    score: cosineSimilarity(queryEmbedding, candidateEmbeddings[i]),
+    score: scoreChunkByQuery(c.text, query),
   }));
 
-  // Step 7: sort descending and pick topK
+  // Step 3: sort descending by score
   scored.sort((a, b) => b.score - a.score);
-  const topChunks = scored.slice(0, topK);
+
+  // Step 4: fallback if all scores are zero
+  let topChunks = scored.filter(c => c.score > 0).slice(0, topK);
+  if (!topChunks.length) topChunks = scored.slice(0, topK);
 
   return {
     docs: topChunks.map(c => c.text),
@@ -125,7 +89,7 @@ app.post("/generate", async (req, res) => {
   try {
     const { input: userInput, docType } = req.body;
 
-    const { docs, metadata } = await retrieveContext(userInput, docType, 4);
+    const { docs, metadata } = retrieveContext(userInput, docType, 4);
 
     const context = docs.length ? docs.join("\n\n") : "No additional context available.";
 
@@ -137,7 +101,7 @@ app.post("/generate", async (req, res) => {
       })
       .join("\n");
 
-    console.log(sourcesList);
+    console.log("Sources used:\n", sourcesList);
 
     const completion = await groq.chat.completions.create({
       model: "openai/gpt-oss-120b",
@@ -172,6 +136,183 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+// OLD uses embeddings
+
+// // server.js
+// import express from "express";
+// import Groq from "groq-sdk";
+// import dotenv from "dotenv";
+// import path from "path";
+// import { fileURLToPath } from "url";
+// import cors from "cors";
+// import fs from "fs";
+
+// dotenv.config();
+
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+
+// const app = express();
+// const groq = new Groq({
+//   apiKey: process.env.GROQ_API_KEY,
+// });
+
+// // Enable CORS for frontend
+// app.use(cors({
+//   origin: "https://isabelrut.github.io",
+// }));
+
+// app.use(express.json());
+// app.use(express.static(path.join(__dirname, "docs")));
+
+// // ------------------------------
+// // Load JSON data
+// // ------------------------------
+// const DATA_PATH = path.join(__dirname, "rag_chunks.json");
+// let chunks = [];
+
+// try {
+//   const raw = fs.readFileSync(DATA_PATH, "utf-8");
+//   chunks = JSON.parse(raw);
+//   console.log(`Loaded ${chunks.length} chunks from JSON`);
+// } catch (err) {
+//   console.error("Failed to load chunks:", err);
+// }
+
+// // ------------------------------
+// // Cosine similarity helper
+// // ------------------------------
+// function cosineSimilarity(a, b) {
+//   let dot = 0.0, normA = 0.0, normB = 0.0;
+//   for (let i = 0; i < a.length; i++) {
+//     dot += a[i] * b[i];
+//     normA += a[i] * a[i];
+//     normB += b[i] * b[i];
+//   }
+//   return dot / (Math.sqrt(normA) * Math.sqrt(normB));
+// }
+
+// // ------------------------------
+// // Retrieve top chunks safely
+// // ------------------------------
+// async function retrieveContext(query, docType = null, topK = 4) {
+//   if (!chunks.length) return { docs: [], metadata: [] };
+
+//   // Step 1: filter by Doc_Type
+//   let candidates = chunks.filter(c => !docType || c.metadata?.Doc_Type === docType);
+
+//   // Step 2: keyword filter
+//   const qLower = query.toLowerCase();
+//   let filtered = candidates.filter(c => c.text.toLowerCase().includes(qLower));
+
+//   // fallback if keyword removed all
+//   if (!filtered.length) filtered = candidates;
+
+//   // Step 3: limit candidates to avoid 413
+//   const MAX_CANDIDATES = 500;
+//   const candidatesToEmbed = filtered.slice(0, MAX_CANDIDATES);
+//   const textsToEmbed = candidatesToEmbed.map(c => c.text);
+
+//   if (!textsToEmbed.length) return { docs: [], metadata: [] };
+
+//   // Step 4: embed candidate texts
+//   let candidateEmbeddings;
+//   try {
+//     const embeddingResponse = await groq.embeddings.create({
+//       model: "text-embedding-3-small",
+//       input: textsToEmbed,
+//     });
+//     candidateEmbeddings = embeddingResponse.data.map(e => e.embedding);
+//   } catch (err) {
+//     console.error("Embedding API error:", err);
+//     return { docs: [], metadata: [] };
+//   }
+
+//   // Step 5: embed query
+//   let queryEmbedding;
+//   try {
+//     const queryEmbeddingResp = await groq.embeddings.create({
+//       model: "text-embedding-3-small",
+//       input: query,
+//     });
+//     queryEmbedding = queryEmbeddingResp.data[0].embedding;
+//   } catch (err) {
+//     console.error("Query embedding error:", err);
+//     return { docs: [], metadata: [] };
+//   }
+
+//   // Step 6: cosine similarity scoring
+//   const scored = candidatesToEmbed.map((c, i) => ({
+//     text: c.text,
+//     metadata: c.metadata,
+//     score: cosineSimilarity(queryEmbedding, candidateEmbeddings[i]),
+//   }));
+
+//   // Step 7: sort descending and pick topK
+//   scored.sort((a, b) => b.score - a.score);
+//   const topChunks = scored.slice(0, topK);
+
+//   return {
+//     docs: topChunks.map(c => c.text),
+//     metadata: topChunks.map(c => c.metadata),
+//   };
+// }
+
+// // ------------------------------
+// // /generate endpoint
+// // ------------------------------
+// app.post("/generate", async (req, res) => {
+//   try {
+//     const { input: userInput, docType } = req.body;
+
+//     const { docs, metadata } = await retrieveContext(userInput, docType, 4);
+
+//     const context = docs.length ? docs.join("\n\n") : "No additional context available.";
+
+//     const sourcesList = metadata
+//       .map((m, i) => {
+//         const title = m.Name || `Document ${i + 1}`;
+//         const type = m.Doc_Type || "unknown";
+//         return `- ${title} (${type})`;
+//       })
+//       .join("\n");
+
+//     console.log(sourcesList);
+
+//     const completion = await groq.chat.completions.create({
+//       model: "openai/gpt-oss-120b",
+//       messages: [
+//         {
+//           role: "system",
+//           content:
+//             "You are a Digital Product Passport (DPP) expert helping organizations implement the DPP. Based on the user input about the organization, provide a clear customized requirements overview. Make sure that the requirements fits with the (digital) capabilities, sector-specific needs, and personal interests of the stakeholder. Ensure that the requirements comply to the SMART framework, without explicitly stating them; i.e. the requirement itself should be SMART, not the detailed explanation. Repeat the userinput at the start of your response. Don't use tables in your response, not even for illustration. The current date is " + new Date() + ", which can be used in your planning if applicable. Use the provided context to answer questions accurately. Always include a 'Sources' section at the end of your answer listing the source documents."
+//         },
+//         {
+//           role: "user",
+//           content:
+//             `Context from EU documents:\n${context}\n\nUser request:\n${userInput}\n\nSources:\n${sourcesList}`,
+//         },
+//       ],
+//     });
+
+//     res.json({
+//       output: completion.choices[0].message.content,
+//       sources: metadata,
+//     });
+//   } catch (error) {
+//     console.error("ERROR in /generate:", error);
+//     res.status(500).json({ error: "Something went wrong" });
+//   }
+// });
+
+// // ------------------------------
+// // Start server
+// // ------------------------------
+// const PORT = process.env.PORT || 3000;
+// app.listen(PORT, () => {
+//   console.log(`Server running on port ${PORT}`);
+// });
 
 // CHROMA DB VERSION
 
