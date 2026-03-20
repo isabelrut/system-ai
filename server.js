@@ -68,7 +68,9 @@ async function initChroma() {
   }
 }
 
-await initChroma();
+(async () => {
+  await initChroma();
+})();
 
 // ------------------------------
 // Cosine similarity helper
