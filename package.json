@@ -16,7 +16,7 @@
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "groq-sdk": "^0.37.0",
-    "chromadb": "^3.4.0",
+    "chromadb": "^1.5.5",
     "@chroma-core/default-embed": "^0.1.9"
   }
 }
