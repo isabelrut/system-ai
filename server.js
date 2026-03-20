@@ -26,9 +26,9 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "docs")));
 
 // ------------------------------
-// Load small JSON with only text + metadata
+// Load JSON data
 // ------------------------------
-const DATA_PATH = path.join(__dirname, "rag_chunks.json"); // <= keep this under 10MB
+const DATA_PATH = path.join(__dirname, "rag_chunks.json");
 let chunks = [];
 
 try {
@@ -53,7 +53,7 @@ function cosineSimilarity(a, b) {
 }
 
 // ------------------------------
-// Hybrid retrieval: keyword + embeddings
+// Retrieve top chunks safely
 // ------------------------------
 async function retrieveContext(query, docType = null, topK = 4) {
   if (!chunks.length) return { docs: [], metadata: [] };
@@ -61,38 +61,54 @@ async function retrieveContext(query, docType = null, topK = 4) {
   // Step 1: filter by Doc_Type
   let candidates = chunks.filter(c => !docType || c.metadata?.Doc_Type === docType);
 
-  // Step 2: keyword filter (case-insensitive)
+  // Step 2: keyword filter
   const qLower = query.toLowerCase();
-  candidates = candidates.filter(c => c.text.toLowerCase().includes(qLower));
+  let filtered = candidates.filter(c => c.text.toLowerCase().includes(qLower));
 
-  // If keyword filter removed all candidates, fallback to all Doc_Type matches
-  if (!candidates.length) {
-    candidates = chunks.filter(c => !docType || c.metadata?.Doc_Type === docType);
+  // fallback if keyword removed all
+  if (!filtered.length) filtered = candidates;
+
+  // Step 3: limit candidates to avoid 413
+  const MAX_CANDIDATES = 500;
+  const candidatesToEmbed = filtered.slice(0, MAX_CANDIDATES);
+  const textsToEmbed = candidatesToEmbed.map(c => c.text);
+
+  if (!textsToEmbed.length) return { docs: [], metadata: [] };
+
+  // Step 4: embed candidate texts
+  let candidateEmbeddings;
+  try {
+    const embeddingResponse = await groq.embeddings.create({
+      model: "text-embedding-3-small",
+      input: textsToEmbed,
+    });
+    candidateEmbeddings = embeddingResponse.data.map(e => e.embedding);
+  } catch (err) {
+    console.error("Embedding API error:", err);
+    return { docs: [], metadata: [] };
   }
 
-  // Step 3: embed candidate texts
-  const texts = candidates.map(c => c.text);
-  const embeddingResponse = await groq.embeddings.create({
-    model: "text-embedding-3-small", // smaller model to save tokens & RAM
-    input: texts,
-  });
-  const candidateEmbeddings = embeddingResponse.data.map(e => e.embedding);
+  // Step 5: embed query
+  let queryEmbedding;
+  try {
+    const queryEmbeddingResp = await groq.embeddings.create({
+      model: "text-embedding-3-small",
+      input: query,
+    });
+    queryEmbedding = queryEmbeddingResp.data[0].embedding;
+  } catch (err) {
+    console.error("Query embedding error:", err);
+    return { docs: [], metadata: [] };
+  }
 
-  // Step 4: embed query
-  const queryEmbeddingResp = await groq.embeddings.create({
-    model: "text-embedding-3-small",
-    input: query,
-  });
-  const queryEmbedding = queryEmbeddingResp.data[0].embedding;
-
-  // Step 5: compute cosine similarity
-  const scored = candidates.map((c, i) => ({
+  // Step 6: cosine similarity scoring
+  const scored = candidatesToEmbed.map((c, i) => ({
     text: c.text,
     metadata: c.metadata,
     score: cosineSimilarity(queryEmbedding, candidateEmbeddings[i]),
   }));
 
-  // Step 6: sort & pick top K
+  // Step 7: sort descending and pick topK
   scored.sort((a, b) => b.score - a.score);
   const topChunks = scored.slice(0, topK);
 
@@ -103,7 +119,7 @@ async function retrieveContext(query, docType = null, topK = 4) {
 }
 
 // ------------------------------
-// API endpoint
+// /generate endpoint
 // ------------------------------
 app.post("/generate", async (req, res) => {
   try {
@@ -144,7 +160,7 @@ app.post("/generate", async (req, res) => {
       sources: metadata,
     });
   } catch (error) {
-    console.error("ERROR:", error);
+    console.error("ERROR in /generate:", error);
     res.status(500).json({ error: "Something went wrong" });
   }
 });
