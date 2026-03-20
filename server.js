@@ -50,10 +50,14 @@ if (!fs.existsSync(DB_PATH)) {
 // Initialize Chroma
 // ------------------------------
 const chroma = new ChromaClient({
-  persistDirectory: DB_PATH, // folder containing legacy DB
-  embeddingFunction: new DefaultEmbeddingFunction(),
-  chromaServer: false, 
+  path: DB_PATH,
+  // persistDirectory: DB_PATH, // folder containing legacy DB
+  // embeddingFunction: new DefaultEmbeddingFunction(),
+  // chromaServer: false, 
 });
+
+console.log("DB PATH EXISTS:", fs.existsSync(DB_PATH));
+console.log("DB FILES:", fs.readdirSync(DB_PATH));
 
 let collection;
 
