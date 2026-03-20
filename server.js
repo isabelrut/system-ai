@@ -134,7 +134,7 @@ app.post("/generate", async (req, res) => {
   try {
     const { input: userInput, docType } = req.body;
 
-    const { docs, metadata } = await retrieveContext(userInput, docType, 4);
+    const { docs, metadata } = await retrieveContext(userInput, docType, 4); 
 
     const context = docs.length ? docs.join("\n\n") : "No additional context available.";
 
@@ -146,6 +146,8 @@ app.post("/generate", async (req, res) => {
         return `- ${title} (${type})`;
       })
       .join("\n");
+
+    print(sourcesList) 
 
     const completion = await groq.chat.completions.create({
       model: "openai/gpt-oss-120b",
