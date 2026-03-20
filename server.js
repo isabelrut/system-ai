@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, "docs")));
 // ------------------------------
 // Load small JSON with only text + metadata
 // ------------------------------
-const DATA_PATH = path.join(__dirname, "data", "rag_chunks.json"); // <= keep this under 10MB
+const DATA_PATH = path.join(__dirname, "rag_chunks.json"); // <= keep this under 10MB
 let chunks = [];
 
 try {
