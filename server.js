@@ -7,6 +7,8 @@ import { fileURLToPath } from "url";
 import cors from "cors";
 import { ChromaClient } from "chromadb";
 import { DefaultEmbeddingFunction } from "@chroma-core/default-embed";
+import fs from "fs";
+import { execSync } from "child_process";
 
 dotenv.config();
 
@@ -27,10 +29,28 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "docs")));
 
 // ------------------------------
+// Step 1: Ensure Chroma DB exists
+// ------------------------------
+const DB_PATH = path.join(__dirname, "chroma_db");
+const ZIP_PATH = path.join(__dirname, "chroma_db.zip");
+
+if (!fs.existsSync(DB_PATH)) {
+  if (!fs.existsSync(ZIP_PATH)) {
+    console.error("Chroma DB zip not found at", ZIP_PATH);
+    process.exit(1);
+  }
+  console.log("Unzipping Chroma DB...");
+  execSync(`unzip -o "${ZIP_PATH}" -d "${DB_PATH}"`);
+  console.log("Chroma DB unzipped successfully.");
+} else {
+  console.log("Chroma DB folder exists, skipping unzip.");
+}
+
+// ------------------------------
 // Initialize Chroma
 // ------------------------------
 const chroma = new ChromaClient({
-  persistDirectory: "./chroma_db", // folder containing legacy DB
+  persistDirectory: DB_PATH, // folder containing legacy DB
   embeddingFunction: new DefaultEmbeddingFunction(),
 });
 
