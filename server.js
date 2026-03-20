@@ -6,7 +6,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import cors from "cors";
 import { ChromaClient } from "chromadb";
-import { DefaultEmbed } from "@chroma-core/default-embed";
+import DefaultEmbed from "@chroma-core/default-embed";
 
 dotenv.config();
 
