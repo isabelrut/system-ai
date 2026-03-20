@@ -6,6 +6,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import cors from "cors";
 import { ChromaClient } from "chromadb";
+import { DefaultEmbed } from "@chroma-core/default-embed";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use(express.static(path.join(__dirname, "docs")));
 // ------------------------------
 const chroma = new ChromaClient({
   persistDirectory: "./chroma_db", // folder containing legacy DB
+  embeddingFunction: new DefaultEmbed()
 });
 
 let collection;
