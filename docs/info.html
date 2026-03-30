@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DPPathfinder</title>
+    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Prepare html output for html -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>DPPathfinder</h1>
+        <p>AI-Driven Support for Implementing<br>the Digital Product Passport</p>
+        <p style="color:grey">Version 1.0 </p>
+        <!-- <p style="color:grey">Version 1.0 <br> <a href="info.html" style="color:white; text-decoration:none">Information page</a> </p> -->
+    </div>
+
+    <div class="container">
+
+        <p class="intro">
+            Fill in the following forms to find out what <em>you</em> need to do to take part in the DPP ecosystem.
+        </p>
+
+        <div class="form-group">
+            <label for="sector">1. What sector is your organization working in?</label>
+            <input id="sector" type="text" placeholder="Toys sector">
+        </div>
+
+        <div class="form-group">
+            <label for="activity">2. What does your organization do?</label>
+            <small class="form-text">
+                (e.g. company size, supply chain role)  <br>
+            </small>
+            <input id="activity" type="text" placeholder="Small wooden toys manufacturer of ~20 people">
+        </div>
+
+        <div class="form-group">
+            <label for="maturity">3. What is the digital maturity level of your organization?</label>
+            <small class="form-text">
+                (e.g. process automation, product information storage)  <br>
+            </small>
+            <input id="maturity" type="text" placeholder="We store the basic product information in Excel sheets">
+        </div>
+
+        <div class="form-group">
+            <label for="technical">4. How strong is your computer science background?</label>
+            <small class="form-text">
+                (used to customize the output to your background)  <br>
+            </small>
+            <input id="technical" type="text" placeholder="Common ICT knowledge">
+        </div>
+
+        <div class="form-group">
+            <label for="implementation">5. What level of DPP implementation does your organization aim for?</label>
+            <small class="form-text">
+                (with 1: Entity level compliance, 2: Ecosystem level compliance, <br> 3: Value adding, 4: Competitive advantage) <br>
+            </small>
+            <input id="implementation" type="number" min="1" max="4" placeholder="2">
+        </div>
+        
+        <button class="main-button" onclick="submitForm()">
+            DISCOVER YOUR REQUIREMENTS<br>TO IMPLEMENT THE DPP
+        </button>
+
+        <div id="llm-output" class="llm-output"></div>
+
+        <!-- Copy button -->
+        <button id="copy-button" class="copy-button" onclick="copyOutput()" style="display:none;">
+            Copy Requirements
+        </button>
+
+    </div>
+
+    <!-- MS Forms for Feedback -->
+    <!--
+    <div class="msforms">
+        <iframe id="ms-forms" width="640px" height="480px" src="https://forms.office.com/Pages/ResponsePage.aspx?id=ujzz4PV5YkaC5w5TbNoSMky758Gqz3BGmiRiauivYCNUOTJKSUhWSTFaOFlOVVNDOUlGTlpCTUE3Ni4u&embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border: none; max-width:100%; max-height:100vh" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
+    </div>-->
+    
+    <div class="footer">
+        <p style="color:grey">Version 1.0</p> 
+        Created by <strong>Isabel Rutten</strong> as thesis intern of <strong>TNO Vector</strong>. 
+    </div>
+
+
+
+
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+

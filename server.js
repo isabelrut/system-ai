@@ -120,7 +120,7 @@ app.post("/generate", async (req, res) => {
             - The influence (company size) indicates the set of regulations that the user needs to adhere to (as per enterprise sizes set by the EU: micro, small, medium, large) and the resources at their availability; 
             - The digital maturity level indicates how complicated the ICT solution should be, as those on the lowest level (incomplete) will have a harder time to get the relevant data than those at the highest level (optimizing); 
             - The computer science background indicates the level of complicated ICT jargon mentioned in the requirements, to ensure readability for the user; 
-            - The compliance interest indicates whether the company wants to comply at the absolute minimum (1: entity level compliance), only with their direct environment (2: ecosystem level compliance), in a way that improves their position (3: value adding) or by getting ahead of their competition (4: competitive advantage).
+            - The compliance interest indicates whether the company wants to comply at the absolute minimum (2: entity level compliance), only with their direct environment (3: ecosystem level compliance), in a way that improves their position (4: value adding), by getting ahead of their competition (5: competitive advantage), or simply does not want to comply at all (0: no compliance).
             Do not infer beyond what you know or what information the source documents give.  
             Note that a good requirement includes the following:   
             -	ID;

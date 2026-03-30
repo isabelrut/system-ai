@@ -14,7 +14,8 @@
     <div class="header">
         <h1>DPPathfinder</h1>
         <p>AI-Driven Support for Implementing<br>the Digital Product Passport</p>
-        <p style="color:grey">Version 0.1</p>
+        <p style="color:grey">Version 1.0 </p>
+        <!-- <p style="color:grey">Version 1.0 <br> <a href="info.html" style="color:white; text-decoration:none">Information page</a> </p> -->
     </div>
 
     <div class="container">
@@ -29,35 +30,47 @@
         </div>
 
         <div class="form-group">
-            <label for="activity">2. What does your organization do?</label>
+            <label for="size">2. What is your company size according to <a href="https://single-market-economy.ec.europa.eu/smes/sme-fundamentals/sme-definition_en">EU regulations</a>?</label>
+            <img src="SME-table.png" alt="SME sizes according to the EU"> <br>
             <small class="form-text">
-                (e.g. company size, supply chain role)  <br>
+                (e.g. small, large)  <br>
             </small>
-            <input id="activity" type="text" placeholder="Small wooden toys manufacturer of ~20 people">
+            <input id="size" type="text" placeholder="Micro">
         </div>
 
         <div class="form-group">
-            <label for="maturity">3. What is the digital maturity level of your organization?</label>
+            <label for="role">3. What role does your organization take in the <a href="https://coe-dsc.nl/wp-content/uploads/2026/01/Dutch-Digital-Product-Passport-Landscape-Scan-Version-1.0-final-1.pdf">DPP ecosystem</a>?</label>
+            <img src="Ecosystem-framework.png" alt="DPP Ecosystem Framework"> <br>
             <small class="form-text">
-                (e.g. process automation, product information storage)  <br>
+                (e.g. retailer, economic operator)  <br>
             </small>
-            <input id="maturity" type="text" placeholder="We store the basic product information in Excel sheets">
+            <input id="role" type="text" placeholder="Supplier">
         </div>
 
         <div class="form-group">
-            <label for="technical">4. How strong is your computer science background?</label>
+            <label for="maturity">4. What is the digital maturity level of your organization?</label>
+            <img src="digital-maturity-model.png" alt="Digital Maturity Model" style="width: 40%"> <br>
             <small class="form-text">
-                (used to customize the output to your background)  <br>
+                (e.g. incomplete, performed, predictable)  <br>
             </small>
-            <input id="technical" type="text" placeholder="Common ICT knowledge">
+            <input id="maturity" type="text" placeholder="Optimizing">
         </div>
 
         <div class="form-group">
             <label for="implementation">5. What level of DPP implementation does your organization aim for?</label>
+            <img src="DPP-maturity-model.png" alt="DPP Maturity Model"> <br>
             <small class="form-text">
-                (with 1: Entity level compliance, 2: Ecosystem level compliance, <br> 3: Value adding, 4: Competitive advantage) <br>
+                (with 2: Entity level compliance, 3: Ecosystem level compliance, <br> 4: Value adding, 5: Competitive advantage) <br>
             </small>
-            <input id="implementation" type="number" min="1" max="4" placeholder="2">
+            <input id="implementation" type="number" min="2" max="5" placeholder="2">
+        </div>
+
+        <div class="form-group">
+            <label for="technical">6. What is your ICT background?</label>
+            <small class="form-text">
+                (used to customize the output to your background)  <br>
+            </small>
+            <input id="technical" type="text" placeholder="Average ICT knowledge">
         </div>
         
         <button class="main-button" onclick="submitForm()">
@@ -73,15 +86,15 @@
 
     </div>
 
+    <!-- MS Forms for Feedback -->
+    <!--
     <div class="msforms">
-        <!-- MS Forms for Feedback -->
         <iframe id="ms-forms" width="640px" height="480px" src="https://forms.office.com/Pages/ResponsePage.aspx?id=ujzz4PV5YkaC5w5TbNoSMky758Gqz3BGmiRiauivYCNUOTJKSUhWSTFaOFlOVVNDOUlGTlpCTUE3Ni4u&embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border: none; max-width:100%; max-height:100vh" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
-    </div>
+    </div>-->
     
     <div class="footer">
-        <p style="color:grey">Version 0.1</p> 
-        Created by <strong>Isabel Rutten</strong> as thesis intern of <strong>TNO Vector</strong>,  <br>
-        presented at the <strong>Data Sharing Festival 2026</strong>.
+        <p style="color:grey">Version 1.0</p> 
+        Created by <strong>Isabel Rutten</strong> as thesis intern of <strong>TNO Vector</strong>.
     </div>
 
 
@@ -93,13 +106,14 @@
 async function submitForm() {
     // Gather input values
     const sector = document.getElementById("sector").value.trim();
-    const activity = document.getElementById("activity").value.trim();
+    const size = document.getElementById("size").value.trim();
+    const role = document.getElementById("role").value.trim();
     const maturity = document.getElementById("maturity").value.trim();
     const technical = document.getElementById("technical").value.trim();
     const implementation = document.getElementById("implementation").value.trim();
 
     // Basic validation (optional)
-    if (!sector || !activity || !maturity || !technical|| !implementation) {
+    if (!sector || !size || !role || !maturity || !technical|| !implementation) {
         alert("Please fill out all fields.");
         return;
     }
@@ -107,15 +121,16 @@ async function submitForm() {
     // Build prompt text combining all answers
     const prompt = `
 1. Sector: ${sector}
-2. Organization: ${activity}
-3. Digital maturity: ${maturity}
-4. Level of ICT knowledge (i.e. level of technical detail in output): ${technical}
-5. Aim of implementation level (with 1: Entity level compliance, 2: Ecosystem level compliance, 3: Value adding, 4: Competitive advantage):  ${implementation}
+2. Organization size: ${size}
+3. Organization role in DPP Ecosystem: ${role}
+4. Digital maturity: ${maturity}
+5. Level of ICT knowledge (i.e. level of technical detail in output): ${technical}
+6. Aim of implementation level (with 2: Entity level compliance, 3: Ecosystem level compliance, 4: Value adding, 5: Competitive advantage):  ${implementation}
 `;
 
     // Show a loading indicator
     const outputDiv = document.getElementById("llm-output");
-    outputDiv.innerHTML = "Generating action plan...";
+    outputDiv.innerHTML = "Generating custom requirements...";
 
     // Call backend
     try {
