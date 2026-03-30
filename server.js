@@ -137,7 +137,7 @@ Always include a 'Sources' section at the end of your answer listing the given s
         },
       ],
       temperature : 0.6, 
-      reasoning_effort : "hidden",
+      reasoning_effort : "none",
     });
 
     res.json({
