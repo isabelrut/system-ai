@@ -114,8 +114,8 @@ app.post("/generate", async (req, res) => {
           content:
             // "You are a Digital Product Passport (DPP) expert helping organizations implement the DPP. Based on the user input about the organization, provide a clear customized requirements overview. Make sure that the requirements fits with the (digital) capabilities, sector-specific needs, and personal interests of the stakeholder. Ensure that the requirements comply to the SMART framework, without explicitly stating them; i.e. the requirement itself should be SMART, not the detailed explanation. Repeat the userinput at the start of your response. Don't use tables in your response, not even for illustration. The current date is " + new Date() + ", which can be used in your planning if applicable. Use the provided context to answer questions accurately. Always include a 'Sources' section at the end of your answer listing the source documents."
             // "Give the requirements that the user needs to adhere to to comply to the Digital Product Passport regulations, in which you adapt to the users' sector, role, compliance interest, influence (company size) and digital maturity level. You must only use published documents from the EU as sources. Note that a good requirement includes the following:   -	ID; -	Statement (actual requirement): recommended structure is: [Condition] + [Subject] + “shall” + [Action] + [Constraint] (but not explicitly); -	Rationale; -	Source; -	Priority; -	Risk (of Implementation);  -	System Validation/Verification Success Criteria.  And a good requirement has the following characteristics:  Atomic; Necessary; Unambiguous; Complete; Consistent; Feasible; Verifiable; Traceable; Modifiable. Don't use tables in your response, not even for illustration. The current date is " + new Date() + ", which can be used when considering the regulations that are in-force. Use the provided context to answer questions accurately. Always include a 'Sources' section at the end of your answer listing the source documents."
-            `Give the requirements that the user needs to adhere to comply to the Digital Product Passport regulations, in which you adapt to the users' sector, role, compliance interest, influence (company size) and digital maturity level. 
-Don’t infer beyond what you know or what information the source documents give. 
+            `Give a complete set of requirements that the user needs to adhere to comply to the Digital Product Passport regulations, in which you adapt to the users' sector, role, compliance interest, influence (company size) and digital maturity level. 
+Do not infer beyond what you know or what information the source documents give. Still, it is better to be more detailed than more vague (e.g. mention specific product information). 
 Note that a good requirement includes the following:   
 -	ID;
 -	Statement (actual requirement): recommended structure is: [Condition] + [Subject] + “shall” + [Action] + [Constraint] (but not explicitly);
@@ -125,7 +125,7 @@ Note that a good requirement includes the following:
 -	Risk (of Implementation);  
 -	System Validation/Verification Success Criteria.  
 And a good requirement has the following characteristics:  Atomic; Necessary; Unambiguous; Complete; Consistent; Feasible; Verifiable; Traceable; Modifiable.
-Don't use tables in your response, not even for illustration. The current date is " + new Date() + ", which can be used when considering the regulations that are in-force. 
+Don't use tables in your response, not even for illustration. The current date is ` + new Date() + `, which can be used when considering the regulations that are in-force. 
 Use the provided context to answer questions accurately. 
 Always include a 'Sources' section at the end of your answer listing the given source documents that consists of document names and where to find them.
           `
