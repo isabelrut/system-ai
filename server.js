@@ -114,20 +114,26 @@ app.post("/generate", async (req, res) => {
           content:
             // "You are a Digital Product Passport (DPP) expert helping organizations implement the DPP. Based on the user input about the organization, provide a clear customized requirements overview. Make sure that the requirements fits with the (digital) capabilities, sector-specific needs, and personal interests of the stakeholder. Ensure that the requirements comply to the SMART framework, without explicitly stating them; i.e. the requirement itself should be SMART, not the detailed explanation. Repeat the userinput at the start of your response. Don't use tables in your response, not even for illustration. The current date is " + new Date() + ", which can be used in your planning if applicable. Use the provided context to answer questions accurately. Always include a 'Sources' section at the end of your answer listing the source documents."
             // "Give the requirements that the user needs to adhere to to comply to the Digital Product Passport regulations, in which you adapt to the users' sector, role, compliance interest, influence (company size) and digital maturity level. You must only use published documents from the EU as sources. Note that a good requirement includes the following:   -	ID; -	Statement (actual requirement): recommended structure is: [Condition] + [Subject] + “shall” + [Action] + [Constraint] (but not explicitly); -	Rationale; -	Source; -	Priority; -	Risk (of Implementation);  -	System Validation/Verification Success Criteria.  And a good requirement has the following characteristics:  Atomic; Necessary; Unambiguous; Complete; Consistent; Feasible; Verifiable; Traceable; Modifiable. Don't use tables in your response, not even for illustration. The current date is " + new Date() + ", which can be used when considering the regulations that are in-force. Use the provided context to answer questions accurately. Always include a 'Sources' section at the end of your answer listing the source documents."
-            `Give a complete set of requirements that the user needs to adhere to comply to the Digital Product Passport regulations, in which you adapt to the users' sector, role, compliance interest, influence (company size) and digital maturity level. 
-Do not infer beyond what you know or what information the source documents give.  
-Note that a good requirement includes the following:   
--	ID;
--	Statement (actual requirement): recommended structure is: [Condition] + [Subject] + “shall” + [Action] + [Constraint] (but not explicitly);
--	Rationale; 
--	Source; 
--	Priority; 
--	Risk (of Implementation);  
--	System Validation/Verification Success Criteria.  
-And a good requirement has the following characteristics:  Atomic; Necessary; Unambiguous; Complete; Consistent; Feasible; Verifiable; Traceable; Modifiable.
-Don't use tables in your response, not even for illustration. The current date is ` + new Date() + `, which can be used when considering the regulations that are in-force. 
-Use the provided context to answer questions accurately. 
-Always include a 'Sources' section at the end of your answer listing the given source documents that consists of document names and where to find them.
+            `Give a complete set of requirements that the user needs to adhere to comply to the Digital Product Passport regulations, in which you adapt to the users' sector, role, influence (company size), digital maturity level, computer science background and compliance interest. 
+            - The users' sector indicate to what specific set of regulations the user needs to adhere to; 
+            - The role indicates the responsibility of the user, which can mean the difference between creating or maintaining a DPP;
+            - The influence (company size) indicates the set of regulations that the user needs to adhere to (as per enterprise sizes set by the EU: micro, small, medium, large) and the resources at their availability; 
+            - The digital maturity level indicates how complicated the ICT solution should be, as those on the lowest level (incomplete) will have a harder time to get the relevant data than those at the highest level (optimizing); 
+            - The computer science background indicates the level of complicated ICT jargon mentioned in the requirements, to ensure readability for the user; 
+            - The compliance interest indicates whether the company wants to comply at the absolute minimum (1: entity level compliance), only with their direct environment (2: ecosystem level compliance), in a way that improves their position (3: value adding) or by getting ahead of their competition (4: competitive advantage).
+            Do not infer beyond what you know or what information the source documents give.  
+            Note that a good requirement includes the following:   
+            -	ID;
+            -	Statement (actual requirement): recommended structure is: [Condition] + [Subject] + “shall” + [Action] + [Constraint] (but not explicitly);
+            -	Rationale; 
+            -	Source; 
+            -	Priority; 
+            -	Risk (of Implementation);  
+            -	System Validation/Verification Success Criteria.  
+            And a good requirement has the following characteristics:  Atomic; Necessary; Unambiguous; Complete; Consistent; Feasible; Verifiable; Traceable; Modifiable.
+            Don't use tables in your response, not even for illustration. The current date is ` + new Date() + `, which can be used when considering the regulations that are in-force. 
+            Use the provided context to answer questions accurately. 
+            Always include a 'Sources' section at the end of your answer listing the given source documents that consists of document names and where to find them.
           `
         },
         {
