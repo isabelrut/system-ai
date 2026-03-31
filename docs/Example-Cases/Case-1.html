@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<!-- saved from url=(0038)https://isabelrut.github.io/system-ai/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>DPPathfinder</title>
+    <link rel="stylesheet" href="./Case-1_files/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Prepare html output for html -->
+    <script src="./Case-1_files/marked.min.js.download"></script>
+    <script src="./Case-1_files/purify.min.js.download"></script>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>DPPathfinder</h1>
+        <p>AI-Driven Support for Implementing<br>the Digital Product Passport</p>
+        <p style="color:grey">Version 1.0 </p>
+        <!-- <p style="color:grey">Version 1.0 <br> <a href="info.html" style="color:white; text-decoration:none">Information page</a> </p> -->
+    </div>
+
+    <div class="container">
+
+        <p class="intro">
+            Fill in the following forms to find out what <em>you</em> need to do to take part in the DPP ecosystem.
+        </p>
+
+        <div class="form-group">
+            <label for="sector">1. What sector is your organization working in?</label>
+            <input id="sector" type="text" placeholder="Toys sector">
+        </div>
+
+        <div class="form-group">
+            <label for="size">2. What is your company size according to <a href="https://single-market-economy.ec.europa.eu/smes/sme-fundamentals/sme-definition_en">EU regulations</a>?</label>
+            <img src="./Case-1_files/SME-table.png" alt="SME sizes according to the EU"> <br>
+            <small class="form-text">
+                (e.g. small, large)  <br>
+            </small>
+            <input id="size" type="text" placeholder="Micro">
+        </div>
+
+        <div class="form-group">
+            <label for="role">3. What role does your organization take in the <a href="https://coe-dsc.nl/wp-content/uploads/2026/01/Dutch-Digital-Product-Passport-Landscape-Scan-Version-1.0-final-1.pdf">DPP ecosystem</a>?</label>
+            <img src="./Case-1_files/Ecosystem-framework.png" alt="DPP Ecosystem Framework"> <br>
+            <small class="form-text">
+                (e.g. retailer, economic operator)  <br>
+            </small>
+            <input id="role" type="text" placeholder="Supplier">
+        </div>
+
+        <div class="form-group">
+            <label for="maturity">4. What is the digital maturity level of your organization?</label>
+            <img src="./Case-1_files/digital-maturity-model.png" alt="Digital Maturity Model" style="width: 40%"> <br>
+            <small class="form-text">
+                (e.g. incomplete, performed, predictable)  <br>
+            </small>
+            <input id="maturity" type="text" placeholder="Optimizing">
+        </div>
+
+        <div class="form-group">
+            <label for="implementation">5. What level of DPP implementation does your organization aim for?</label>
+            <img src="./Case-1_files/DPP-maturity-model.png" alt="DPP Maturity Model"> <br>
+            <small class="form-text">
+                (with 2: Entity level compliance, 3: Ecosystem level compliance, <br> 4: Value adding, 5: Competitive advantage) <br>
+            </small>
+            <input id="implementation" type="number" min="2" max="5" placeholder="2">
+        </div>
+
+        <div class="form-group">
+            <label for="technical">6. What is your ICT background?</label>
+            <small class="form-text">
+                (used to customize the output to your background)  <br>
+            </small>
+            <input id="technical" type="text" placeholder="Average ICT knowledge">
+        </div>
+        
+        <button class="main-button" onclick="submitForm()">
+            DISCOVER YOUR REQUIREMENTS<br>TO IMPLEMENT THE DPP
+        </button>
+
+        <div id="llm-output" class="llm-output"><p><strong>Requirements for Compliance with Digital Product Passport (DPP) Regulations in the Textiles and Footwear Sector</strong><br><em>For a Small-Sized Organization in the Supplier Role with Incomplete Digital Maturity and Basic ICT Knowledge, Aiming for Ecosystem-Level Compliance</em></p>
+<hr>
+<p><strong>1. ID: DPP-TEXT-001</strong><br><strong>Statement</strong>: When acting as a supplier in the textile supply chain, the organization shall collect and provide data related to the chemical composition of materials used in the production process to support restricted substance compliance claims.<br><strong>Rationale</strong>: EU regulations emphasize transparency regarding hazardous substances in textile products, particularly as consumer demand for environmentally safe products grows. This requirement aligns with broader EU strategies to promote sustainable textiles and reduce harmful chemical use.<br><strong>Source</strong>: EU strategy for sustainable and circular textiles (commission)<br><strong>Priority</strong>: High<br><strong>Risk</strong>: Medium – Incomplete digital maturity may hinder data collection and reporting capabilities.<br><strong>System Validation/Verification Success Criteria</strong>: All materials provided to downstream partners include a documented chemical composition summary, verified by at least one external audit annually.  </p>
+<hr>
+<p><strong>2. ID: DPP-TEXT-002</strong><br><strong>Statement</strong>: The supplier shall ensure that all DPP-related data is exchanged with downstream partners using standardized formats and accessible via a shared digital platform or portal.<br><strong>Rationale</strong>: Standardized data formats and shared platforms facilitate interoperability and transparency across the textile supply chain, which is essential for ecosystem-level compliance.<br><strong>Source</strong>: D4.1 Reference Architecture (working_group)<br><strong>Priority</strong>: Medium<br><strong>Risk</strong>: High – If no shared platform is used, downstream partners may not be able to verify compliance.<br><strong>System Validation/Verification Success Criteria</strong>: Data is exchanged in standardized format (e.g., JSON or XML) and confirmed by receiving partners via receipt or digital signature.  </p>
+<hr>
+<p><strong>3. ID: DPP-TEXT-003</strong><br><strong>Statement</strong>: The supplier shall establish a basic digital system for tracking and storing DPP data, including materials, chemical content, and supplier information. The system must be compatible with at least one widely used DPP platform in the textile industry.<br><strong>Rationale</strong>: A basic digital system ensures that data is preserved, accessible, and can be shared with partners, supporting ecosystem-level transparency.<br><strong>Source</strong>: Draft Preparatory Study on Textiles for Product Policy Instruments (working_group)<br><strong>Priority</strong>: Medium<br><strong>Risk</strong>: Medium – Incomplete digital maturity increases the risk of data loss or inaccessibility.<br><strong>System Validation/Verification Success Criteria</strong>: Data is stored in a digital format and can be exported for sharing with downstream partners at least quarterly.  </p>
+<hr>
+<p><strong>4. ID: DPP-TEXT-004</strong><br><strong>Statement</strong>: The supplier shall provide a simplified, user-friendly version of the DPP to end-consumers through product labels or digital means, including basic information on chemical safety and sustainability.<br><strong>Rationale</strong>: Consumer awareness and trust in textile products can be improved through simplified DPP data, which supports the EU’s broader goal of sustainable consumption.<br><strong>Source</strong>: Survey on Spanish consumer preferences (Draft Preparatory Study)<br><strong>Priority</strong>: Medium<br><strong>Risk</strong>: Low – Non-compliance may reduce consumer confidence but not regulatory penalties.<br><strong>System Validation/Verification Success Criteria</strong>: At least 75% of products on the market include a visible or scannable DPP summary by the end of Q3 2026.  </p>
+<hr>
+<p><strong>5. ID: DPP-TEXT-005</strong><br><strong>Statement</strong>: The supplier shall collaborate with at least one trusted third-party or industry body to authenticate the identity of the organization and its facilities for DPP data exchange.<br><strong>Rationale</strong>: Authentication of organizational and facility identities ensures trust in data exchanges and supports secure, reliable DPP ecosystems.<br><strong>Source</strong>: D4.1 Reference Architecture (working_group)<br><strong>Priority</strong>: High<br><strong>Risk</strong>: Medium – Without authentication, there is a higher risk of data misuse or misattribution.<br><strong>System Validation/Verification Success Criteria</strong>: The organization is registered with a recognized industry body (e.g., Textile Exchange or ZDHC) and receives a digital certificate for DPP data exchange.  </p>
+<hr>
+<p><strong>6. ID: DPP-TEXT-006</strong><br><strong>Statement</strong>: The supplier shall participate in at least one industry-wide training or workshop on DPP implementation and data management by the end of 2026.<br><strong>Rationale</strong>: Small suppliers with incomplete digital maturity benefit from external guidance and peer learning to improve compliance readiness.<br><strong>Source</strong>: EU strategy for sustainable and circular textiles (commission)<br><strong>Priority</strong>: Medium<br><strong>Risk</strong>: Low – Participation is not mandatory but enhances long-term compliance.<br><strong>System Validation/Verification Success Criteria</strong>: Attendance confirmation or certificate from a relevant industry workshop is submitted by end of 2026.  </p>
+<hr>
+<p><strong>7. ID: DPP-TEXT-007</strong><br><strong>Statement</strong>: The supplier shall ensure that all DPP data submitted to downstream partners or consumers is verified against internal quality control checks at least once per quarter.<br><strong>Rationale</strong>: Regular internal verification helps prevent data errors and supports the integrity of the DPP ecosystem.<br><strong>Source</strong>: Draft Preparatory Study on Textiles for Product Policy Instruments (working_group)<br><strong>Priority</strong>: High<br><strong>Risk</strong>: Medium – Incorrect data could lead to non-compliance or reputational risk.<br><strong>System Validation/Verification Success Criteria</strong>: A documented internal audit report is generated and archived every quarter.  </p>
+<hr>
+<p><strong>8. ID: DPP-TEXT-008</strong><br><strong>Statement</strong>: The supplier shall maintain a digital log of all DPP data exchanges with partners, including timestamps and data versions.<br><strong>Rationale</strong>: Maintaining a digital log supports traceability and accountability in case of disputes or audits.<br><strong>Source</strong>: D4.1 Reference Architecture (working_group)<br><strong>Priority</strong>: Medium<br><strong>Risk</strong>: Low – However, missing logs may complicate compliance verification.<br><strong>System Validation/Verification Success Criteria</strong>: A log is maintained and accessible for at least 12 months.  </p>
+<hr>
+<p><strong>Sources</strong>  </p>
+<ul>
+<li><strong>Draft Preparatory Study on Textiles for Product Policy Instruments</strong> (working_group) – [<a href="https://susproc.jrc.ec.europa.eu/product-bureau/product-groups/467/home%5D">https://susproc.jrc.ec.europa.eu/product-bureau/product-groups/467/home]</a>  </li>
+<li><strong>D4.1 Reference Architecture</strong> (working_group) – [<a href="https://zenodo.org/records/15467720%5D">https://zenodo.org/records/15467720]</a>  </li>
+<li><strong>EU strategy for sustainable and circular textiles</strong> (commission) – [<a href="https://environment.ec.europa.eu/publications/textiles-strategy_en%5D">https://environment.ec.europa.eu/publications/textiles-strategy_en]</a></li>
+</ul>
+<hr>
+<p><strong>End of Requirements Document</strong></p>
+</div>
+
+        <!-- Copy button -->
+        <button id="copy-button" class="copy-button" onclick="copyOutput()" style="display: inline-block;">
+            Copy Requirements
+        </button>
+
+    </div>
+
+    <!-- MS Forms for Feedback -->
+    <!--
+    <div class="msforms">
+        <iframe id="ms-forms" width="640px" height="480px" src="https://forms.office.com/Pages/ResponsePage.aspx?id=ujzz4PV5YkaC5w5TbNoSMky758Gqz3BGmiRiauivYCNUOTJKSUhWSTFaOFlOVVNDOUlGTlpCTUE3Ni4u&embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border: none; max-width:100%; max-height:100vh" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
+    </div>-->
+    
+    <div class="footer">
+        <p style="color:grey">Version 1.0</p> 
+        Created by <strong>Isabel Rutten</strong> as thesis intern of <strong>TNO Vector</strong>.
+    </div>
+
+
+
+
+
+
+<script>
+async function submitForm() {
+    // Gather input values
+    const sector = document.getElementById("sector").value.trim();
+    const size = document.getElementById("size").value.trim();
+    const role = document.getElementById("role").value.trim();
+    const maturity = document.getElementById("maturity").value.trim();
+    const technical = document.getElementById("technical").value.trim();
+    const implementation = document.getElementById("implementation").value.trim();
+
+    // Basic validation (optional)
+    if (!sector || !size || !role || !maturity || !technical|| !implementation) {
+        alert("Please fill out all fields.");
+        return;
+    }
+
+    // Build prompt text combining all answers
+    const prompt = `
+1. Sector: ${sector}
+2. Organization size: ${size}
+3. Organization role in DPP Ecosystem: ${role}
+4. Digital maturity: ${maturity}
+5. Level of ICT knowledge (i.e. level of technical detail in output): ${technical}
+6. Aim of implementation level (with 2: Entity level compliance, 3: Ecosystem level compliance, 4: Value adding, 5: Competitive advantage):  ${implementation}
+`;
+
+    // Show a loading indicator
+    const outputDiv = document.getElementById("llm-output");
+    outputDiv.innerHTML = "Generating custom requirements...";
+
+    // Call backend
+    try {
+        const response = await fetch("https://system-ai-335a.onrender.com/generate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ input: prompt })
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+            outputDiv.innerHTML = "Error: " + escapeHTML(data.error);
+        } else {
+            outputDiv.innerHTML = formatOutput(data.output);
+            showCopyButtonIfNeeded();
+            // showFormsIfNeeded();
+        }
+    } catch (err) {
+        outputDiv.innerHTML = "Request failed: " + escapeHTML(err.message);
+    }
+}
+
+// Helper: escape HTML entities to prevent injection
+function escapeHTML(str) {
+    return str.replace(/&/g, "&amp;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;");
+}
+
+// Helper: format text output nicely
+function formatOutput(text) {
+    if (!text || typeof text !== "string") return "";
+
+    // Configure marked (GitHub-flavored markdown)
+    marked.setOptions({
+        // breaks: true,        // convert \n to <br>
+        gfm: true            // enable tables, strikethrough, etc.
+    });
+
+    // Step 1: Markdown → HTML
+    const rawHtml = marked.parse(text);
+
+    // Step 2: Sanitize HTML to prevent XSS
+    const safeHtml = DOMPurify.sanitize(rawHtml, {
+        USE_PROFILES: { html: true }
+    });
+
+    return safeHtml;
+}
+
+
+// function formatOutput(text) {
+//     // Escape HTML first
+//     let escaped = text
+//         .replace(/&/g, "&amp;")
+//         .replace(/</g, "&lt;")
+//         .replace(/>/g, "&gt;");
+
+//     // Convert bold: **text** -> <strong>text</strong>
+//     escaped = escaped.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+
+//     // Convert bullets starting with -, *, or • into <ul><li>
+//     const lines = escaped.split("\n");
+//     let inList = false;
+//     let html = "";
+
+//     for (let line of lines) {
+//         if (/^(\s*[-*•]\s+)/.test(line)) {
+//             if (!inList) {
+//                 inList = true;
+//                 html += "<ul>";
+//             }
+//             html += "<li>" + line.replace(/^(\s*[-*•]\s+)/, "") + "</li>";
+//         } else {
+//             if (inList) {
+//                 inList = false;
+//                 html += "</ul>";
+//             }
+//             // Wrap paragraphs
+//             if (line.trim() !== "") {
+//                 html += "<p>" + line + "</p>";
+//             }
+//         }
+//     }
+//     if (inList) html += "</ul>";
+
+//     return html;
+// }
+
+// function copyOutput() {
+//     const outputDiv = document.getElementById("llm-output");
+
+//     if (outputDiv.textContent.trim() === "") return;
+
+//     // Copy plain text (without HTML tags)
+//     navigator.clipboard.writeText(outputDiv.textContent)
+//         .then(() => {
+//             alert("Action plan copied to clipboard!");
+//         })
+//         .catch(err => {
+//             alert("Failed to copy: " + err);
+//         });
+// }
+
+function copyOutput() {
+    const outputDiv = document.getElementById("llm-output");
+
+    if (outputDiv.innerHTML.trim() === "") return;
+
+    // Convert HTML to nicely formatted plain text
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = outputDiv.innerHTML;
+
+    // Recursively extract text with line breaks
+    function getTextWithFormatting(element) {
+        let text = "";
+        element.childNodes.forEach(node => {
+            if (node.nodeType === Node.TEXT_NODE) {
+                text += node.textContent;
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
+                const tag = node.tagName.toLowerCase();
+                if (tag === "br") {
+                    text += "\n";
+                } else if (tag === "p") {
+                    text += getTextWithFormatting(node) + "\n\n";
+                } else if (tag === "li") {
+                    text += "- " + getTextWithFormatting(node) + "\n";
+                } else if (tag === "ul" || tag === "ol") {
+                    text += getTextWithFormatting(node) + "\n";
+                } else if (tag === "strong") {
+                    text += node.textContent; // bold as plain text
+                } else {
+                    text += getTextWithFormatting(node);
+                }
+            }
+        });
+        return text;
+    }
+
+    const formattedText = getTextWithFormatting(tempDiv).trim();
+
+    navigator.clipboard.writeText(formattedText)
+        .then(() => alert("Action plan copied to clipboard!"))
+        .catch(err => alert("Failed to copy: " + err));
+}
+
+
+// Show the copy button only when there’s content
+function showCopyButtonIfNeeded() {
+    const outputDiv = document.getElementById("llm-output");
+    const copyButton = document.getElementById("copy-button");
+
+    if (outputDiv.textContent.trim() !== "") {
+        copyButton.style.display = "inline-block";
+    } else {
+        copyButton.style.display = "none";
+    }
+}
+
+// Show the MS Forms only when there is content
+// function showFormsIfNeeded() {
+//     const outputDiv = document.getElementById("llm-output");
+//     const msForms = document.getElementById("ms-forms");
+
+//     if (outputDiv.textContent.trim() !== "") {
+//         msForms.style.display = "inline-block";
+//     } else {
+//         msForms.style.display = "none";
+//     }
+// }
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body></html>
