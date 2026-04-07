@@ -79,10 +79,16 @@
         <div class="form-group">
             <label for="implementation">5. What level of DPP implementation does your organization aim for?</label>
             <img src="DPP-maturity-model.png" alt="DPP Maturity Model"> <br>
-            <small class="form-text">
+            <!-- <small class="form-text">
                 (with 2: Entity level compliance, 3: Ecosystem level compliance, <br> 4: Value adding, 5: Competitive advantage) <br>
             </small>
-            <input id="implementation" type="number" min="2" max="5" placeholder="2">
+            <input id="implementation" type="number" min="2" max="5" placeholder="2"> -->
+            <select id="implementation" name="implementation"> 
+                <option value="two">2: Entity level compliance</option>
+                <option value="three">3: Ecosystem level compliance</option>
+                <option value="four">4: Value adding</option>
+                <option value="five">5: Competitive advantage</option>
+            </select> 
         </div>
 
         <!-- <div class="form-group">
