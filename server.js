@@ -126,7 +126,7 @@ app.post("/generate", async (req, res) => {
             Do not infer beyond what you know or what information the source documents give.  
             Note that a good requirement includes the following:   
             -	ID (this should be standardized with the following format: "DPP"-SECTOR-NUMBER, e.g. DPP-TEXTILE-001);
-            -	Statement (actual requirement): recommended structure (but not explicitly) is: [Condition] + [Subject] + “must/should/could/won't” + [Action] + [Constraint] (with the verb must/should/could/won't being chosen based on the MoSCoW method, which should be used to show a distinction between requirements and recommendations);
+            -	Statement (actual requirement): recommended structure (but not explicitly) is: [Condition] + [Subject] + “must/should/could/won't” + [Action] + [Constraint] (with the verb must/should/could/won't being chosen based on the MoSCoW method, which should be used to show a distinction between requirements and recommendations, but you do not have to use all verbs);
             -	Rationale (compliance oriented); 
             - Organization benefits (e.g. efficiency)
             -	Source; 
@@ -136,6 +136,7 @@ app.post("/generate", async (req, res) => {
             And a good requirement has the following characteristics:  Atomic; Necessary; Unambiguous; Complete; Consistent; Feasible; Verifiable; Traceable; Modifiable.
             Also, assume that the reader has a limited ICT or DPP background and that the information should be accessible and understandable to the user.
             Don't use tables in your response, not even for illustration. The current date is ` + new Date() + `, which can be used when considering the regulations that are in-force. 
+            Do not end your response with any suggestions for other ways in which you can help, just end with the sources.
             Use the provided context to answer questions accurately. 
             Always include a 'Sources' section at the end of your answer listing the given source documents that consists of document names and where to find them.
           `
