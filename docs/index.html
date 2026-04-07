@@ -135,10 +135,10 @@
 
         <!-- Buttons for the next steps -->
         <div style="display: flex">
-            <button id="copy-button" class="copy-button" onclick="location.href = 'https://cirpass2.eu/'" style="display:none;">
+            <button id="info-button-1" class="copy-button" onclick="location.href = 'https://cirpass2.eu/'" style="display:none;">
                 Get more information on European level!
             </button>
-            <button id="copy-button" class="copy-button" onclick="location.href = 'https://coe-dpp.nl/" style="display:none;">
+            <button id="info-button-2" class="copy-button" onclick="location.href = 'https://coe-dpp.nl/" style="display:none;">
                 Get more information as a Dutch organization!
             </button>
         </div>
@@ -341,11 +341,17 @@ function copyOutput() {
 function showCopyButtonIfNeeded() {
     const outputDiv = document.getElementById("llm-output");
     const copyButton = document.getElementById("copy-button");
+    const infoButtonOne = document.getElementById("info-button-1");
+    const infoButtonTwo = document.getElementById("info-button-2");
 
     if (outputDiv.textContent.trim() !== "") {
         copyButton.style.display = "inline-block";
+        infoButtonOne.style.display = "inline-block";
+        infoButtonTwo.style.display = "inline-block";
     } else {
         copyButton.style.display = "none";
+        infoButtonOne.style.display = "inline-block";
+        infoButtonTwo.style.display = "inline-block";
     }
 }
 
