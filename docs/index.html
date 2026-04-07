@@ -32,28 +32,48 @@
         <div class="form-group">
             <label for="size">2. What is your company size according to <a href="https://single-market-economy.ec.europa.eu/smes/sme-fundamentals/sme-definition_en">EU regulations</a>?</label>
             <img src="SME-table.png" alt="SME sizes according to the EU"> <br>
-            <small class="form-text">
+            <!-- <small class="form-text">
                 (e.g. small, large)  <br>
             </small>
-            <input id="size" type="text" placeholder="Micro">
+            <input id="size" type="text" placeholder="Micro"> -->
+            <select id="size" name="size"> 
+                <option value="micro">Micro</option>
+                <option value="small">Small</option>
+                <option value="medium">Medium</option>
+                <option value="large">Large</option>
+            </select>
         </div>
 
         <div class="form-group">
             <label for="role">3. What role does your organization take in the <a href="https://coe-dsc.nl/wp-content/uploads/2026/01/Dutch-Digital-Product-Passport-Landscape-Scan-Version-1.0-final-1.pdf">DPP ecosystem</a>?</label>
             <img src="Ecosystem-framework.png" alt="DPP Ecosystem Framework"> <br>
-            <small class="form-text">
+            <!-- <small class="form-text">
                 (e.g. retailer, economic operator)  <br>
             </small>
-            <input id="role" type="text" placeholder="Supplier">
+            <input id="role" type="text" placeholder="Supplier"> -->
+            <select id="role" name="role"> 
+                <option value="micro">Economic operator</option>
+                <option value="small">Supplier</option>
+                <option value="medium">Retailer</option>
+                <option value="large">Independent operator</option>
+            </select>
         </div>
 
         <div class="form-group">
             <label for="maturity">4. What is the digital maturity level of your organization?</label>
             <img src="digital-maturity-model.png" alt="Digital Maturity Model" style="width: 40%"> <br>
-            <small class="form-text">
+            <!-- <small class="form-text">
                 (e.g. incomplete, performed, predictable)  <br>
             </small>
-            <input id="maturity" type="text" placeholder="Optimizing">
+            <input id="maturity" type="text" placeholder="Optimizing"> -->
+            <select id="maturity" name="maturity"> 
+                <option value="incomplete">Incomplete</option>
+                <option value="performed">Performed</option>
+                <option value="managed">Managed</option>
+                <option value="established">Established</option>
+                <option value="predictable">Predictable</option>
+                <option value="optimizing">Optimizing</option>
+            </select> 
         </div>
 
         <div class="form-group">
