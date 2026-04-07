@@ -65,13 +65,13 @@
             <input id="implementation" type="number" min="2" max="5" placeholder="2">
         </div>
 
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label for="technical">6. What is your ICT background?</label>
             <small class="form-text">
                 (used to customize the output to your background)  <br>
             </small>
             <input id="technical" type="text" placeholder="Average ICT knowledge">
-        </div>
+        </div> -->
         
         <button class="main-button" onclick="submitForm()">
             DISCOVER YOUR REQUIREMENTS<br>TO IMPLEMENT THE DPP
@@ -109,11 +109,11 @@ async function submitForm() {
     const size = document.getElementById("size").value.trim();
     const role = document.getElementById("role").value.trim();
     const maturity = document.getElementById("maturity").value.trim();
-    const technical = document.getElementById("technical").value.trim();
+    // const technical = document.getElementById("technical").value.trim();
     const implementation = document.getElementById("implementation").value.trim();
 
     // Basic validation (optional)
-    if (!sector || !size || !role || !maturity || !technical|| !implementation) {
+    if (!sector || !size || !role || !maturity || !implementation) {
         alert("Please fill out all fields.");
         return;
     }
@@ -124,8 +124,7 @@ async function submitForm() {
 2. Organization size: ${size}
 3. Organization role in DPP Ecosystem: ${role}
 4. Digital maturity: ${maturity}
-5. Level of ICT knowledge (i.e. level of technical detail in output): ${technical}
-6. Aim of implementation level (with 2: Entity level compliance, 3: Ecosystem level compliance, 4: Value adding, 5: Competitive advantage):  ${implementation}
+5. Aim of implementation level (with 2: Entity level compliance, 3: Ecosystem level compliance, 4: Value adding, 5: Competitive advantage):  ${implementation}
 `;
 
     // Show a loading indicator
