@@ -161,29 +161,48 @@ function retrieveContext(query, docType = null, topK = 4) {
 
   const sector = detectSector(query);
 
-  // Step 1: filter by Doc_Type only (keep this optional)
+  // Step 1: filter by Doc_Type only (kept optional)
   let candidates = chunks.filter(c => {
     if (docType && c.metadata?.Doc_Type !== docType) return false;
     return true;
   });
 
-  // Step 2: score all candidates
+  // Step 2: try specific sector first
+  let usedSectorFilter = false;
+
+  if (sector) {
+    const filtered = candidates.filter(c =>
+      (c.metadata?.Tags || "").toLowerCase().includes(sector.toLowerCase())
+    );
+
+    if (filtered.length > 0) {
+      candidates = filtered;
+      usedSectorFilter = true;
+    }
+  }
+
+  // Step 3: score all candidates
   const scored = candidates.map(c => ({
     text: c.text,
     metadata: c.metadata,
     score: scoreChunk(c, query, sector),
   }));
 
-  // Step 3: sort descending
+  // Step 4: sort descending
   scored.sort((a, b) => b.score - a.score);
 
-  // Step 4: prefer relevant matches, fallback if needed
+  // Step 5: prefer relevant matches, fallback if needed
   let topChunks = scored.filter(c => c.score > 0).slice(0, topK);
+  
   if (!topChunks.length) topChunks = scored.slice(0, topK);
 
   return {
     docs: topChunks.map(c => c.text),
-    metadata: topChunks.map(c => c.metadata),
+    // metadata: topChunks.map(c => c.metadata),
+    metadata: topChunks.map(c => ({
+      ...c.metadata,
+      _sectorFiltered: usedSectorFilter // 👈 debugging gold
+    })),
   };
 }
 
