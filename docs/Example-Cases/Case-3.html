@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<!-- saved from url=(0038)https://isabelrut.github.io/system-ai/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>DPPathfinder</title>
+    <link rel="stylesheet" href="./Case-3_files/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Prepare html output for html -->
+    <script src="./Case-3_files/marked.min.js.download"></script>
+    <script src="./Case-3_files/purify.min.js.download"></script>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>DPPathfinder</h1>
+        <p>AI-Driven Support for Implementing<br>the Digital Product Passport</p>
+        <p style="color:grey">Version 2.0 </p>
+        <!-- <p style="color:grey">Version 1.0 <br> <a href="info.html" style="color:white; text-decoration:none">Information page</a> </p> -->
+    </div>
+
+    <div class="container">
+
+        <p class="intro">
+            Fill in the following forms to find out what <em>you</em> need to do to take part in the DPP ecosystem.
+        </p>
+
+        <div class="form-group">
+            <label for="sector">1. What sector is your organization working in?</label>
+            <!-- <input id="sector" type="text" placeholder="Toys sector"> -->
+            <select id="sector" name="sector"> 
+                <option value="Textiles/apparel">Textiles/apparel</option>
+                <option value="ICT products">ICT products</option>
+                <option value="Construction products">Construction products</option>
+                <option value="Batteries">Batteries</option>
+                <option value="Recycled content">Recycled content</option>
+                <option value="Iron and steel">Iron and steel</option>
+                <option value="Repairability">Repairability</option>
+                <option value="Energy-related products">Energy-related products</option>
+                <option value="Furniture">Furniture</option>
+                <option value="Footwear">Footwear</option>
+                <option value="Aluminium">Aluminium</option>
+                <option value="Mattresses">Mattresses</option>
+                <option value="Tyres">Tyres</option>
+                <option value="Toys">Toys</option>
+                <option value="Plastic">Plastic</option>
+                <option value="Fuels">Fuels</option>
+                <option value="Chemicals">Chemicals</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="size">2. What is your company size according to <a href="https://single-market-economy.ec.europa.eu/smes/sme-fundamentals/sme-definition_en">EU regulations</a>?</label>
+            <img src="./Case-3_files/SME-table.png" alt="SME sizes according to the EU"> <br>
+            <!-- <small class="form-text">
+                (e.g. small, large)  <br>
+            </small>
+            <input id="size" type="text" placeholder="Micro"> -->
+            <select id="size" name="size"> 
+                <option value="small">Small</option>
+                <option value="micro">Micro</option>
+                <option value="medium">Medium</option>
+                <option value="large">Large</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="role">3. What role does your organization take in the <a href="https://coe-dsc.nl/wp-content/uploads/2026/01/Dutch-Digital-Product-Passport-Landscape-Scan-Version-1.0-final-1.pdf">DPP ecosystem</a>?</label>
+            <img src="./Case-3_files/Ecosystem-framework.png" alt="DPP Ecosystem Framework"> <br>
+            <!-- <small class="form-text">
+                (e.g. retailer, economic operator)  <br>
+            </small>
+            <input id="role" type="text" placeholder="Supplier"> -->
+            <select id="role" name="role"> 
+                <option value="Supplier">Supplier</option>
+                <option value="Economic operator">Economic operator</option>
+                <option value="Retailer">Retailer</option>
+                <option value="Independent operator">Independent operator</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="maturity">4. What is the <a href="https://www.mdpi.com/2504-2289/7/1/17">digital maturity level</a> of your organization?</label>
+            <img src="./Case-3_files/digital-maturity-model.png" alt="Digital Maturity Model" style="width: 40%"> <br>
+            <small class="form-text">
+                The figure shows a digital maturity model that starts at incomplete, meaning there has been no digitalization in the company. Next, performed means that a planning has been made. Managed focuses on ensuring existing business processes are digitized through technology. Established means that digital transformation has been done based on existing standard. Predictable seizes those benefits by applying quantitative techniques on real-time data, with data analytics on business processes. Lastly, optimizing focuses on innovation and continuous improvement.  <br>
+            </small>
+            <!-- <small class="form-text" title="The figure shows a digital maturity model that starts at incomplete, meaning there has been no digitalization in the company. Next, performed means that a planning has been made. Managed focuses on ensuring existing business processes are digitized through technology. Established means that digital transformation has been done based on existing standard. Predictable seizes those benefits by applying quantitative techniques on real-time data, with data analytics on business processes. Lastly, optimizing focuses on innovation and continuous improvement.">
+                For further explanation, please hover your mouse over this text or click this <a href="https://www.mdpi.com/2504-2289/7/1/17"> link</a>.  <br>
+            </small> -->
+            <!--
+            <input id="maturity" type="text" placeholder="Optimizing"> -->
+            <select id="maturity" name="maturity"> 
+                <option value="incomplete">Incomplete</option>
+                <option value="performed">Performed</option>
+                <option value="managed">Managed</option>
+                <option value="established">Established</option>
+                <option value="predictable">Predictable</option>
+                <option value="optimizing">Optimizing</option>
+            </select> 
+        </div>
+
+        <div class="form-group">
+            <label for="implementation">5. What level of DPP implementation does your organization aim for?</label>
+            <img src="./Case-3_files/DPP-maturity-model.png" alt="DPP Maturity Model"> <br>
+            <!-- <small class="form-text">
+                (with 2: Entity level compliance, 3: Ecosystem level compliance, <br> 4: Value adding, 5: Competitive advantage) <br>
+            </small>
+            <input id="implementation" type="number" min="2" max="5" placeholder="2"> -->
+            <select id="implementation" name="implementation"> 
+                <option value="three">3: Ecosystem level compliance</option>
+                <option value="two">2: Entity level compliance</option>
+                <option value="four">4: Value adding</option>
+                <option value="five">5: Competitive advantage</option>
+            </select> 
+        </div>
+
+        <!-- <div class="form-group">
+            <label for="technical">6. What is your ICT background?</label>
+            <small class="form-text">
+                (used to customize the output to your background)  <br>
+            </small>
+            <input id="technical" type="text" placeholder="Average ICT knowledge">
+        </div> -->
+        
+        <button class="main-button" onclick="submitForm()">
+            DISCOVER YOUR REQUIREMENTS<br>TO IMPLEMENT THE DPP
+        </button>
+
+        <div id="llm-output" class="llm-output"><p><strong>DPP-TEXTILE-001</strong><br><strong>Statement</strong>: When acting as a supplier in the textiles/apparel sector, the organization must assign a globally unique identifier (e.g., GTIN) to each product model produced.<br><strong>Rationale</strong>: Compliance with the delegated act on textiles requires that at minimum, model-level identifiers are used to ensure traceability and transparency of the product within the supply chain. This facilitates regulatory reporting and supports extended producer responsibility.<br><strong>Organization Benefits</strong>: Enables compliance with EU regulations; simplifies data reporting to downstream partners.<br><strong>Source</strong>: DPP Granularity options for Textiles/Apparel (working_group) from <a href="https://zenodo.org/records/17582219">https://zenodo.org/records/17582219</a><br><strong>Priority</strong>: Must – This is a baseline requirement for regulatory compliance and is mandated by the ESPR Ecodesign Forum.<br><strong>Risk</strong>: High – Failure to assign identifiers may result in non-compliance and legal penalties.<br><strong>System Validation/Verification Success Criteria</strong>: All product models are assigned a GTIN and verified against a central database or through internal audits.</p>
+<hr>
+<p><strong>DPP-TEXTILE-002</strong><br><strong>Statement</strong>: The organization must maintain and update a record of basic product attributes (e.g., color, size, fabric composition) associated with each product model.<br><strong>Rationale</strong>: These attributes are essential for model-level DPPs and are required for transparency and downstream compliance.<br><strong>Organization Benefits</strong>: Supports efficient product categorization and facilitates communication with retailers and consumers.<br><strong>Source</strong>: DPP Granularity options for Textiles/Apparel (working_group) from <a href="https://zenodo.org/records/17582219">https://zenodo.org/records/17582219</a><br><strong>Priority</strong>: Must – These attributes are part of the minimum mandatory data set for model-level DPPs.<br><strong>Risk</strong>: Medium – Incomplete or outdated records may lead to compliance issues during audits.<br><strong>System Validation/Verification Success Criteria</strong>: Product attributes are consistently recorded and match physical products.</p>
+<hr>
+<p><strong>DPP-TEXTILE-003</strong><br><strong>Statement</strong>: The organization should establish a basic digital system for storing and managing model-level DPP data internally.<br><strong>Rationale</strong>: A digital system is necessary to ensure data integrity, accessibility, and traceability for regulatory and business purposes.<br><strong>Organization Benefits</strong>: Enhances data management efficiency and supports scalability as digital maturity improves.<br><strong>Source</strong>: DPP Granularity options for Textiles/Apparel (working_group) from <a href="https://zenodo.org/records/17582219">https://zenodo.org/records/17582219</a><br><strong>Priority</strong>: Should – While not strictly required immediately, it is a foundational step toward compliance and operational improvement.<br><strong>Risk</strong>: Medium – Without a system, manual tracking increases the risk of errors and inefficiencies.<br><strong>System Validation/Verification Success Criteria</strong>: DPP data is stored in a centralized digital format accessible to key stakeholders.</p>
+<hr>
+<p><strong>DPP-TEXTILE-004</strong><br><strong>Statement</strong>: The organization should provide model-level DPP data to downstream partners upon request, using standardized formats where available.<br><strong>Rationale</strong>: This supports ecosystem-level compliance and transparency, which is a strategic step toward broader industry alignment and trust.<br><strong>Organization Benefits</strong>: Facilitates collaboration with other actors in the supply chain and supports brand reputation.<br><strong>Source</strong>: DPP Granularity options for Textiles/Apparel (working_group) from <a href="https://zenodo.org/records/17582219">https://zenodo.org/records/17582219</a><br><strong>Priority</strong>: Should – Required for ecosystem-level compliance and to build a trusted supply chain.<br><strong>Risk</strong>: Low – May require some minor process changes, but is generally feasible.<br><strong>System Validation/Verification Success Criteria</strong>: DPP data is shared in a consistent and timely manner to requested partners.</p>
+<hr>
+<p><strong>DPP-TEXTILE-005</strong><br><strong>Statement</strong>: The organization could consider integrating product identifiers and attributes into existing labeling or packaging to support traceability and consumer engagement.<br><strong>Rationale</strong>: Embedding identifiers into labels improves consumer visibility and engagement, which supports the broader goals of sustainable fashion and circularity.<br><strong>Organization Benefits</strong>: Increases brand trust and may lead to new market opportunities.<br><strong>Source</strong>: DPP Granularity options for Textiles/Apparel (working_group) from <a href="https://zenodo.org/records/17582219">https://zenodo.org/records/17582219</a><br><strong>Priority</strong>: Could – Not mandatory but adds value in building a sustainable brand image and supporting consumer transparency.<br><strong>Risk</strong>: Low – May require design adjustments but is optional and low-cost.<br><strong>System Validation/Verification Success Criteria</strong>: Identifiers and attributes are clearly visible on product labels or packaging.</p>
+<hr>
+<p><strong>DPP-TEXTILE-006</strong><br><strong>Statement</strong>: The organization won't be required to collect or report batch- or item-level data unless explicitly mandated by a future delegated act or requested by a downstream partner.<br><strong>Rationale</strong>: Model-level granularity is currently sufficient for compliance and aligns with the current regulatory framework.<br><strong>Organization Benefits</strong>: Avoids unnecessary data collection and processing costs.<br><strong>Source</strong>: DPP Granularity options for Textiles/Apparel (working_group) from <a href="https://zenodo.org/records/17582219">https://zenodo.org/records/17582219</a><br><strong>Priority</strong>: Won’t – These are not currently required for a small supplier with low digital maturity and ecosystem-level compliance goals.<br><strong>Risk</strong>: Low – Not collecting this data now avoids resource allocation to non-essential activities.<br><strong>System Validation/Verification Success Criteria</strong>: No batch- or item-level data is collected or stored unless mandated by law or requested by a partner.</p>
+<hr>
+<p><strong>Sources</strong>  </p>
+<ul>
+<li>DPP Granularity options for Textiles/Apparel (working_group) from <a href="https://zenodo.org/records/17582219">https://zenodo.org/records/17582219</a></li>
+</ul>
+</div>
+
+        <!-- Copy button -->
+        <button id="copy-button" class="copy-button" onclick="copyOutput()" style="display: inline-block;">
+            Copy Requirements
+        </button>
+
+        <br> 
+        
+        <!-- Buttons for the next steps -->
+        <button id="info-button-1" class="copy-button" onclick="location.href = &#39;https://cirpass2.eu/&#39;" style="display: inline-block; background-color: rgb(65, 167, 101);">
+            Get more information on European level!
+        </button>
+        
+        <button id="info-button-2" class="copy-button" onclick="location.href = &#39;https://coe-dpp.nl/&#39;" style="display: inline-block; background-color: rgb(65, 167, 101);">
+            Get more information as a Dutch organization!
+        </button>
+
+        <br> 
+        <br> 
+
+        <small id="disclaimer" class="form-text" style="display: inline-block;">
+            <i> Each requirement consists of an ID, a statement (the actual requirement itself), a rationale (a compliance-oriented reason behind the requirement), organization benefits (such as improved efficiency), a source (which are either published EU documents or EU working group documents), a priority (based on the MoSCoW method, which uses must/should/could/won't), a risk of implementation (about the possible complications that might occur), and system validation success criteria (to verify whether you adhere to this requirement). </i> <br> <br>
+            <i> Note that this set of requirements has been generated using a Large Language Model. Although the used LLM has access to a relevant set of documents about the Digital Product Passport, it is still sensitive to hallucinations. Hence, it is recommended to only use these requirements as a starting point in your journey with the DPP. No rights can be derived from this LLM output. </i> <br>
+        </small>
+        
+    </div>
+
+    <!-- MS Forms for Feedback -->
+    <!--
+    <div class="msforms">
+        <iframe id="ms-forms" width="640px" height="480px" src="https://forms.office.com/Pages/ResponsePage.aspx?id=ujzz4PV5YkaC5w5TbNoSMky758Gqz3BGmiRiauivYCNUOTJKSUhWSTFaOFlOVVNDOUlGTlpCTUE3Ni4u&embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border: none; max-width:100%; max-height:100vh" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
+    </div>-->
+    
+    <div class="footer">
+        <p style="color:grey">Version 2.0</p> 
+        Created by <strong>Isabel Rutten</strong> as thesis intern of <strong>TNO Vector</strong>.
+    </div>
+
+
+
+
+
+
+<script>
+async function submitForm() {
+    // Gather input values
+    const sector = document.getElementById("sector").value.trim();
+    const size = document.getElementById("size").value.trim();
+    const role = document.getElementById("role").value.trim();
+    const maturity = document.getElementById("maturity").value.trim();
+    // const technical = document.getElementById("technical").value.trim();
+    const implementation = document.getElementById("implementation").value.trim();
+
+    // Basic validation (optional)
+    if (!sector || !size || !role || !maturity || !implementation) {
+        alert("Please fill out all fields.");
+        return;
+    }
+
+    // Build prompt text combining all answers
+    const prompt = `
+1. Sector: ${sector}
+2. Organization size: ${size}
+3. Organization role in DPP Ecosystem: ${role}
+4. Digital maturity (The digital maturity model starts at incomplete (no digitalization in the company). Next, performed means that a planning has been made. Managed focuses on ensuring existing business processes are digitized through technology. Established means that digital transformation has been done based on existing standard. Predictable seizes those benefits by applying quantitative techniques on real-time data, with data analytics on business processes. Lastly, optimizing focuses on innovation and continuous improvement.): ${maturity} 
+5. Aim of implementation level (with 2: Entity level compliance, 3: Ecosystem level compliance, 4: Value adding, 5: Competitive advantage):  ${implementation}
+`;
+
+    // Show a loading indicator
+    const outputDiv = document.getElementById("llm-output");
+    outputDiv.innerHTML = "Generating custom requirements...";
+
+    // Call backend
+    try {
+        const response = await fetch("https://system-ai-335a.onrender.com/generate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ input: prompt })
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+            outputDiv.innerHTML = "Error: " + escapeHTML(data.error);
+        } else {
+            outputDiv.innerHTML = formatOutput(data.output);
+            showCopyButtonIfNeeded();
+            // showFormsIfNeeded();
+        }
+    } catch (err) {
+        outputDiv.innerHTML = "Request failed: " + escapeHTML(err.message);
+    }
+}
+
+// Helper: escape HTML entities to prevent injection
+function escapeHTML(str) {
+    return str.replace(/&/g, "&amp;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;");
+}
+
+// Helper: format text output nicely
+function formatOutput(text) {
+    if (!text || typeof text !== "string") return "";
+
+    // Configure marked (GitHub-flavored markdown)
+    marked.setOptions({
+        // breaks: true,        // convert \n to <br>
+        gfm: true            // enable tables, strikethrough, etc.
+    });
+
+    // Step 1: Markdown → HTML
+    const rawHtml = marked.parse(text);
+
+    // Step 2: Sanitize HTML to prevent XSS
+    const safeHtml = DOMPurify.sanitize(rawHtml, {
+        USE_PROFILES: { html: true }
+    });
+
+    return safeHtml;
+}
+
+
+// function formatOutput(text) {
+//     // Escape HTML first
+//     let escaped = text
+//         .replace(/&/g, "&amp;")
+//         .replace(/</g, "&lt;")
+//         .replace(/>/g, "&gt;");
+
+//     // Convert bold: **text** -> <strong>text</strong>
+//     escaped = escaped.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+
+//     // Convert bullets starting with -, *, or • into <ul><li>
+//     const lines = escaped.split("\n");
+//     let inList = false;
+//     let html = "";
+
+//     for (let line of lines) {
+//         if (/^(\s*[-*•]\s+)/.test(line)) {
+//             if (!inList) {
+//                 inList = true;
+//                 html += "<ul>";
+//             }
+//             html += "<li>" + line.replace(/^(\s*[-*•]\s+)/, "") + "</li>";
+//         } else {
+//             if (inList) {
+//                 inList = false;
+//                 html += "</ul>";
+//             }
+//             // Wrap paragraphs
+//             if (line.trim() !== "") {
+//                 html += "<p>" + line + "</p>";
+//             }
+//         }
+//     }
+//     if (inList) html += "</ul>";
+
+//     return html;
+// }
+
+// function copyOutput() {
+//     const outputDiv = document.getElementById("llm-output");
+
+//     if (outputDiv.textContent.trim() === "") return;
+
+//     // Copy plain text (without HTML tags)
+//     navigator.clipboard.writeText(outputDiv.textContent)
+//         .then(() => {
+//             alert("Action plan copied to clipboard!");
+//         })
+//         .catch(err => {
+//             alert("Failed to copy: " + err);
+//         });
+// }
+
+function copyOutput() {
+    const outputDiv = document.getElementById("llm-output");
+
+    if (outputDiv.innerHTML.trim() === "") return;
+
+    // Convert HTML to nicely formatted plain text
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = outputDiv.innerHTML;
+
+    // Recursively extract text with line breaks
+    function getTextWithFormatting(element) {
+        let text = "";
+        element.childNodes.forEach(node => {
+            if (node.nodeType === Node.TEXT_NODE) {
+                text += node.textContent;
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
+                const tag = node.tagName.toLowerCase();
+                if (tag === "br") {
+                    text += "\n";
+                } else if (tag === "p") {
+                    text += getTextWithFormatting(node) + "\n\n";
+                } else if (tag === "li") {
+                    text += "- " + getTextWithFormatting(node) + "\n";
+                } else if (tag === "ul" || tag === "ol") {
+                    text += getTextWithFormatting(node) + "\n";
+                } else if (tag === "strong") {
+                    text += node.textContent; // bold as plain text
+                } else {
+                    text += getTextWithFormatting(node);
+                }
+            }
+        });
+        return text;
+    }
+
+    const formattedText = getTextWithFormatting(tempDiv).trim();
+    const disclaimerText = "\n\nEach requirement consists of an ID, a statement (the actual requirement itself), a rationale (a compliance-oriented reason behind the requirement), organization benefits (such as improved efficiency), a source (which are either published EU documents or EU working group documents), a priority (based on the MoSCoW method, which uses must/should/could/won't), a risk of implementation (about the possible complications that might occur), and system validation success criteria (to verify whether you adhere to this requirement).\n\n Note that this set of requirements has been generated using a Large Language Model. Although the used LLM has access to a relevant set of documents about the Digital Product Passport, it is still sensitive to hallucinations. Hence, it is recommended to only use these requirements as a starting point in your journey with the DPP. No rights can be derived from this LLM output.";
+    const finalText = formattedText + disclaimerText
+
+    navigator.clipboard.writeText(finalText)
+        .then(() => alert("Action plan copied to clipboard!"))
+        .catch(err => alert("Failed to copy: " + err));
+}
+
+
+// Show the copy button only when there’s content
+function showCopyButtonIfNeeded() {
+    const outputDiv = document.getElementById("llm-output");
+    const copyButton = document.getElementById("copy-button");
+    const infoButtonOne = document.getElementById("info-button-1");
+    const infoButtonTwo = document.getElementById("info-button-2");
+    const disclaimer = document.getElementById("disclaimer");
+
+    if (outputDiv.textContent.trim() !== "") {
+        copyButton.style.display = "inline-block";
+        infoButtonOne.style.display = "inline-block";
+        infoButtonTwo.style.display = "inline-block";
+        disclaimer.style.display = "inline-block";
+    } else {
+        copyButton.style.display = "none";
+        infoButtonOne.style.display = "none";
+        infoButtonTwo.style.display = "none";
+        disclaimer.style.display = "none";
+    }
+}
+
+// Show the MS Forms only when there is content
+// function showFormsIfNeeded() {
+//     const outputDiv = document.getElementById("llm-output");
+//     const msForms = document.getElementById("ms-forms");
+
+//     if (outputDiv.textContent.trim() !== "") {
+//         msForms.style.display = "inline-block";
+//     } else {
+//         msForms.style.display = "none";
+//     }
+// }
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body></html>

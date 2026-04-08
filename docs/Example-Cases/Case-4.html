@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<!-- saved from url=(0038)https://isabelrut.github.io/system-ai/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>DPPathfinder</title>
+    <link rel="stylesheet" href="./Case-4_files/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Prepare html output for html -->
+    <script src="./Case-4_files/marked.min.js.download"></script>
+    <script src="./Case-4_files/purify.min.js.download"></script>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>DPPathfinder</h1>
+        <p>AI-Driven Support for Implementing<br>the Digital Product Passport</p>
+        <p style="color:grey">Version 2.0 </p>
+        <!-- <p style="color:grey">Version 1.0 <br> <a href="info.html" style="color:white; text-decoration:none">Information page</a> </p> -->
+    </div>
+
+    <div class="container">
+
+        <p class="intro">
+            Fill in the following forms to find out what <em>you</em> need to do to take part in the DPP ecosystem.
+        </p>
+
+        <div class="form-group">
+            <label for="sector">1. What sector is your organization working in?</label>
+            <!-- <input id="sector" type="text" placeholder="Toys sector"> -->
+            <select id="sector" name="sector"> 
+                <option value="Toys">Toys</option>
+                <option value="ICT products">ICT products</option>
+                <option value="Textiles/apparel">Textiles/apparel</option>
+                <option value="Construction products">Construction products</option>
+                <option value="Batteries">Batteries</option>
+                <option value="Recycled content">Recycled content</option>
+                <option value="Iron and steel">Iron and steel</option>
+                <option value="Repairability">Repairability</option>
+                <option value="Energy-related products">Energy-related products</option>
+                <option value="Furniture">Furniture</option>
+                <option value="Footwear">Footwear</option>
+                <option value="Aluminium">Aluminium</option>
+                <option value="Mattresses">Mattresses</option>
+                <option value="Tyres">Tyres</option>
+                <option value="Plastic">Plastic</option>
+                <option value="Fuels">Fuels</option>
+                <option value="Chemicals">Chemicals</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="size">2. What is your company size according to <a href="https://single-market-economy.ec.europa.eu/smes/sme-fundamentals/sme-definition_en">EU regulations</a>?</label>
+            <img src="./Case-4_files/SME-table.png" alt="SME sizes according to the EU"> <br>
+            <!-- <small class="form-text">
+                (e.g. small, large)  <br>
+            </small>
+            <input id="size" type="text" placeholder="Micro"> -->
+            <select id="size" name="size"> 
+                <option value="large">Large</option>
+                <option value="micro">Micro</option>
+                <option value="small">Small</option>
+                <option value="medium">Medium</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="role">3. What role does your organization take in the <a href="https://coe-dsc.nl/wp-content/uploads/2026/01/Dutch-Digital-Product-Passport-Landscape-Scan-Version-1.0-final-1.pdf">DPP ecosystem</a>?</label>
+            <img src="./Case-4_files/Ecosystem-framework.png" alt="DPP Ecosystem Framework"> <br>
+            <!-- <small class="form-text">
+                (e.g. retailer, economic operator)  <br>
+            </small>
+            <input id="role" type="text" placeholder="Supplier"> -->
+            <select id="role" name="role"> 
+                <option value="Retailer">Retailer</option>
+                <option value="Economic operator">Economic operator</option>
+                <option value="Supplier">Supplier</option>
+                <option value="Independent operator">Independent operator</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="maturity">4. What is the <a href="https://www.mdpi.com/2504-2289/7/1/17">digital maturity level</a> of your organization?</label>
+            <img src="./Case-4_files/digital-maturity-model.png" alt="Digital Maturity Model" style="width: 40%"> <br>
+            <small class="form-text">
+                The figure shows a digital maturity model that starts at incomplete, meaning there has been no digitalization in the company. Next, performed means that a planning has been made. Managed focuses on ensuring existing business processes are digitized through technology. Established means that digital transformation has been done based on existing standard. Predictable seizes those benefits by applying quantitative techniques on real-time data, with data analytics on business processes. Lastly, optimizing focuses on innovation and continuous improvement.  <br>
+            </small>
+            <!-- <small class="form-text" title="The figure shows a digital maturity model that starts at incomplete, meaning there has been no digitalization in the company. Next, performed means that a planning has been made. Managed focuses on ensuring existing business processes are digitized through technology. Established means that digital transformation has been done based on existing standard. Predictable seizes those benefits by applying quantitative techniques on real-time data, with data analytics on business processes. Lastly, optimizing focuses on innovation and continuous improvement.">
+                For further explanation, please hover your mouse over this text or click this <a href="https://www.mdpi.com/2504-2289/7/1/17"> link</a>.  <br>
+            </small> -->
+            <!--
+            <input id="maturity" type="text" placeholder="Optimizing"> -->
+            <select id="maturity" name="maturity"> 
+                <option value="optimizing">Optimizing</option>
+                <option value="incomplete">Incomplete</option>
+                <option value="performed">Performed</option>
+                <option value="managed">Managed</option>
+                <option value="established">Established</option>
+                <option value="predictable">Predictable</option>
+            </select> 
+        </div>
+
+        <div class="form-group">
+            <label for="implementation">5. What level of DPP implementation does your organization aim for?</label>
+            <img src="./Case-4_files/DPP-maturity-model.png" alt="DPP Maturity Model"> <br>
+            <!-- <small class="form-text">
+                (with 2: Entity level compliance, 3: Ecosystem level compliance, <br> 4: Value adding, 5: Competitive advantage) <br>
+            </small>
+            <input id="implementation" type="number" min="2" max="5" placeholder="2"> -->
+            <select id="implementation" name="implementation"> 
+                <option value="five">5: Competitive advantage</option>
+                <option value="two">2: Entity level compliance</option>
+                <option value="three">3: Ecosystem level compliance</option>
+                <option value="four">4: Value adding</option>
+            </select> 
+        </div>
+
+        <!-- <div class="form-group">
+            <label for="technical">6. What is your ICT background?</label>
+            <small class="form-text">
+                (used to customize the output to your background)  <br>
+            </small>
+            <input id="technical" type="text" placeholder="Average ICT knowledge">
+        </div> -->
+        
+        <button class="main-button" onclick="submitForm()">
+            DISCOVER YOUR REQUIREMENTS<br>TO IMPLEMENT THE DPP
+        </button>
+
+        <div id="llm-output" class="llm-output"><p><strong>Digital Product Passport Requirements for a Large Retailer in the Toy Sector with Optimizing Digital Maturity and Competitive Advantage Aim</strong></p>
+<hr>
+<p><strong>DPP-TOYS-001</strong><br><strong>Statement</strong>: When acting as a retailer of toys within the EU, the organization <em>must</em> ensure that all digital product passports (DPPs) linked to the products it sells contain accurate, up-to-date, and legally compliant data as defined by Regulation (EU) 2023/... (as per the Toy Safety Regulation proposal).<br><strong>Rationale</strong>: To comply with EU legislation, retailers are responsible for verifying that all products they sell have valid and accessible DPPs to ensure product safety and traceability.<br><strong>Organization Benefits</strong>: Reduces legal risk and supports brand trust through transparency.<br><strong>Source</strong>: Proposal for the regulation on the safety of toys (Commission)<br><strong>Priority</strong>: Must (M) – Legal non-compliance leads to penalties and reputational damage.<br><strong>Risk of Implementation</strong>: Medium – Requires integration with supplier systems and may involve supplier audits.<br><strong>Verification/Validation Success Criteria</strong>: All DPPs linked to sold toys are verified for compliance via automated or manual audit systems.</p>
+<hr>
+<p><strong>DPP-TOYS-002</strong><br><strong>Statement</strong>: The organization <em>must</em> implement a system that enables real-time access to DPPs for all toys sold in its stores or online, including digital access for customers upon request.<br><strong>Rationale</strong>: To align with consumer rights and EU transparency goals, customers must be able to access product safety and sustainability data.<br><strong>Organization Benefits</strong>: Enhances customer trust and supports marketing through transparency.<br><strong>Source</strong>: Proposal for the regulation on the safety of toys (Commission)<br><strong>Priority</strong>: Must (M) – Legal requirement for product transparency.<br><strong>Risk of Implementation</strong>: Medium – Integration with e-commerce platforms and in-store systems may be complex.<br><strong>Verification/Validation Success Criteria</strong>: Real-time access is provided to DPPs across all sales channels, with a 99% uptime SLA.</p>
+<hr>
+<p><strong>DPP-TOYS-003</strong><br><strong>Statement</strong>: The organization <em>must</em> establish a process to audit and verify the accuracy of DPP data supplied by upstream suppliers and manufacturers.<br><strong>Rationale</strong>: Retailers are responsible for ensuring that data in DPPs is accurate, particularly for safety and compliance-related fields.<br><strong>Organization Benefits</strong>: Reduces liability and improves supply chain accountability.<br><strong>Source</strong>: Proposal for the regulation on the safety of toys (Commission)<br><strong>Priority</strong>: Must (M) – Non-compliant data can result in product recalls and legal action.<br><strong>Risk of Implementation</strong>: High – Requires supplier cooperation and may involve data validation tools.<br><strong>Verification/Validation Success Criteria</strong>: An annual audit confirms that at least 95% of DPP data is accurate and verified.</p>
+<hr>
+<p><strong>DPP-TOYS-004</strong><br><strong>Statement</strong>: The organization <em>should</em> integrate DPP data into its internal product lifecycle management systems to support decision-making on product sustainability and supply chain resilience.<br><strong>Rationale</strong>: Leveraging DPP data can help identify risks, improve sourcing strategies, and support ESG goals.<br><strong>Organization Benefits</strong>: Supports strategic decision-making and enhances sustainability reporting.<br><strong>Source</strong>: Commission Communication on competitiveness (March 2023)<br><strong>Priority</strong>: Should (S) – Strategic advantage, not a legal requirement.<br><strong>Risk of Implementation</strong>: Medium – Integration with existing systems may require customization.<br><strong>Verification/Validation Success Criteria</strong>: DPP data is accessible in business intelligence tools for at least three use cases (e.g., sustainability reporting, risk monitoring, supplier evaluation).</p>
+<hr>
+<p><strong>DPP-TOYS-005</strong><br><strong>Statement</strong>: The organization <em>should</em> participate in industry-wide DPP data sharing protocols to improve interoperability and data exchange with regulators and other stakeholders.<br><strong>Rationale</strong>: Interoperability supports cross-border compliance and facilitates regulatory reporting.<br><strong>Organization Benefits</strong>: Increases operational efficiency and aligns with EU digital agenda goals.<br><strong>Source</strong>: Commission Communication on competitiveness (March 2023)<br><strong>Priority</strong>: Should (S) – Supports long-term competitiveness and digital transformation.<br><strong>Risk of Implementation</strong>: Medium – Requires alignment with external partners and potential data governance adjustments.<br><strong>Verification/Validation Success Criteria</strong>: The organization is part of at least one recognized DPP data exchange platform.</p>
+<hr>
+<p><strong>DPP-TOYS-006</strong><br><strong>Statement</strong>: The organization <em>could</em> use DPP data to develop a proprietary product transparency platform to differentiate itself in the market and attract environmentally conscious consumers.<br><strong>Rationale</strong>: Going beyond compliance allows the retailer to innovate and build brand loyalty.<br><strong>Organization Benefits</strong>: Provides a unique selling point and supports marketing efforts.<br><strong>Source</strong>: Commission Communication on competitiveness (March 2023)<br><strong>Priority</strong>: Could (C) – Optional enhancement for competitive advantage.<br><strong>Risk of Implementation</strong>: High – Requires significant investment in user interface design and marketing.<br><strong>Verification/Validation Success Criteria</strong>: Launch of a consumer-facing transparency platform with DPP data accessible in multiple formats.</p>
+<hr>
+<p><strong>DPP-TOYS-007</strong><br><strong>Statement</strong>: The organization <em>could</em> leverage DPP data to support internal analytics for demand forecasting, product returns analytics, and recall management.<br><strong>Rationale</strong>: Advanced use of DPP data supports business intelligence and risk mitigation.<br><strong>Organization Benefits</strong>: Improves inventory planning and reduces operational costs.<br><strong>Source</strong>: Commission Communication on competitiveness (March 2023)<br><strong>Priority</strong>: Could (C) – Strategic but not mandatory.<br><strong>Risk of Implementation</strong>: Medium – Depends on existing data analytics capabilities.<br><strong>Verification/Validation Success Criteria</strong>: At least two internal use cases are developed using DPP data for analytics.</p>
+<hr>
+<p><strong>DPP-TOYS-008</strong><br><strong>Statement</strong>: The organization <em>won't</em> be required to publish DPP data publicly unless specifically mandated by EU or national legislation.<br><strong>Rationale</strong>: While transparency is a goal, publication is not currently a legal requirement beyond consumer access.<br><strong>Organization Benefits</strong>: Protects sensitive supply chain information from competitors.<br><strong>Source</strong>: Proposal for the regulation on the safety of toys (Commission)<br><strong>Priority</strong>: Won't (W) – Not a mandatory requirement at this time.<br><strong>Risk of Implementation</strong>: Low – No action required.<br><strong>Verification/Validation Success Criteria</strong>: No public publishing of DPP data is implemented unless legally required.</p>
+<hr>
+<p><strong>Sources</strong>  </p>
+<ul>
+<li>Proposal for the regulation on the safety of toys (Commission) from <a href="https://single-market-economy.ec.europa.eu/system/files/2023-07/COM_2023_462_1_EN_ACT_part1_v4.pdf">https://single-market-economy.ec.europa.eu/system/files/2023-07/COM_2023_462_1_EN_ACT_part1_v4.pdf</a>  </li>
+<li>Commission Communication on the long-term competitiveness of the EU (March 2023) from <a href="https://ec.europa.eu/">Official EU Publications</a></li>
+</ul>
+</div>
+
+        <!-- Copy button -->
+        <button id="copy-button" class="copy-button" onclick="copyOutput()" style="display: inline-block;">
+            Copy Requirements
+        </button>
+
+        <br> 
+        
+        <!-- Buttons for the next steps -->
+        <button id="info-button-1" class="copy-button" onclick="location.href = &#39;https://cirpass2.eu/&#39;" style="display: inline-block; background-color: rgb(65, 167, 101);">
+            Get more information on European level!
+        </button>
+        
+        <button id="info-button-2" class="copy-button" onclick="location.href = &#39;https://coe-dpp.nl/&#39;" style="display: inline-block; background-color: rgb(65, 167, 101);">
+            Get more information as a Dutch organization!
+        </button>
+
+        <br> 
+        <br> 
+
+        <small id="disclaimer" class="form-text" style="display: inline-block;">
+            <i> Each requirement consists of an ID, a statement (the actual requirement itself), a rationale (a compliance-oriented reason behind the requirement), organization benefits (such as improved efficiency), a source (which are either published EU documents or EU working group documents), a priority (based on the MoSCoW method, which uses must/should/could/won't), a risk of implementation (about the possible complications that might occur), and system validation success criteria (to verify whether you adhere to this requirement). </i> <br> <br>
+            <i> Note that this set of requirements has been generated using a Large Language Model. Although the used LLM has access to a relevant set of documents about the Digital Product Passport, it is still sensitive to hallucinations. Hence, it is recommended to only use these requirements as a starting point in your journey with the DPP. No rights can be derived from this LLM output. </i> <br>
+        </small>
+        
+    </div>
+
+    <!-- MS Forms for Feedback -->
+    <!--
+    <div class="msforms">
+        <iframe id="ms-forms" width="640px" height="480px" src="https://forms.office.com/Pages/ResponsePage.aspx?id=ujzz4PV5YkaC5w5TbNoSMky758Gqz3BGmiRiauivYCNUOTJKSUhWSTFaOFlOVVNDOUlGTlpCTUE3Ni4u&embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border: none; max-width:100%; max-height:100vh" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
+    </div>-->
+    
+    <div class="footer">
+        <p style="color:grey">Version 2.0</p> 
+        Created by <strong>Isabel Rutten</strong> as thesis intern of <strong>TNO Vector</strong>.
+    </div>
+
+
+
+
+
+
+<script>
+async function submitForm() {
+    // Gather input values
+    const sector = document.getElementById("sector").value.trim();
+    const size = document.getElementById("size").value.trim();
+    const role = document.getElementById("role").value.trim();
+    const maturity = document.getElementById("maturity").value.trim();
+    // const technical = document.getElementById("technical").value.trim();
+    const implementation = document.getElementById("implementation").value.trim();
+
+    // Basic validation (optional)
+    if (!sector || !size || !role || !maturity || !implementation) {
+        alert("Please fill out all fields.");
+        return;
+    }
+
+    // Build prompt text combining all answers
+    const prompt = `
+1. Sector: ${sector}
+2. Organization size: ${size}
+3. Organization role in DPP Ecosystem: ${role}
+4. Digital maturity (The digital maturity model starts at incomplete (no digitalization in the company). Next, performed means that a planning has been made. Managed focuses on ensuring existing business processes are digitized through technology. Established means that digital transformation has been done based on existing standard. Predictable seizes those benefits by applying quantitative techniques on real-time data, with data analytics on business processes. Lastly, optimizing focuses on innovation and continuous improvement.): ${maturity} 
+5. Aim of implementation level (with 2: Entity level compliance, 3: Ecosystem level compliance, 4: Value adding, 5: Competitive advantage):  ${implementation}
+`;
+
+    // Show a loading indicator
+    const outputDiv = document.getElementById("llm-output");
+    outputDiv.innerHTML = "Generating custom requirements...";
+
+    // Call backend
+    try {
+        const response = await fetch("https://system-ai-335a.onrender.com/generate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ input: prompt })
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+            outputDiv.innerHTML = "Error: " + escapeHTML(data.error);
+        } else {
+            outputDiv.innerHTML = formatOutput(data.output);
+            showCopyButtonIfNeeded();
+            // showFormsIfNeeded();
+        }
+    } catch (err) {
+        outputDiv.innerHTML = "Request failed: " + escapeHTML(err.message);
+    }
+}
+
+// Helper: escape HTML entities to prevent injection
+function escapeHTML(str) {
+    return str.replace(/&/g, "&amp;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;");
+}
+
+// Helper: format text output nicely
+function formatOutput(text) {
+    if (!text || typeof text !== "string") return "";
+
+    // Configure marked (GitHub-flavored markdown)
+    marked.setOptions({
+        // breaks: true,        // convert \n to <br>
+        gfm: true            // enable tables, strikethrough, etc.
+    });
+
+    // Step 1: Markdown → HTML
+    const rawHtml = marked.parse(text);
+
+    // Step 2: Sanitize HTML to prevent XSS
+    const safeHtml = DOMPurify.sanitize(rawHtml, {
+        USE_PROFILES: { html: true }
+    });
+
+    return safeHtml;
+}
+
+
+// function formatOutput(text) {
+//     // Escape HTML first
+//     let escaped = text
+//         .replace(/&/g, "&amp;")
+//         .replace(/</g, "&lt;")
+//         .replace(/>/g, "&gt;");
+
+//     // Convert bold: **text** -> <strong>text</strong>
+//     escaped = escaped.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+
+//     // Convert bullets starting with -, *, or • into <ul><li>
+//     const lines = escaped.split("\n");
+//     let inList = false;
+//     let html = "";
+
+//     for (let line of lines) {
+//         if (/^(\s*[-*•]\s+)/.test(line)) {
+//             if (!inList) {
+//                 inList = true;
+//                 html += "<ul>";
+//             }
+//             html += "<li>" + line.replace(/^(\s*[-*•]\s+)/, "") + "</li>";
+//         } else {
+//             if (inList) {
+//                 inList = false;
+//                 html += "</ul>";
+//             }
+//             // Wrap paragraphs
+//             if (line.trim() !== "") {
+//                 html += "<p>" + line + "</p>";
+//             }
+//         }
+//     }
+//     if (inList) html += "</ul>";
+
+//     return html;
+// }
+
+// function copyOutput() {
+//     const outputDiv = document.getElementById("llm-output");
+
+//     if (outputDiv.textContent.trim() === "") return;
+
+//     // Copy plain text (without HTML tags)
+//     navigator.clipboard.writeText(outputDiv.textContent)
+//         .then(() => {
+//             alert("Action plan copied to clipboard!");
+//         })
+//         .catch(err => {
+//             alert("Failed to copy: " + err);
+//         });
+// }
+
+function copyOutput() {
+    const outputDiv = document.getElementById("llm-output");
+
+    if (outputDiv.innerHTML.trim() === "") return;
+
+    // Convert HTML to nicely formatted plain text
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = outputDiv.innerHTML;
+
+    // Recursively extract text with line breaks
+    function getTextWithFormatting(element) {
+        let text = "";
+        element.childNodes.forEach(node => {
+            if (node.nodeType === Node.TEXT_NODE) {
+                text += node.textContent;
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
+                const tag = node.tagName.toLowerCase();
+                if (tag === "br") {
+                    text += "\n";
+                } else if (tag === "p") {
+                    text += getTextWithFormatting(node) + "\n\n";
+                } else if (tag === "li") {
+                    text += "- " + getTextWithFormatting(node) + "\n";
+                } else if (tag === "ul" || tag === "ol") {
+                    text += getTextWithFormatting(node) + "\n";
+                } else if (tag === "strong") {
+                    text += node.textContent; // bold as plain text
+                } else {
+                    text += getTextWithFormatting(node);
+                }
+            }
+        });
+        return text;
+    }
+
+    const formattedText = getTextWithFormatting(tempDiv).trim();
+    const disclaimerText = "\n\nEach requirement consists of an ID, a statement (the actual requirement itself), a rationale (a compliance-oriented reason behind the requirement), organization benefits (such as improved efficiency), a source (which are either published EU documents or EU working group documents), a priority (based on the MoSCoW method, which uses must/should/could/won't), a risk of implementation (about the possible complications that might occur), and system validation success criteria (to verify whether you adhere to this requirement).\n\n Note that this set of requirements has been generated using a Large Language Model. Although the used LLM has access to a relevant set of documents about the Digital Product Passport, it is still sensitive to hallucinations. Hence, it is recommended to only use these requirements as a starting point in your journey with the DPP. No rights can be derived from this LLM output.";
+    const finalText = formattedText + disclaimerText
+
+    navigator.clipboard.writeText(finalText)
+        .then(() => alert("Action plan copied to clipboard!"))
+        .catch(err => alert("Failed to copy: " + err));
+}
+
+
+// Show the copy button only when there’s content
+function showCopyButtonIfNeeded() {
+    const outputDiv = document.getElementById("llm-output");
+    const copyButton = document.getElementById("copy-button");
+    const infoButtonOne = document.getElementById("info-button-1");
+    const infoButtonTwo = document.getElementById("info-button-2");
+    const disclaimer = document.getElementById("disclaimer");
+
+    if (outputDiv.textContent.trim() !== "") {
+        copyButton.style.display = "inline-block";
+        infoButtonOne.style.display = "inline-block";
+        infoButtonTwo.style.display = "inline-block";
+        disclaimer.style.display = "inline-block";
+    } else {
+        copyButton.style.display = "none";
+        infoButtonOne.style.display = "none";
+        infoButtonTwo.style.display = "none";
+        disclaimer.style.display = "none";
+    }
+}
+
+// Show the MS Forms only when there is content
+// function showFormsIfNeeded() {
+//     const outputDiv = document.getElementById("llm-output");
+//     const msForms = document.getElementById("ms-forms");
+
+//     if (outputDiv.textContent.trim() !== "") {
+//         msForms.style.display = "inline-block";
+//     } else {
+//         msForms.style.display = "none";
+//     }
+// }
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body></html>
