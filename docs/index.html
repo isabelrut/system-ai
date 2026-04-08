@@ -140,7 +140,7 @@
             Get more information on European level!
         </button>
         
-        <button id="info-button-2" class="copy-button" onclick="location.href = 'https://coe-dpp.nl/" style="display:none; background-color:#41A765;">
+        <button id="info-button-2" class="copy-button" onclick="location.href = 'https://coe-dpp.nl/'" style="display:none; background-color:#41A765;">
             Get more information as a Dutch organization!
         </button>
 
@@ -339,8 +339,10 @@ function copyOutput() {
     }
 
     const formattedText = getTextWithFormatting(tempDiv).trim();
+    const disclaimerText = "\n\nEach requirement consists of an ID, a statement (the actual requirement itself), a rationale (a compliance-oriented reason behind the requirement), organization benefits (such as improved efficiency), a source (which are either published EU documents or EU working group documents), a priority (based on the MoSCoW method, which uses must/should/could/won't), a risk of implementation (about the possible complications that might occur), and system validation success criteria (to verify whether you adhere to this requirement).\n\n Note that this set of requirements has been generated using a Large Language Model. Although the used LLM has access to a relevant set of documents about the Digital Product Passport, it is still sensitive to hallucinations. Hence, it is recommended to only use these requirements as a starting point in your journey with the DPP. No rights can be derived from this LLM output.";
+    const finalText = formattedText + disclaimerText
 
-    navigator.clipboard.writeText(formattedText)
+    navigator.clipboard.writeText(finalText)
         .then(() => alert("Action plan copied to clipboard!"))
         .catch(err => alert("Failed to copy: " + err));
 }
