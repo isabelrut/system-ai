@@ -39,40 +39,133 @@ try {
   console.error("Failed to load chunks:", err);
 }
 
+// // ------------------------------
+// // Simple keyword scoring helper
+// // ------------------------------
+// function scoreChunkByQuery(chunkText, query) {
+//   const words = query.toLowerCase().split(/\s+/);
+//   const textLower = chunkText.toLowerCase();
+//   // Count number of query words present in the chunk
+//   let score = 0;
+//   for (const word of words) {
+//     if (textLower.includes(word)) score += 1;
+//   }
+//   return score;
+// }
+
+// // ------------------------------
+// // Retrieve top chunks using hybrid keyword search
+// // ------------------------------
+// function retrieveContext(query, docType = null, topK = 4) {
+//   if (!chunks.length) return { docs: [], metadata: [] };
+
+//   // Step 1: filter by Doc_Type
+//   let candidates = chunks.filter(c => !docType || c.metadata?.Doc_Type === docType);
+
+//   // Step 2: score candidates by query keyword overlap
+//   const scored = candidates.map(c => ({
+//     text: c.text,
+//     metadata: c.metadata,
+//     score: scoreChunkByQuery(c.text, query),
+//   }));
+
+//   // Step 3: sort descending by score
+//   scored.sort((a, b) => b.score - a.score);
+
+//   // Step 4: fallback if all scores are zero
+//   let topChunks = scored.filter(c => c.score > 0).slice(0, topK);
+//   if (!topChunks.length) topChunks = scored.slice(0, topK);
+
+//   return {
+//     docs: topChunks.map(c => c.text),
+//     metadata: topChunks.map(c => c.metadata),
+//   };
+// }
+
 // ------------------------------
-// Simple keyword scoring helper
+// Stopwords (basic)
 // ------------------------------
-function scoreChunkByQuery(chunkText, query) {
-  const words = query.toLowerCase().split(/\s+/);
-  const textLower = chunkText.toLowerCase();
-  // Count number of query words present in the chunk
+const STOPWORDS = ["the", "and", "of", "in", "on", "for", "to", "a", "an", "with", "by", "is"];
+
+// ------------------------------
+// Detect sector from query
+// ------------------------------
+function detectSector(query) {
+  const q = query.toLowerCase();
+
+  if (q.includes("batteries")) return "Battery"; 
+  if (q.includes("battery")) return "Battery"; 
+  if (q.includes("textiles")) return "Textile"; 
+  if (q.includes("textile")) return "Textile"; 
+  if (q.includes("apparel")) return "Textile"; 
+  if (q.includes("toys")) return "Toys"; 
+  if (q.includes("toy")) return "Toys"; 
+  if (q.includes("construction")) return "Construction"; 
+  if (q.includes("iron")) return "Steel"; 
+  if (q.includes("steel")) return "Steel"; 
+
+  return null;
+}
+
+// ------------------------------
+// Improved scoring function
+// ------------------------------
+function scoreChunk(chunk, query, sector) {
+  const words = query
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(w => !STOPWORDS.includes(w));
+
+  // 🔥 Include metadata in searchable text
+  const combinedText = (
+    chunk.text + " " +
+    (chunk.metadata?.Name || "") + " " +
+    (chunk.metadata?.Tags || "") + " " +
+    (chunk.metadata?.Summary || "")
+  ).toLowerCase();
+
   let score = 0;
+
   for (const word of words) {
-    if (textLower.includes(word)) score += 1;
+    if (combinedText.includes(word)) {
+      // 🔥 Weight longer / more meaningful words higher
+      score += word.length > 4 ? 2 : 1;
+    }
   }
+
+  // 🔥 Sector boost (soft filter)
+  if (sector && chunk.metadata?.Tags === sector) {
+    score += 5;
+  }
+
   return score;
 }
 
 // ------------------------------
-// Retrieve top chunks using hybrid keyword search
+// Retrieve top chunks
 // ------------------------------
 function retrieveContext(query, docType = null, topK = 4) {
   if (!chunks.length) return { docs: [], metadata: [] };
 
-  // Step 1: filter by Doc_Type
-  let candidates = chunks.filter(c => !docType || c.metadata?.Doc_Type === docType);
+  const sector = detectSector(query);
 
-  // Step 2: score candidates by query keyword overlap
+  // Step 1: filter by Doc_Type only (keep this optional)
+  let candidates = chunks.filter(c => {
+    if (docType && c.metadata?.Doc_Type !== docType) return false;
+    return true;
+  });
+
+  // Step 2: score all candidates
   const scored = candidates.map(c => ({
     text: c.text,
     metadata: c.metadata,
-    score: scoreChunkByQuery(c.text, query),
+    score: scoreChunk(c, query, sector),
   }));
 
-  // Step 3: sort descending by score
+  // Step 3: sort descending
   scored.sort((a, b) => b.score - a.score);
 
-  // Step 4: fallback if all scores are zero
+  // Step 4: prefer relevant matches, fallback if needed
   let topChunks = scored.filter(c => c.score > 0).slice(0, topK);
   if (!topChunks.length) topChunks = scored.slice(0, topK);
 
