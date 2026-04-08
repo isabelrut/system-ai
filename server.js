@@ -117,25 +117,37 @@ function scoreChunk(chunk, query, sector) {
     .filter(w => !STOPWORDS.includes(w));
 
   // 🔥 Include metadata in searchable text
-  const combinedText = (
-    chunk.text + " " +
-    (chunk.metadata?.Name || "") + " " +
-    (chunk.metadata?.Tags || "") + " " +
-    (chunk.metadata?.Summary || "")
-  ).toLowerCase();
+  // const combinedText = (
+  //   chunk.text + " " +
+  //   (chunk.metadata?.Name || "") + " " +
+  //   (chunk.metadata?.Tags || "") + " " +
+  //   (chunk.metadata?.Summary || "")
+  // ).toLowerCase();
+  const text = chunk.text.toLowerCase();
+  const name = (chunk.metadata?.Name || "").toLowerCase();
+  const tags = (chunk.metadata?.Tags || "").toLowerCase();
+  const summary = (chunk.metadata?.Summary || "").toLowerCase();
+
 
   let score = 0;
 
   for (const word of words) {
-    if (combinedText.includes(word)) {
-      // 🔥 Weight longer / more meaningful words higher
-      score += word.length > 4 ? 2 : 1;
-    }
+    // if (combinedText.includes(word)) {
+    //   // 🔥 Weight longer / more meaningful words higher
+    //   score += word.length > 4 ? 2 : 1;
+    // }
+    if (text.includes(word)) score += word.length > 4 ? 2 : 1;
+
+    // 🔥 Strong metadata boosts
+    if (name.includes(word)) score += 3;
+    if (tags.includes(word)) score += 4;
+    if (summary.includes(word)) score += 2;
+
   }
 
   // 🔥 Sector boost (soft filter)
   if (sector && chunk.metadata?.Tags === sector) {
-    score += 5;
+    score += 10; // was 5
   }
 
   return score;
