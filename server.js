@@ -301,6 +301,22 @@ app.post("/generate", async (req, res) => {
       }).join("\n\n");
     }
 
+    function niceFormatContext(docs, metadata) {
+      return docs
+        .map((doc, i) => {
+          const m = metadata[i];
+
+          const title = m.Name || `Document ${i + 1}`;
+          const type = m.Doc_Type || "unknown";
+          const url = m.URL || "unknown";
+          const section = m.section_title || "unknown";
+
+          // single-line format per source
+          return `[Source ${i + 1}] Title: ${title} | Type: ${type} | URL: ${url} | Section: ${section} | Content: ${doc}`;
+        })
+        .join("\n");
+    }
+
     // ----------------
     // 1a. Get relevant published regulations documents
     // ----------------
@@ -321,6 +337,8 @@ app.post("/generate", async (req, res) => {
     //   .join("\n");
 
     const context_a = docs_a.length ? buildContext(docs_a, metadata_a) : "No relevant published regulations found.";
+
+    const nice_context_a = docs_a.length ? niceFormatContext(docs_a, metadata_a) : "No nice format allowed for a.";
 
     // const context_a = docs_a
     //   .map((doc, i) => {
@@ -366,6 +384,7 @@ app.post("/generate", async (req, res) => {
 
     const context_b = docs_b.length ? buildContext(docs_b, metadata_b) : "No relevant documents found.";
 
+    const nice_context_b = docs_b.length ? niceFormatContext(docs_b, metadata_b) : "No nice format allowed for b.";
 
     // const context_b = docs_b
     //   .map((doc, i) => {
@@ -584,8 +603,8 @@ app.post("/generate", async (req, res) => {
       commission_only_output: completion1.choices[0].message.content,
       full_context_output: completion2.choices[0].message.content,
       sources: {
-        commission: metadata_a,
-        full: metadata_b
+        commission: nice_context_a,
+        full: nice_context_b
       }
     });
 

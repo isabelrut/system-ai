@@ -213,6 +213,9 @@ async function submitForm() {
             outputDiv.innerHTML = "Error: " + escapeHTML(data.error);
         } else {
             // outputDiv.innerHTML = formatOutput(data.output);
+            console.log("commission:", data.sources.commission);
+            console.log("full:", data.sources.full);
+
             outputDiv.innerHTML = `
                 ${formatOutput(data.commission_only_output)}
                 <br>
@@ -260,21 +263,6 @@ function formatOutput(text) {
     });
 
     return safeHtml;
-}
-
-function formatSources(list) {
-  return list.map(m => {
-    const md = m.metadata;
-
-    return `
-        <strong>${md.Name}</strong> | 
-        ${md.Source} | 
-        ${md.Date} | 
-        ${md.Tags} | 
-        <a href="${md.URL}" target="_blank">${md.URL}</a> | 
-        <span>${m.text}</span>
-    `;
-  }).join("");
 }
 
 // function formatOutput(text) {
