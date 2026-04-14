@@ -220,11 +220,11 @@ async function submitForm() {
                 <br> 
                 <h3> Sources for must have requirements </h3>
                 <br> 
-                ${formatOutput(data.sources.commission)}
+                ${formatSources(data.sources.commission)}
                 <br> 
                 <h3> Sources for other requirements </h3>
                 <br> 
-                ${formatOutput(data.sources.full)}
+                ${formatSources(data.sources.full)}
             `;
             showCopyButtonIfNeeded();
             // showFormsIfNeeded();
@@ -262,6 +262,20 @@ function formatOutput(text) {
     return safeHtml;
 }
 
+function formatSources(list) {
+  return list.map(m => {
+    const md = m.metadata;
+
+    return `
+        <strong>${md.Name}</strong> | 
+        ${md.Source} | 
+        ${md.Date} | 
+        ${md.Tags} | 
+        <a href="${md.URL}" target="_blank">${md.URL}</a> | 
+        <span>${m.text}</span>
+    `;
+  }).join("");
+}
 
 // function formatOutput(text) {
 //     // Escape HTML first
