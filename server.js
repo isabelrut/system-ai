@@ -328,7 +328,7 @@ app.post("/generate", async (req, res) => {
             const url = m.URL || "unknown";
             const section = m.section_title || "unknown";
 
-          return `<li> [Source ${i + 1}] Title: ${title} | Type: ${type} | URL: ${url} | Section: ${section} | Content: ${doc} </li>`;
+          return `<li> <b>[Source ${i + 1}] Title: ${title}</b> | <i>Type:</i> ${type} | <i>URL:</i> <a href="${url}">${url}</a> | <i>Section:</i> ${section} | <i>Content:</i> ${doc} </li>`;
           }).join("")}
         </ul>
       `;    
