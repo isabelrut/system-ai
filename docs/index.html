@@ -213,9 +213,6 @@ async function submitForm() {
             outputDiv.innerHTML = "Error: " + escapeHTML(data.error);
         } else {
             // outputDiv.innerHTML = formatOutput(data.output);
-            console.log("commission:", data.sources.commission);
-            console.log("full:", data.sources.full);
-
             outputDiv.innerHTML = `
                 ${formatOutput(data.commission_only_output)}
                 <br>
@@ -223,11 +220,11 @@ async function submitForm() {
                 <br> 
                 <h3> Sources for must have requirements </h3>
                 <br> 
-                ${formatSources(data.sources.commission)}
+                ${formatOutput(data.sources.commission)}
                 <br> 
                 <h3> Sources for other requirements </h3>
                 <br> 
-                ${formatSources(data.sources.full)}
+                ${formatOutput(data.sources.full)}
             `;
             showCopyButtonIfNeeded();
             // showFormsIfNeeded();
