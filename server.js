@@ -499,7 +499,7 @@ app.post("/generate", async (req, res) => {
             And a good requirement has the following characteristics:  Atomic; Necessary; Unambiguous; Complete; Consistent; Feasible; Verifiable; Traceable; Modifiable.
             Also, assume that the reader has a limited ICT or DPP background and that the information should be accessible and understandable to the user.
             Don't use tables in your response, not even for illustration. The current date is ` + new Date() + `, which can be used when considering the regulations that are in-force. 
-            Do not end your response with any suggestions for other ways in which you can help.
+            Do not start your response with any prefacing text, immediately start with your first requirement. Do not include any headers between the requirements. Do not end your response with any suggestions for other ways in which you can help.
             Use the provided context to answer questions accurately. 
             Do not include a sources section, I will provide the overview to the user. 
             `
@@ -574,7 +574,7 @@ app.post("/generate", async (req, res) => {
             Give a set of requirements that the user should, could or won't have to do to comply to the Digital Product Passport regulations, in which you adapt to the users' sector, role, influence (company size), digital maturity level and compliance interest. 
             For this, you are allowed to be creative and find sector-specific solutions. As a basis, you are provided with an existing set of must-have requirements.
             When considering the MoSCow method (Must, Should, Could, Won't), only include the Should, Could, and Won't requirements. In other words, try to be as complete as possible on what an organization could do to be fully compliant with the Digital Product Passport regulations. Here, clearly state if there are still some aspects unclear about a requirement, e.g. due to decisions that still need to be made by the EU. It is vital that you do not make claims about EU regulations without explaining your assumptions. If so, you can include this explanation in the rationale.
-
+            Note that you do not have to have at least 1 Should, 1 Could, and 1 Won't requirement, just use the verbs where appropriate. For instance, "won't" might not be applicable for any value-adding requirement. 
             Focus on what the organization of the user should do, not how other organizations in their supply chain can be controlled. Ensure that these requirements are solution-agnostic, as a requirement can have multiple solutions to ensure that an organization can comply to the DPP. 
 
             These requirements should be ordered according to their priority (highest first) and the verb used from the MoSCoW method (should first, then could, then won't).
@@ -599,7 +599,7 @@ app.post("/generate", async (req, res) => {
             And a good requirement has the following characteristics:  Atomic; Necessary; Unambiguous; Complete; Consistent; Feasible; Verifiable; Traceable; Modifiable.
             Also, assume that the reader has a limited ICT or DPP background and that the information should be accessible and understandable to the user.
             Don't use tables in your response, not even for illustration. The current date is ` + new Date() + `, which can be used when considering the regulations that are in-force. 
-            Do not end your response with any suggestions for other ways in which you can help.
+            Do not start your response with any prefacing text, immediately start with your first requirement. Do not include any headers between the requirements, like "Should requirements". Do not end your response with any suggestions for other ways in which you can help.
             Use the provided context to answer questions accurately. 
             Do not include a sources section, I will provide the overview to the user. 
             
