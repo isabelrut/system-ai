@@ -26,7 +26,6 @@
 
         <div class="form-group">
             <label for="sector">1. What sector is your organization working in?</label>
-            <!-- <input id="sector" type="text" placeholder="Toys sector"> -->
             <select id="sector" name="sector"> 
                 <option value="ICT products">ICT products</option>
                 <option value="Textiles/apparel">Textiles/apparel</option>
@@ -51,10 +50,6 @@
         <div class="form-group">
             <label for="size">2. What is your company size according to <a href="https://single-market-economy.ec.europa.eu/smes/sme-fundamentals/sme-definition_en">EU regulations</a>?</label>
             <img src="SME-table.png" alt="SME sizes according to the EU"> <br>
-            <!-- <small class="form-text">
-                (e.g. small, large)  <br>
-            </small>
-            <input id="size" type="text" placeholder="Micro"> -->
             <select id="size" name="size"> 
                 <option value="micro">Micro</option>
                 <option value="small">Small</option>
@@ -66,10 +61,6 @@
         <div class="form-group">
             <label for="role">3. What role does your organization take in the <a href="https://coe-dsc.nl/wp-content/uploads/2026/01/Dutch-Digital-Product-Passport-Landscape-Scan-Version-1.0-final-1.pdf">DPP ecosystem</a>?</label>
             <img src="Ecosystem-framework.png" alt="DPP Ecosystem Framework"> <br>
-            <!-- <small class="form-text">
-                (e.g. retailer, economic operator)  <br>
-            </small>
-            <input id="role" type="text" placeholder="Supplier"> -->
             <select id="role" name="role"> 
                 <option value="Economic operator">Economic operator</option>
                 <option value="Supplier">Supplier</option>
@@ -84,11 +75,6 @@
             <small class="form-text">
                 The figure shows a digital maturity model that starts at incomplete, meaning there has been no digitalization in the company. Next, performed means that a planning has been made. Managed focuses on ensuring existing business processes are digitized through technology. Established means that digital transformation has been done based on existing standard. Predictable seizes those benefits by applying quantitative techniques on real-time data, with data analytics on business processes. Lastly, optimizing focuses on innovation and continuous improvement.  <br>
             </small>
-            <!-- <small class="form-text" title="The figure shows a digital maturity model that starts at incomplete, meaning there has been no digitalization in the company. Next, performed means that a planning has been made. Managed focuses on ensuring existing business processes are digitized through technology. Established means that digital transformation has been done based on existing standard. Predictable seizes those benefits by applying quantitative techniques on real-time data, with data analytics on business processes. Lastly, optimizing focuses on innovation and continuous improvement.">
-                For further explanation, please hover your mouse over this text or click this <a href="https://www.mdpi.com/2504-2289/7/1/17"> link</a>.  <br>
-            </small> -->
-            <!--
-            <input id="maturity" type="text" placeholder="Optimizing"> -->
             <select id="maturity" name="maturity"> 
                 <option value="incomplete">Incomplete</option>
                 <option value="performed">Performed</option>
@@ -102,10 +88,6 @@
         <div class="form-group">
             <label for="implementation">5. What level of DPP implementation does your organization aim for?</label>
             <img src="DPP-maturity-model.png" alt="DPP Maturity Model"> <br>
-            <!-- <small class="form-text">
-                (with 2: Entity level compliance, 3: Ecosystem level compliance, <br> 4: Value adding, 5: Competitive advantage) <br>
-            </small>
-            <input id="implementation" type="number" min="2" max="5" placeholder="2"> -->
             <select id="implementation" name="implementation"> 
                 <option value="two">2: Entity level compliance</option>
                 <option value="three">3: Ecosystem level compliance</option>
@@ -113,14 +95,6 @@
                 <option value="five">5: Competitive advantage</option>
             </select> 
         </div>
-
-        <!-- <div class="form-group">
-            <label for="technical">6. What is your ICT background?</label>
-            <small class="form-text">
-                (used to customize the output to your background)  <br>
-            </small>
-            <input id="technical" type="text" placeholder="Average ICT knowledge">
-        </div> -->
         
         <button class="main-button" onclick="submitForm()">
             DISCOVER YOUR REQUIREMENTS<br>TO IMPLEMENT THE DPP
@@ -153,12 +127,6 @@
         </small>
         
     </div>
-
-    <!-- MS Forms for Feedback -->
-    <!--
-    <div class="msforms">
-        <iframe id="ms-forms" width="640px" height="480px" src="https://forms.office.com/Pages/ResponsePage.aspx?id=ujzz4PV5YkaC5w5TbNoSMky758Gqz3BGmiRiauivYCNUOTJKSUhWSTFaOFlOVVNDOUlGTlpCTUE3Ni4u&embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border: none; max-width:100%; max-height:100vh" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
-    </div>-->
     
     <div class="footer">
         <p style="color:grey">Version 3.0</p> 
@@ -212,7 +180,6 @@ async function submitForm() {
         if (data.error) {
             outputDiv.innerHTML = "Error: " + escapeHTML(data.error);
         } else {
-            // outputDiv.innerHTML = formatOutput(data.output);
             outputDiv.innerHTML = `
                 ${formatOutput(data.commission_only_output)}
                 <br>
@@ -227,7 +194,6 @@ async function submitForm() {
                 ${data.sources.full}
             `;
             showCopyButtonIfNeeded();
-            // showFormsIfNeeded();
         }
     } catch (err) {
         outputDiv.innerHTML = "Request failed: " + escapeHTML(err.message);
@@ -261,59 +227,6 @@ function formatOutput(text) {
 
     return safeHtml;
 }
-
-// function formatOutput(text) {
-//     // Escape HTML first
-//     let escaped = text
-//         .replace(/&/g, "&amp;")
-//         .replace(/</g, "&lt;")
-//         .replace(/>/g, "&gt;");
-
-//     // Convert bold: **text** -> <strong>text</strong>
-//     escaped = escaped.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
-
-//     // Convert bullets starting with -, *, or • into <ul><li>
-//     const lines = escaped.split("\n");
-//     let inList = false;
-//     let html = "";
-
-//     for (let line of lines) {
-//         if (/^(\s*[-*•]\s+)/.test(line)) {
-//             if (!inList) {
-//                 inList = true;
-//                 html += "<ul>";
-//             }
-//             html += "<li>" + line.replace(/^(\s*[-*•]\s+)/, "") + "</li>";
-//         } else {
-//             if (inList) {
-//                 inList = false;
-//                 html += "</ul>";
-//             }
-//             // Wrap paragraphs
-//             if (line.trim() !== "") {
-//                 html += "<p>" + line + "</p>";
-//             }
-//         }
-//     }
-//     if (inList) html += "</ul>";
-
-//     return html;
-// }
-
-// function copyOutput() {
-//     const outputDiv = document.getElementById("llm-output");
-
-//     if (outputDiv.textContent.trim() === "") return;
-
-//     // Copy plain text (without HTML tags)
-//     navigator.clipboard.writeText(outputDiv.textContent)
-//         .then(() => {
-//             alert("Action plan copied to clipboard!");
-//         })
-//         .catch(err => {
-//             alert("Failed to copy: " + err);
-//         });
-// }
 
 function copyOutput() {
     const outputDiv = document.getElementById("llm-output");
@@ -380,18 +293,6 @@ function showCopyButtonIfNeeded() {
         disclaimer.style.display = "none";
     }
 }
-
-// Show the MS Forms only when there is content
-// function showFormsIfNeeded() {
-//     const outputDiv = document.getElementById("llm-output");
-//     const msForms = document.getElementById("ms-forms");
-
-//     if (outputDiv.textContent.trim() !== "") {
-//         msForms.style.display = "inline-block";
-//     } else {
-//         msForms.style.display = "none";
-//     }
-// }
 
 
 </script>
