@@ -301,20 +301,37 @@ app.post("/generate", async (req, res) => {
       }).join("\n\n");
     }
 
+    // function niceFormatContext(docs, metadata) {
+    //   return docs
+    //     .map((doc, i) => {
+    //       const m = metadata[i];
+
+    //       const title = m.Name || `Document ${i + 1}`;
+    //       const type = m.Doc_Type || "unknown";
+    //       const url = m.URL || "unknown";
+    //       const section = m.section_title || "unknown";
+
+    //       // single-line format per source
+    //       return `<li> [Source ${i + 1}] Title: ${title} | Type: ${type} | URL: ${url} | Section: ${section} | Content: ${doc} </li>`;
+    //     })
+    //     .join("");
+    // }
+
     function niceFormatContext(docs, metadata) {
-      return docs
-        .map((doc, i) => {
-          const m = metadata[i];
+      return `
+        <ul>
+          ${docs.map((doc, i) => {
+            const m = metadata[i];
 
-          const title = m.Name || `Document ${i + 1}`;
-          const type = m.Doc_Type || "unknown";
-          const url = m.URL || "unknown";
-          const section = m.section_title || "unknown";
+            const title = m.Name || `Document ${i + 1}`;
+            const type = m.Doc_Type || "unknown";
+            const url = m.URL || "unknown";
+            const section = m.section_title || "unknown";
 
-          // single-line format per source
-          return `[Source ${i + 1}] Title: ${title} | Type: ${type} | URL: ${url} | Section: ${section} | Content: ${doc}`;
-        })
-        .join("\n\n");
+          return `<li> [Source ${i + 1}] Title: ${title} | Type: ${type} | URL: ${url} | Section: ${section} | Content: ${doc} </li>`;
+          }).join("")}
+        </ul>
+      `;    
     }
 
     // ----------------
@@ -496,7 +513,7 @@ app.post("/generate", async (req, res) => {
       ],
       temperature : 0.3, 
       reasoning_effort : "none",
-      max_tokens : 1000, 
+      max_tokens : 1200, 
     });
 
     // Some delay due to token space
@@ -597,7 +614,7 @@ app.post("/generate", async (req, res) => {
       ],
       temperature : 0.8, 
       reasoning_effort : "none",
-      max_tokens : 1000, 
+      max_tokens : 1200, 
     });
 
     // 3. Output the first and second prompt together
