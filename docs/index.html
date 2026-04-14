@@ -217,6 +217,14 @@ async function submitForm() {
                 ${formatOutput(data.commission_only_output)}
                 <br>
                 ${formatOutput(data.full_context_output)}
+                <br> 
+                <h3> Sources for must have requirements </h3>
+                <br> 
+                ${formatOutput(data.sources.commission)}
+                <br> 
+                <h3> Sources for other requirements </h3>
+                <br> 
+                ${formatOutput(data.sources.full)}
             `;
             showCopyButtonIfNeeded();
             // showFormsIfNeeded();
