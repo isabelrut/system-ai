@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<!-- saved from url=(0038)https://isabelrut.github.io/system-ai/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>DPPathfinder</title>
+    <link rel="stylesheet" href="./Case-5_files/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Prepare html output for html -->
+    <script src="./Case-5_files/marked.min.js.download"></script>
+    <script src="./Case-5_files/purify.min.js.download"></script>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>DPPathfinder</h1>
+        <p>AI-Driven Support for Implementing<br>the Digital Product Passport</p>
+        <p style="color:grey">Version 2.0 </p>
+        <!-- <p style="color:grey">Version 1.0 <br> <a href="info.html" style="color:white; text-decoration:none">Information page</a> </p> -->
+    </div>
+
+    <div class="container">
+
+        <p class="intro">
+            Fill in the following forms to find out what <em>you</em> need to do to take part in the DPP ecosystem.
+        </p>
+
+        <div class="form-group">
+            <label for="sector">1. What sector is your organization working in?</label>
+            <!-- <input id="sector" type="text" placeholder="Toys sector"> -->
+            <select id="sector" name="sector"> 
+                <option value="ICT products">ICT products</option>
+                <option value="Textiles/apparel">Textiles/apparel</option>
+                <option value="Construction products">Construction products</option>
+                <option value="Batteries">Batteries</option>
+                <option value="Recycled content">Recycled content</option>
+                <option value="Iron and steel">Iron and steel</option>
+                <option value="Repairability">Repairability</option>
+                <option value="Energy-related products">Energy-related products</option>
+                <option value="Furniture">Furniture</option>
+                <option value="Footwear">Footwear</option>
+                <option value="Aluminium">Aluminium</option>
+                <option value="Mattresses">Mattresses</option>
+                <option value="Tyres">Tyres</option>
+                <option value="Toys">Toys</option>
+                <option value="Plastic">Plastic</option>
+                <option value="Fuels">Fuels</option>
+                <option value="Chemicals">Chemicals</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="size">2. What is your company size according to <a href="https://single-market-economy.ec.europa.eu/smes/sme-fundamentals/sme-definition_en">EU regulations</a>?</label>
+            <img src="./Case-5_files/SME-table.png" alt="SME sizes according to the EU"> <br>
+            <!-- <small class="form-text">
+                (e.g. small, large)  <br>
+            </small>
+            <input id="size" type="text" placeholder="Micro"> -->
+            <select id="size" name="size"> 
+                <option value="micro">Micro</option>
+                <option value="small">Small</option>
+                <option value="medium">Medium</option>
+                <option value="large">Large</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="role">3. What role does your organization take in the <a href="https://coe-dsc.nl/wp-content/uploads/2026/01/Dutch-Digital-Product-Passport-Landscape-Scan-Version-1.0-final-1.pdf">DPP ecosystem</a>?</label>
+            <img src="./Case-5_files/Ecosystem-framework.png" alt="DPP Ecosystem Framework"> <br>
+            <!-- <small class="form-text">
+                (e.g. retailer, economic operator)  <br>
+            </small>
+            <input id="role" type="text" placeholder="Supplier"> -->
+            <select id="role" name="role"> 
+                <option value="Economic operator">Economic operator</option>
+                <option value="Supplier">Supplier</option>
+                <option value="Retailer">Retailer</option>
+                <option value="Independent operator">Independent operator</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="maturity">4. What is the <a href="https://www.mdpi.com/2504-2289/7/1/17">digital maturity level</a> of your organization?</label>
+            <img src="./Case-5_files/digital-maturity-model.png" alt="Digital Maturity Model" style="width: 40%"> <br>
+            <small class="form-text">
+                The figure shows a digital maturity model that starts at incomplete, meaning there has been no digitalization in the company. Next, performed means that a planning has been made. Managed focuses on ensuring existing business processes are digitized through technology. Established means that digital transformation has been done based on existing standard. Predictable seizes those benefits by applying quantitative techniques on real-time data, with data analytics on business processes. Lastly, optimizing focuses on innovation and continuous improvement.  <br>
+            </small>
+            <!-- <small class="form-text" title="The figure shows a digital maturity model that starts at incomplete, meaning there has been no digitalization in the company. Next, performed means that a planning has been made. Managed focuses on ensuring existing business processes are digitized through technology. Established means that digital transformation has been done based on existing standard. Predictable seizes those benefits by applying quantitative techniques on real-time data, with data analytics on business processes. Lastly, optimizing focuses on innovation and continuous improvement.">
+                For further explanation, please hover your mouse over this text or click this <a href="https://www.mdpi.com/2504-2289/7/1/17"> link</a>.  <br>
+            </small> -->
+            <!--
+            <input id="maturity" type="text" placeholder="Optimizing"> -->
+            <select id="maturity" name="maturity"> 
+                <option value="incomplete">Incomplete</option>
+                <option value="performed">Performed</option>
+                <option value="managed">Managed</option>
+                <option value="established">Established</option>
+                <option value="predictable">Predictable</option>
+                <option value="optimizing">Optimizing</option>
+            </select> 
+        </div>
+
+        <div class="form-group">
+            <label for="implementation">5. What level of DPP implementation does your organization aim for?</label>
+            <img src="./Case-5_files/DPP-maturity-model.png" alt="DPP Maturity Model"> <br>
+            <!-- <small class="form-text">
+                (with 2: Entity level compliance, 3: Ecosystem level compliance, <br> 4: Value adding, 5: Competitive advantage) <br>
+            </small>
+            <input id="implementation" type="number" min="2" max="5" placeholder="2"> -->
+            <select id="implementation" name="implementation"> 
+                <option value="two">2: Entity level compliance</option>
+                <option value="three">3: Ecosystem level compliance</option>
+                <option value="four">4: Value adding</option>
+                <option value="five">5: Competitive advantage</option>
+            </select> 
+        </div>
+
+        <!-- <div class="form-group">
+            <label for="technical">6. What is your ICT background?</label>
+            <small class="form-text">
+                (used to customize the output to your background)  <br>
+            </small>
+            <input id="technical" type="text" placeholder="Average ICT knowledge">
+        </div> -->
+        
+        <button class="main-button" onclick="submitForm()">
+            DISCOVER YOUR REQUIREMENTS<br>TO IMPLEMENT THE DPP
+        </button>
+
+        <div id="llm-output" class="llm-output">
+                <p><strong>DPP-TEXTILE-001</strong><br><strong>Statement:</strong> A textile supplier must collect and maintain product-specific data throughout the product lifecycle, including raw material origin, production processes, environmental impact, and end-of-life options.<br><strong>Rationale:</strong> Compliance with the Digital Product Passport (DPP) requires that all relevant product sustainability and circularity data be available to support informed decision-making and traceability across the supply chain.<br><strong>Organization benefits:</strong> Improved transparency, better alignment with EU sustainability goals, and enhanced trust with downstream partners.<br><strong>Source:</strong> [Source 3] – “This collaborative tool can serve as a discussion forum in anticipation of actions under the Ecodesign for Sustainable Products Regulation, including the Digital Product Passport.”<br><strong>Priority:</strong> Must – This is a foundational requirement for any entity participating in the DPP ecosystem.<br><strong>Risk:</strong> If data is incomplete or not structured properly, the organization may fail to meet regulatory expectations when the DPP becomes mandatory.<br><strong>System Validation/Verification Success Criteria:</strong> All product-specific data fields are populated and accessible in a structured format, and verified by a third party or through internal audits.  </p>
+<hr>
+<p><strong>DPP-TEXTILE-002</strong><br><strong>Statement:</strong> A textile supplier must ensure that the data collected for the DPP is machine-readable and structured in a standardized format.<br><strong>Rationale:</strong> The DPP mandates that data be interoperable across systems to enable seamless exchange and use by all stakeholders in the textile value chain.<br><strong>Organization benefits:</strong> Facilitates easier integration with partners and reduces the cost of future compliance.<br><strong>Source:</strong> [Source 4] – “Potential measures under ESPR: performance requirement on maximum level of life cycle energy consumption.”<br><strong>Priority:</strong> Must – Machine-readability is a technical prerequisite for the DPP to function effectively.<br><strong>Risk:</strong> If data is not structured in a standardized format, it may be rejected by downstream systems or not accepted during regulatory audits.<br><strong>System Validation/Verification Success Criteria:</strong> The data format is validated against a recognized standard (e.g., ISO or Ecodesign for Sustainable Products Regulation schema) and successfully imported into a test DPP system.  </p>
+<hr>
+<p><strong>DPP-TEXTILE-003</strong><br><strong>Statement:</strong> A textile supplier must establish a process for updating the DPP data in real time or at least at regular intervals (e.g., quarterly) to reflect changes in production, materials, or product use.<br><strong>Rationale:</strong> Continuous updates are necessary to ensure the DPP remains accurate and relevant, especially as sustainability practices evolve.<br><strong>Organization benefits:</strong> Maintains compliance over time and supports dynamic reporting for stakeholders.<br><strong>Source:</strong> [Source 3] – “Once the Transition Pathway has been established, it will also allow to monitor the progress in achieving the twin transitions…”<br><strong>Priority:</strong> Must – Regulatory compliance requires ongoing accuracy and relevance of data.<br><strong>Risk:</strong> If updates are not made regularly, the data may become obsolete, leading to non-compliance or misrepresentation of sustainability claims.<br><strong>System Validation/Verification Success Criteria:</strong> A documented process for data updates is in place, and the system logs show regular updates with timestamps and responsible parties.  </p>
+<hr>
+<p><strong>DPP-TEXTILE-004</strong><br><strong>Statement:</strong> A textile supplier must ensure that the DPP data is accessible to downstream partners (e.g., brands, retailers) and regulators upon request.<br><strong>Rationale:</strong> The DPP is designed to support transparency and accountability across the supply chain, including for regulatory enforcement.<br><strong>Organization benefits:</strong> Builds trust with partners and reduces the risk of supply chain disruptions due to non-compliance.<br><strong>Source:</strong> [Source 2] – “By building on the work already done… the EU can become a global trailblazer in sustainable and circular textile value chains…”<br><strong>Priority:</strong> Must – Access to DPP data is a core principle of the regulation.<br><strong>Risk:</strong> If data is not accessible when requested, the organization may face legal or reputational consequences.<br><strong>System Validation/Verification Success Criteria:</strong> A documented access protocol is in place, and downstream partners can retrieve the data within a defined timeframe.  </p>
+<hr>
+<p><strong>DPP-TEXTILE-005</strong><br><strong>Statement:</strong> A textile supplier must implement a data governance framework that defines roles, responsibilities, and procedures for managing DPP-related data.<br><strong>Rationale:</strong> A governance framework ensures accountability, data integrity, and compliance with evolving regulatory expectations.<br><strong>Organization benefits:</strong> Reduces the risk of data mismanagement and supports efficient internal coordination.<br><strong>Source:</strong> [Source 3] – “This collaborative tool can serve as a discussion forum in anticipation of actions under the Ecodesign for Sustainable Products Regulation…”<br><strong>Priority:</strong> Must – Governance is essential for managing compliance in a structured and sustainable way.<br><strong>Risk:</strong> Without governance, data may be inconsistent or incomplete, leading to non-compliance.<br><strong>System Validation/Verification Success Criteria:</strong> A documented data governance framework is in place, with assigned roles and responsibilities and a review cycle for updates.  </p>
+<hr>
+<p><strong>DPP-TEXTILE-006</strong><br><strong>Statement:</strong> A textile supplier must ensure that the DPP data includes at minimum: product composition, environmental impact (e.g., carbon footprint), production location, and recycling or reuse options.<br><strong>Rationale:</strong> These data points are essential for assessing the sustainability and circularity of the product, as required by the DPP.<br><strong>Organization benefits:</strong> Provides a baseline for transparency and supports downstream partners in meeting their own sustainability goals.<br><strong>Source:</strong> [Source 3] – “This collaborative tool can serve as a discussion forum in anticipation of actions under the Ecodesign for Sustainable Products Regulation…”<br><strong>Priority:</strong> Must – These are core data elements expected under the DPP.<br><strong>Risk:</strong> Missing key data elements may result in non</p>
+
+                <br>
+                <p><strong>DPP-TEXTILE-007</strong><br><strong>Statement:</strong> A small textile supplier should assign internal ownership for DPP data management to ensure consistency and follow-up, even in the absence of an integrated digital system.<br><strong>Rationale:</strong> Given the organization’s low digital maturity level and current lack of digital infrastructure, assigning clear ownership ensures that data collection and maintenance continue in a structured way.<br><strong>Organization benefits:</strong> Establishes accountability and minimizes the risk of data silos or neglect.<br><strong>Source:</strong> [Source 3] – “This collaborative tool can serve as a discussion forum…”<br><strong>Priority:</strong> Should – Ownership is critical for ensuring that even limited digital resources are effectively managed.<br><strong>Risk:</strong> Without a designated owner, there is a high risk of data inconsistency or loss, especially when transitioning to more digital systems.<br><strong>System Validation/Verification Success Criteria:</strong> A named individual or team is assigned in writing, with documented responsibilities and a review process every six months.</p>
+<hr>
+<p><strong>DPP-TEXTILE-008</strong><br><strong>Statement:</strong> A small textile supplier should use physical or standardized digital templates (e.g., PDFs or simple spreadsheets) to collect and store DPP-related data until digital integration is feasible.<br><strong>Rationale:</strong> While full digital integration may not be viable at the current maturity level, structured manual formats allow for a controlled transition to digital systems.<br><strong>Organization benefits:</strong> Provides a scalable solution that supports compliance while minimizing disruption from a sudden digital shift.<br><strong>Source:</strong> [Source 2] – “Analysis of the implementation of mandatory DPPs at three levels of granularity…”<br><strong>Priority:</strong> Should – This acts as a bridge between current practices and future digital readiness.<br><strong>Risk:</strong> Manual templates may limit interoperability and scalability if not aligned with future digital standards.<br><strong>System Validation/Verification Success Criteria:</strong> Templates are used consistently across all product lines and are reviewed annually for alignment with evolving standards.</p>
+<hr>
+<p><strong>DPP-TEXTILE-009</strong><br><strong>Statement:</strong> A small textile supplier should collect and document the production batch information (e.g., date, location, fabric composition) for each model, especially when multiple batches may originate from different supply chains.<br><strong>Rationale:</strong> Batch-level information supports transparency and traceability, particularly in cases where supply chain variations exist for the same model.<br><strong>Organization benefits:</strong> Enhances traceability and supports compliance with potential future granularity requirements.<br><strong>Source:</strong> [Source 1] – “Especially for large brands and due to the existence of production facilities in different countries…”<br><strong>Priority:</strong> Should – While not yet mandatory, batch-level data may become required as the regulation evolves.<br><strong>Risk:</strong> Current EU regulations may not yet mandate batch-level data; however, early collection prepares for potential future enforcement.<br><strong>System Validation/Verification Success Criteria:</strong> Batch information is systematically recorded for all produced models and linked to product identifiers.</p>
+<hr>
+<p><strong>DPP-TEXTILE-010</strong><br><strong>Statement:</strong> A small textile supplier should establish a communication protocol with downstream partners to clarify data sharing expectations and verification methods.<br><strong>Rationale:</strong> As the organization operates at an ecosystem level (not just entity level), alignment with partners supports transparency and avoids conflicts in DPP reporting.<br><strong>Organization benefits:</strong> Ensures that the supplier’s data is compatible with the formats and requirements of brands or retailers.<br><strong>Source:</strong> [Source 3] – “This collaborative tool can serve as a discussion forum in anticipation of actions under the Ecodesign for Sustainable Products Regulation…”<br><strong>Priority:</strong> Should – Facilitates cooperation within the supply chain and reduces the risk of downstream rejection.<br><strong>Risk:</strong> Miscommunication may lead to data mismatches or delays in product approval.<br><strong>System Validation/Verification Success Criteria:</strong> A documented communication protocol is shared with at least one downstream partner and signed off as acceptable.</p>
+<hr>
+<p><strong>DPP-TEXTILE-011</strong><br><strong>Statement:</strong> A small textile supplier could explore the use of low-cost digital tools (e.g., barcode or QR code systems) to link physical products to their DPP data for easier tracking and verification.<br><strong>Rationale:</strong> As a transitional step, such tools help in assigning data to specific products or batches with minimal technical investment.<br><strong>Organization benefits:</strong> Enables early digital integration without large capital outlay and improves traceability.<br><strong>Source:</strong> [Source 4] – “Potential measures under ESPR: performance requirement on maximum level of life cycle energy consumption.”<br><strong>Priority:</strong> Could – Useful for future-readiness but not immediately required for compliance.<br><strong>Risk:</strong> Limited functionality may not align with future DPP system requirements if higher-level digital systems are mandated.<br><strong>System Validation/Verification Success Criteria:</strong> At least 10% of products are tagged with a digital identifier that links to the DPP database.</p>
+<hr>
+<p><strong>DPP-TEXTILE-012</strong><br><strong>Statement:</strong> A small textile supplier could participate in industry consortia or working groups focused on DPP standardization to better understand and influence the development of the regulation.<br><strong>Rationale:</strong> Given the evolving nature of the DPP and its implementation, staying informed and engaged helps align the organization with expected standards.<br><strong>Organization benefits:</strong> Informed decision-making and potential influence over regulatory expectations.<br><strong>Source:</strong> [Source 1] – “This document was prepared and reviewed collaboratively by the partners of the CIRPASS-2 consortium…”<br><strong>Priority:</strong> Could – Not required for compliance but beneficial for strategic positioning.<br><strong>Risk:</strong> No immediate regulatory consequences, but missing out on early alignment could create compliance challenges later.<br><strong>System Validation/Verification Success Criteria:</strong> Participation in at least one industry event or working group related to DPP implementation is documented.</p>
+<hr>
+<p><strong>DPP-TEXTILE-013</strong><br><strong>Statement:</strong> A small textile supplier won't need to implement real-time data</p>
+
+                <br> 
+                <h3> Sources for must have requirements </h3>
+                <br> 
+                
+        <ul>
+          <li> [Source 1] Title: EU strategy for sustainable and circular textiles | Type: commission | URL: https://environment.ec.europa.eu/publications/textiles-strategy_en | Section: Page 11 | Content: 3.4. Supporting research, innovation and investments
+Making the green and digital transition a story of success and resilience in the context of global value chains relies on the capacity of the textile ecosystem to reinvent itself. Enhancing research and innovation and promoting investments in the sector are essential to tap into its potential to create sustainable growth and local jobs and should be a priority at EU, national and regional level. </li><li> [Source 2] Title: EU strategy for sustainable and circular textiles | Type: commission | URL: https://environment.ec.europa.eu/publications/textiles-strategy_en | Section: Page 3 | Content: By building on the work already done, securing the green and digital transition, addressing social challenges and ensuring that sustainability requirements are complied with, the EU can become a global trailblazer in sustainable and circular textile value chains, new technological solutions and innovative business models </li><li> [Source 3] Title: EU strategy for sustainable and circular textiles | Type: commission | URL: https://environment.ec.europa.eu/publications/textiles-strategy_en | Section: Page 9 | Content: Once the Transition Pathway has been established, it will also allow to monitor the progress in achieving the twin transitions and bridging the investment and innovation gaps, thereby also boosting the textile ecosystem’s competitiveness. This collaborative tool can serve as a discussion forum in anticipation of actions under the Ecodesign for Sustainable Products Regulation, including the Digital Product Passport.
+3.2. Reversing the overproduction and overconsumption of clothing: driving fast </li><li> [Source 4] Title: Ecodesign for Sustainable Products Regulation: JRC Study on new product priorities | Type: commission | URL: https://publications.jrc.ec.europa.eu/repository/handle/JRC138903 | Section: COMMODITY CHEMICALS | Content: tion of energy demand, and green technologies for efficient supply of energy (38). The whole processes effi-ciency may also be optimised by means of digital technologies such as the internet of things, big data, artificial intelligence, smart sensors and robotics whereas re-skilling and up-skilling of the workforce involved in the production and use of chemicals also has a role (1).
+Potential measures under ESPR:
+- performance requirement on maximum level of life cycle energy consumption </li><li> [Source 5] Title: Ecodesign for Sustainable Products Regulation: JRC Study on new product priorities | Type: commission | URL: https://publications.jrc.ec.europa.eu/repository/handle/JRC138903 | Section: Table 1 (Page 296) | Content: - : tion of energy demand, and green technologies for efficient supply of energy (38). The whole processes effi-
+ciency may also be optimised by means of digital technologies such as the internet of things, big data,
+artificial intelligence, smart sensors and robotics whereas re-skilling and up-skilling of the workforce involved
+in the production and use of chemicals also has a role (1).
+Potential measures under ESPR:
+- performance requirement on maximum level of life cycle energy consumption </li><li> [Source 6] Title: Ecodesign for Sustainable Products Regulation: JRC Study on new product priorities | Type: commission | URL: https://publications.jrc.ec.europa.eu/repository/handle/JRC138903 | Section: Page 73 | Content: 37  P4Planet is a European co-programmed public-private Partnership established between A.SPIRE – as the private entity – and the European Commission in the context of the Cluster 4 (Digital, Industry and Space) of Horizon Europe funding programme. The Partnership’s aim is to transform the European process industries to achieve circularity and overall climate neutrality at the EU level by 2050 while enhancing their global competitiveness. </li>
+        </ul>
+      
+                <br> 
+                <h3> Sources for other requirements </h3>
+                <br> 
+                
+        <ul>
+          <li> [Source 1] Title: DPP Granularity options for Textiles/Apparel | Type: working_group | URL: https://zenodo.org/records/17582219 | Section: 2.1.1 MODEL-LEVEL GRANULARITY FOR MANDATORY INFORMATION REQUIREMENTS | Content: If the model level mandatory information includes data related to textiles/apparel product color and size, this corresponds to existing industry practices for product identification (GTIN).
+The bad
+Especially for large brands and due to the existence of production facilities in different countries producing different batches of the same model, the same product model can have a different supply chain. This means that supply-chain transparency is limited: </li><li> [Source 2] Title: DPP Granularity options for Textiles/Apparel | Type: working_group | URL: https://zenodo.org/records/17582219 | Section: Page 2 | Content: This paper provides an analysis of the implementation of mandatory Digital Product Passports (DPPs) for apparel at three potential levels of granularity of DPP information: model, batch, and item. This document was prepared and reviewed collaboratively by the partners of the CIRPASS-2 consortium, with the goal of informing the ongoing discussion in the ESPR Ecodesign Forum on a delegated act for textiles (including apparel).
+Keywords Textiles, garments, granularity, DPP </li><li> [Source 3] Title: DPP Granularity options for Textiles/Apparel | Type: working_group | URL: https://zenodo.org/records/17582219 | Section: 1 INTRODUCTION | Content: This paper provides an analysis of the implementation of mandatory Digital Product Passports (DPPs) for apparel at three potential levels of granularity of DPP information: model, batch, and item. This document was prepared and reviewed collaboratively by the partners of the CIRPASS-2 consortium, with the goal of informing the ongoing discussion in the ESPR Ecodesign Forum on a delegated act for textiles (including apparel). </li><li> [Source 4] Title: Ecodesign for Sustainable Products Regulation: JRC Study on new product priorities | Type: commission | URL: https://publications.jrc.ec.europa.eu/repository/handle/JRC138903 | Section: COMMODITY CHEMICALS | Content: tion of energy demand, and green technologies for efficient supply of energy (38). The whole processes effi-ciency may also be optimised by means of digital technologies such as the internet of things, big data, artificial intelligence, smart sensors and robotics whereas re-skilling and up-skilling of the workforce involved in the production and use of chemicals also has a role (1).
+Potential measures under ESPR:
+- performance requirement on maximum level of life cycle energy consumption </li><li> [Source 5] Title: Ecodesign for Sustainable Products Regulation: JRC Study on new product priorities | Type: commission | URL: https://publications.jrc.ec.europa.eu/repository/handle/JRC138903 | Section: Table 1 (Page 296) | Content: - : tion of energy demand, and green technologies for efficient supply of energy (38). The whole processes effi-
+ciency may also be optimised by means of digital technologies such as the internet of things, big data,
+artificial intelligence, smart sensors and robotics whereas re-skilling and up-skilling of the workforce involved
+in the production and use of chemicals also has a role (1).
+Potential measures under ESPR:
+- performance requirement on maximum level of life cycle energy consumption </li><li> [Source 6] Title: Ecodesign for Sustainable Products Regulation: JRC Study on new product priorities | Type: commission | URL: https://publications.jrc.ec.europa.eu/repository/handle/JRC138903 | Section: Page 73 | Content: 37  P4Planet is a European co-programmed public-private Partnership established between A.SPIRE – as the private entity – and the European Commission in the context of the Cluster 4 (Digital, Industry and Space) of Horizon Europe funding programme. The Partnership’s aim is to transform the European process industries to achieve circularity and overall climate neutrality at the EU level by 2050 while enhancing their global competitiveness. </li>
+        </ul>
+      
+            </div>
+
+        <!-- Copy button -->
+        <button id="copy-button" class="copy-button" onclick="copyOutput()" style="display: inline-block;">
+            Copy Requirements
+        </button>
+
+        <br> 
+        
+        <!-- Buttons for the next steps -->
+        <button id="info-button-1" class="copy-button" onclick="location.href = &#39;https://cirpass2.eu/&#39;" style="display: inline-block; background-color: rgb(65, 167, 101);">
+            Get more information on European level!
+        </button>
+        
+        <button id="info-button-2" class="copy-button" onclick="location.href = &#39;https://coe-dpp.nl/&#39;" style="display: inline-block; background-color: rgb(65, 167, 101);">
+            Get more information as a Dutch organization!
+        </button>
+
+        <br> 
+        <br> 
+
+        <small id="disclaimer" class="form-text" style="display: inline-block;">
+            <i> Each requirement consists of an ID, a statement (the actual requirement itself), a rationale (a compliance-oriented reason behind the requirement), organization benefits (such as improved efficiency), a source (which are either published EU documents or EU working group documents), a priority (based on the MoSCoW method, which uses must/should/could/won't), a risk of implementation (about the possible complications that might occur), and system validation success criteria (to verify whether you adhere to this requirement). </i> <br> <br>
+            <i> Note that this set of requirements has been generated using a Large Language Model. Although the used LLM has access to a relevant set of documents about the Digital Product Passport, it is still sensitive to hallucinations. Hence, it is recommended to only use these requirements as a starting point in your journey with the DPP. No rights can be derived from this LLM output. </i> <br>
+        </small>
+        
+    </div>
+
+    <!-- MS Forms for Feedback -->
+    <!--
+    <div class="msforms">
+        <iframe id="ms-forms" width="640px" height="480px" src="https://forms.office.com/Pages/ResponsePage.aspx?id=ujzz4PV5YkaC5w5TbNoSMky758Gqz3BGmiRiauivYCNUOTJKSUhWSTFaOFlOVVNDOUlGTlpCTUE3Ni4u&embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border: none; max-width:100%; max-height:100vh" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
+    </div>-->
+    
+    <div class="footer">
+        <p style="color:grey">Version 2.0</p> 
+        Created by <strong>Isabel Rutten</strong> as thesis intern of <strong>TNO Vector</strong>.
+    </div>
+
+
+
+
+
+
+<script>
+async function submitForm() {
+    // Gather input values
+    const sector = document.getElementById("sector").value.trim();
+    const size = document.getElementById("size").value.trim();
+    const role = document.getElementById("role").value.trim();
+    const maturity = document.getElementById("maturity").value.trim();
+    // const technical = document.getElementById("technical").value.trim();
+    const implementation = document.getElementById("implementation").value.trim();
+
+    // Basic validation (optional)
+    if (!sector || !size || !role || !maturity || !implementation) {
+        alert("Please fill out all fields.");
+        return;
+    }
+
+    // Build prompt text combining all answers
+    const prompt = `
+1. Sector: ${sector}
+2. Organization size: ${size}
+3. Organization role in DPP Ecosystem: ${role}
+4. Digital maturity (The digital maturity model starts at incomplete (no digitalization in the company). Next, performed means that a planning has been made. Managed focuses on ensuring existing business processes are digitized through technology. Established means that digital transformation has been done based on existing standard. Predictable seizes those benefits by applying quantitative techniques on real-time data, with data analytics on business processes. Lastly, optimizing focuses on innovation and continuous improvement.): ${maturity} 
+5. Aim of implementation level (with 2: Entity level compliance, 3: Ecosystem level compliance, 4: Value adding, 5: Competitive advantage):  ${implementation}
+`;
+
+    // Show a loading indicator
+    const outputDiv = document.getElementById("llm-output");
+    outputDiv.innerHTML = "Generating custom requirements...";
+
+    // Call backend
+    try {
+        const response = await fetch("https://system-ai-335a.onrender.com/generate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ input: prompt })
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+            outputDiv.innerHTML = "Error: " + escapeHTML(data.error);
+        } else {
+            // outputDiv.innerHTML = formatOutput(data.output);
+            outputDiv.innerHTML = `
+                ${formatOutput(data.commission_only_output)}
+                <br>
+                ${formatOutput(data.full_context_output)}
+                <br> 
+                <h3> Sources for must have requirements </h3>
+                <br> 
+                ${data.sources.commission}
+                <br> 
+                <h3> Sources for other requirements </h3>
+                <br> 
+                ${data.sources.full}
+            `;
+            showCopyButtonIfNeeded();
+            // showFormsIfNeeded();
+        }
+    } catch (err) {
+        outputDiv.innerHTML = "Request failed: " + escapeHTML(err.message);
+    }
+}
+
+// Helper: escape HTML entities to prevent injection
+function escapeHTML(str) {
+    return str.replace(/&/g, "&amp;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;");
+}
+
+// Helper: format text output nicely
+function formatOutput(text) {
+    if (!text || typeof text !== "string") return "";
+
+    // Configure marked (GitHub-flavored markdown)
+    marked.setOptions({
+        // breaks: true,        // convert \n to <br>
+        gfm: true            // enable tables, strikethrough, etc.
+    });
+
+    // Step 1: Markdown → HTML
+    const rawHtml = marked.parse(text);
+
+    // Step 2: Sanitize HTML to prevent XSS
+    const safeHtml = DOMPurify.sanitize(rawHtml, {
+        USE_PROFILES: { html: true }
+    });
+
+    return safeHtml;
+}
+
+// function formatOutput(text) {
+//     // Escape HTML first
+//     let escaped = text
+//         .replace(/&/g, "&amp;")
+//         .replace(/</g, "&lt;")
+//         .replace(/>/g, "&gt;");
+
+//     // Convert bold: **text** -> <strong>text</strong>
+//     escaped = escaped.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+
+//     // Convert bullets starting with -, *, or • into <ul><li>
+//     const lines = escaped.split("\n");
+//     let inList = false;
+//     let html = "";
+
+//     for (let line of lines) {
+//         if (/^(\s*[-*•]\s+)/.test(line)) {
+//             if (!inList) {
+//                 inList = true;
+//                 html += "<ul>";
+//             }
+//             html += "<li>" + line.replace(/^(\s*[-*•]\s+)/, "") + "</li>";
+//         } else {
+//             if (inList) {
+//                 inList = false;
+//                 html += "</ul>";
+//             }
+//             // Wrap paragraphs
+//             if (line.trim() !== "") {
+//                 html += "<p>" + line + "</p>";
+//             }
+//         }
+//     }
+//     if (inList) html += "</ul>";
+
+//     return html;
+// }
+
+// function copyOutput() {
+//     const outputDiv = document.getElementById("llm-output");
+
+//     if (outputDiv.textContent.trim() === "") return;
+
+//     // Copy plain text (without HTML tags)
+//     navigator.clipboard.writeText(outputDiv.textContent)
+//         .then(() => {
+//             alert("Action plan copied to clipboard!");
+//         })
+//         .catch(err => {
+//             alert("Failed to copy: " + err);
+//         });
+// }
+
+function copyOutput() {
+    const outputDiv = document.getElementById("llm-output");
+
+    if (outputDiv.innerHTML.trim() === "") return;
+
+    // Convert HTML to nicely formatted plain text
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = outputDiv.innerHTML;
+
+    // Recursively extract text with line breaks
+    function getTextWithFormatting(element) {
+        let text = "";
+        element.childNodes.forEach(node => {
+            if (node.nodeType === Node.TEXT_NODE) {
+                text += node.textContent;
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
+                const tag = node.tagName.toLowerCase();
+                if (tag === "br") {
+                    text += "\n";
+                } else if (tag === "p") {
+                    text += getTextWithFormatting(node) + "\n\n";
+                } else if (tag === "li") {
+                    text += "- " + getTextWithFormatting(node) + "\n";
+                } else if (tag === "ul" || tag === "ol") {
+                    text += getTextWithFormatting(node) + "\n";
+                } else if (tag === "strong") {
+                    text += node.textContent; // bold as plain text
+                } else {
+                    text += getTextWithFormatting(node);
+                }
+            }
+        });
+        return text;
+    }
+
+    const formattedText = getTextWithFormatting(tempDiv).trim();
+    const disclaimerText = "\n\nEach requirement consists of an ID, a statement (the actual requirement itself), a rationale (a compliance-oriented reason behind the requirement), organization benefits (such as improved efficiency), a source (which are either published EU documents or EU working group documents), a priority (based on the MoSCoW method, which uses must/should/could/won't), a risk of implementation (about the possible complications that might occur), and system validation success criteria (to verify whether you adhere to this requirement).\n\n Note that this set of requirements has been generated using a Large Language Model. Although the used LLM has access to a relevant set of documents about the Digital Product Passport, it is still sensitive to hallucinations. Hence, it is recommended to only use these requirements as a starting point in your journey with the DPP. No rights can be derived from this LLM output.";
+    const finalText = formattedText + disclaimerText
+
+    navigator.clipboard.writeText(finalText)
+        .then(() => alert("Action plan copied to clipboard!"))
+        .catch(err => alert("Failed to copy: " + err));
+}
+
+
+// Show the copy button only when there’s content
+function showCopyButtonIfNeeded() {
+    const outputDiv = document.getElementById("llm-output");
+    const copyButton = document.getElementById("copy-button");
+    const infoButtonOne = document.getElementById("info-button-1");
+    const infoButtonTwo = document.getElementById("info-button-2");
+    const disclaimer = document.getElementById("disclaimer");
+
+    if (outputDiv.textContent.trim() !== "") {
+        copyButton.style.display = "inline-block";
+        infoButtonOne.style.display = "inline-block";
+        infoButtonTwo.style.display = "inline-block";
+        disclaimer.style.display = "inline-block";
+    } else {
+        copyButton.style.display = "none";
+        infoButtonOne.style.display = "none";
+        infoButtonTwo.style.display = "none";
+        disclaimer.style.display = "none";
+    }
+}
+
+// Show the MS Forms only when there is content
+// function showFormsIfNeeded() {
+//     const outputDiv = document.getElementById("llm-output");
+//     const msForms = document.getElementById("ms-forms");
+
+//     if (outputDiv.textContent.trim() !== "") {
+//         msForms.style.display = "inline-block";
+//     } else {
+//         msForms.style.display = "none";
+//     }
+// }
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body></html>
