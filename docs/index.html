@@ -212,7 +212,12 @@ async function submitForm() {
         if (data.error) {
             outputDiv.innerHTML = "Error: " + escapeHTML(data.error);
         } else {
-            outputDiv.innerHTML = formatOutput(data.output);
+            // outputDiv.innerHTML = formatOutput(data.output);
+            outputDiv.innerHTML = `
+                ${formatOutput(data.commission_only_output)}
+                <br>
+                ${formatOutput(data.full_context_output)}
+            `;
             showCopyButtonIfNeeded();
             // showFormsIfNeeded();
         }
