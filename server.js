@@ -513,7 +513,7 @@ app.post("/generate", async (req, res) => {
       ],
       temperature : 0.3, 
       reasoning_effort : "none",
-      max_tokens : 1700, 
+      max_tokens : 1800, 
     });
 
     // Some delay due to token space
@@ -614,7 +614,7 @@ app.post("/generate", async (req, res) => {
       ],
       temperature : 0.8, 
       reasoning_effort : "none",
-      max_tokens : 1700, 
+      max_tokens : 1800, 
     });
 
     // 3. Output the first and second prompt together
