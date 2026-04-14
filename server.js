@@ -314,7 +314,7 @@ app.post("/generate", async (req, res) => {
           // single-line format per source
           return `[Source ${i + 1}] Title: ${title} | Type: ${type} | URL: ${url} | Section: ${section} | Content: ${doc}`;
         })
-        .join("\n");
+        .join("\n\n");
     }
 
     // ----------------
