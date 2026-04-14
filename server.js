@@ -276,7 +276,8 @@ app.post("/generate", async (req, res) => {
     // 1a. Get relevant published regulations documents
     // ----------------
 
-    const { docs_a, metadata_a } = retrieveContext(userInput, "commission", 6);
+    // const { docs_a, metadata_a } = retrieveContext(userInput, "commission", 6);
+    const { docs: docs_a, metadata: metadata_a } =  retrieveContext(userInput, "commission", 6);
 
     // const context_a = docs_a.length ? docs_a.join("\n\n") : "No additional context available.";
 
@@ -319,7 +320,8 @@ app.post("/generate", async (req, res) => {
     // 1b. Get all relevant documents
     // ----------------
 
-    const { docs_b, metadata_b } = retrieveContext(userInput, "", 6);
+    // const { docs_b, metadata_b } = retrieveContext(userInput, "", 6);
+    const { docs: docs_b, metadata: metadata_b } =  retrieveContext(userInput, "", 6);
 
     // const context_b = docs_b.length ? docs_b.join("\n\n") : "No additional context available.";
 
