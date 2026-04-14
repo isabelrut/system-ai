@@ -108,6 +108,19 @@ function detectSector(query) {
 }
 
 // ------------------------------
+// Check if document is generic
+// ------------------------------
+function isGenericDoc(c) {
+  const name = (c.metadata?.Name || "").toLowerCase();
+
+  return (
+    name.includes("ecodesign for sustainable products regulation") ||
+    name.includes("espr") ||
+    c.metadata?.Tags?.toLowerCase().includes("product")
+  );
+}
+
+// ------------------------------
 // Improved scoring function
 // ------------------------------
 function scoreChunk(chunk, query, sector) {
@@ -176,31 +189,46 @@ function retrieveContext(query, docType = null, topK = 4) {
   //   return true;
   // });
 
-  const baseCandidates = chunks.filter(c => {
+  let baseCandidates = chunks.filter(c => {
     if (docType && c.metadata?.Doc_Type !== docType) return false;
     return true;
   });
 
-  // Step 2a: try specific sector first
-  const sectorCandidates = baseCandidates; 
-  let usedSectorFilter = false;
+  // Step 2: filter between generic docs and not generic docs
+  let genericPool = baseCandidates.filter(isGenericDoc);
+  let sectorPool = baseCandidates.filter(c => !isGenericDoc(c));
 
+  // Step 2a: try specific sector first
+  // let sectorCandidates = baseCandidates; 
+  let sectorCandidates = sectorPool; 
+  // let usedSectorFilter = false;
+
+  // if (sector) {
+  //   const filtered = baseCandidates.filter(c =>
+  //     (c.metadata?.Tags || "").toLowerCase().includes(sector.toLowerCase())
+  //   );
+
+  //   if (filtered.length > 0) {
+  //     sectorCandidates = filtered;
+  //     usedSectorFilter = true;
+  //   }
+  // }
   if (sector) {
-    const filtered = baseCandidates.filter(c =>
+    let filtered = sectorPool.filter(c =>
       (c.metadata?.Tags || "").toLowerCase().includes(sector.toLowerCase())
     );
 
     if (filtered.length > 0) {
       sectorCandidates = filtered;
-      usedSectorFilter = true;
     }
   }
 
   // Step 2b: include generic text
-  const GENERIC_KEYWORD = "Ecodesign for Sustainable Products Regulation";
-  const genericCandidates = baseCandidates.filter(c =>
-      (c.metadata?.Name || "").toLowerCase().includes(GENERIC_KEYWORD)
-    );
+  // const GENERIC_KEYWORD = "Ecodesign for Sustainable Products Regulation";
+  // const genericCandidates = baseCandidates.filter(c =>
+  //     (c.metadata?.Name || "").toLowerCase().includes(GENERIC_KEYWORD)
+  //   );
+  let genericCandidates = genericPool;
 
   // Step 3: score all candidates
   function scoreAndRank(candidates) {
@@ -240,10 +268,11 @@ function retrieveContext(query, docType = null, topK = 4) {
     // metadata: topChunks.map(c => c.metadata),
     metadata: topChunks.map(c => ({
       ...c.metadata,
-      _sectorFiltered: usedSectorFilter, 
-      _isGeneric: (c.metadata?.Name || "")
-        .toLowerCase()
-        .includes(GENERIC_KEYWORD),
+      // _sectorFiltered: usedSectorFilter, 
+      // _isGeneric: (c.metadata?.Name || "")
+      //   .toLowerCase()
+      //   .includes(GENERIC_KEYWORD),
+      _isGeneric: isGenericDoc(c),
     })),
   };
 }
