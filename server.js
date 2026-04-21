@@ -292,7 +292,7 @@ app.post("/generate", async (req, res) => {
             -	The compliance interest indicates whether the company wants to comply at the absolute minimum (2: entity level compliance), only with their direct environment (3: ecosystem level compliance), in a way that improves their position (4: value adding), by getting ahead of their competition (5: competitive advantage), or simply does not want to comply at all (0: no compliance).
             Do not infer beyond what you know or what information the source documents give.  
             Note that a good requirement includes the following:   
-            -	ID (this should be standardized with the following format: "DPP"-SECTOR-NUMBER, e.g. DPP-TEXTILE-001);
+            -	ID (this should only be a number with the first requirement being 1, to be able to reference to a requirement through its number);
             -	Statement (actual requirement): recommended structure (but not explicitly) is: [Condition] + [Subject] + “must” + [Action] + [Constraint] (with the verb must being used based on the MoSCoW method, which should be used to show a distinction between requirements and recommendations);
             -	Rationale (compliance oriented); 
             -	Organization benefits (e.g. efficiency)
@@ -357,7 +357,7 @@ app.post("/generate", async (req, res) => {
             -	The compliance interest indicates whether the company wants to comply at the absolute minimum (2: entity level compliance), only with their direct environment (3: ecosystem level compliance), in a way that improves their position (4: value adding), by getting ahead of their competition (5: competitive advantage), or simply does not want to comply at all (0: no compliance) (this determines how extensive your list should be). 
 
             Note that a good requirement includes the following:   
-            -	ID (this should be standardized with the following format: "DPP"-SECTOR-NUMBER, e.g. DPP-TEXTILE-001);
+            -	ID (this should only be a number with the first requirement being 1, to be able to reference to a requirement through its number);
             -	Statement (actual requirement): recommended structure (but not explicitly) is: [Condition] + [Subject] + “should/could/won't” + [Action] + [Constraint] (with the verb should/could/won't being chosen based on the MoSCoW method, which should be used to show a distinction between requirements and recommendations, but you do not have to use all verbs);
             -	Rationale (compliance oriented); 
             -	Organization benefits (e.g. efficiency)
