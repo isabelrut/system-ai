@@ -180,8 +180,6 @@ async function submitForm() {
         if (data.error) {
             outputDiv.innerHTML = "Error: " + escapeHTML(data.error);
         } else {
-            print(data.commission_only_output)
-            print(formatOutput(data.commission_only_output))
             outputDiv.innerHTML = `
                 ${formatOutput(data.commission_only_output)}
                 <br>
@@ -200,6 +198,56 @@ async function submitForm() {
     } catch (err) {
         outputDiv.innerHTML = "Request failed: " + escapeHTML(err.message);
     }
+}
+
+// Helper: turn output into readable collapsibles
+function addCollapsibles(html) {
+    const container = document.createElement("div");
+    container.innerHTML = html;
+
+    const text = container.innerText;
+
+    // Split items by ID or D
+    const items = text.split(/(?=ID\s+\d+)/g);
+
+    function extractField(block, fieldName) {
+        const regex = new RegExp(
+            fieldName + ":[\\s\\S]*?(?=\\n[A-Z][^:]+:|$)",
+            "i"
+        );
+        const match = block.match(regex);
+        return match ? match[0].replace(new RegExp(fieldName + ":", "i"), "").trim() : "";
+    }
+
+    return items.map(item => {
+        if (!item.trim()) return "";
+
+        const idMatch = item.match(/ID\s+\d+/);
+        const id = idMatch ? idMatch[0] : "Unknown";
+
+        const statement = extractField(item, "Statement");
+        const risk = extractField(item, "Risk");
+
+        // Remove visible fields from hidden content
+        let hidden = item
+            .replace(id, "")
+            .replace(/Statement:[\s\S]*?(?=\n[A-Z][^:]+:|$)/i, "")
+            .replace(/Risk:[\s\S]*?(?=\n[A-Z][^:]+:|$)/i, "")
+            .trim();
+
+        return `
+            <details class="llm-item">
+                <summary>
+                    <strong>${escapeHTML(id)}</strong><br>
+                    <strong>Statement:</strong> ${escapeHTML(statement)}<br>
+                    <strong>Risk:</strong> ${escapeHTML(risk)}
+                </summary>
+                <div class="llm-details">
+                    ${formatOutput(hidden)}
+                </div>
+            </details>
+        `;
+    }).join("");
 }
 
 // Helper: escape HTML entities to prevent injection
@@ -227,7 +275,10 @@ function formatOutput(text) {
         USE_PROFILES: { html: true }
     });
 
-    return safeHtml;
+    // Step 3: Make HTML more readable
+    const finalHtml = addCollapsibles(safeHtml);
+
+    return finalHtml;
 }
 
 function copyOutput() {

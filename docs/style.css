@@ -235,3 +235,87 @@ img {
   width: 60%; 
   height: auto; 
 }
+
+/* ===========================
+   Collapsibles
+=========================== */
+/* .llm-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 10px;
+    background: #fafafa;
+}
+
+.llm-item summary {
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.llm-item[open] {
+    background: #f0f7ff;
+}
+
+.llm-details {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+} */
+.llm-item {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    background: #e6e6e6;
+    overflow: hidden;
+}
+
+/* Header (collapsed view) */
+.llm-item summary {
+    background: #020059;
+    color: #ffffff;
+    padding: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1.5;
+    list-style: none; /* remove default arrow */
+}
+
+/* Custom arrow */
+.llm-item summary::marker {
+    display: none;
+}
+
+.llm-item summary::after {
+    content: "▼";
+    float: right;
+    transition: transform 0.2s ease;
+}
+
+/* Rotate arrow when open */
+.llm-item[open] summary::after {
+    transform: rotate(180deg);
+}
+
+/* Visible text styling inside summary */
+.llm-item summary strong {
+    color: #41A765; /* accent color */
+}
+
+/* Expanded content */
+.llm-details {
+    padding: 12px;
+    background: #e6e6e6;
+    color: #000000;
+    border-top: 2px solid #41A765;
+}
+
+/* Optional: hover effect */
+.llm-item summary:hover {
+    background: #03007a;
+}
+
+/* Optional: subtle emphasis for labels in details */
+.llm-details strong {
+    color: #020059;
+}
