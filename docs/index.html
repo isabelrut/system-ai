@@ -209,17 +209,10 @@ function formatRawHtml(text) {
 }
 
 // Helper: turn output into readable collapsibles
-function addCollapsibles(html) {
-    const container = document.createElement("div");
-    container.innerHTML = html;
+function addCollapsibles(text) {
 
-    // Preserve line structure better than innerText
-    let text = container.textContent || "";
-
-    // Normalize line endings
     text = text.replace(/\r\n/g, "\n");
 
-    // Split per item (handles "ID 1" or "D 1")
     const items = text.split(/(?=\b(?:ID|D)\s+\d+)/g);
 
     function extractField(block, fieldName) {
@@ -240,9 +233,8 @@ function addCollapsibles(html) {
         const statement = extractField(item, "Statement");
         const risk = extractField(item, "Risk");
 
-        // Remove visible fields from hidden content
         let hidden = item
-            .replace(id, "")
+            .replace(/\b(?:ID|D)\s+\d+/, "")
             .replace(/Statement:[\s\S]*?(?=\n[A-Z][^:]+:|$)/i, "")
             .replace(/Risk:[\s\S]*?(?=\n[A-Z][^:]+:|$)/i, "")
             .trim();
@@ -250,9 +242,7 @@ function addCollapsibles(html) {
         return `
             <details class="llm-item">
                 <summary class="llm-summary">
-                    <span class="llm-id">
-                        <strong>${escapeHTML(id)}</strong>
-                    </span>
+                    <span class="llm-id"><strong>${escapeHTML(id)}</strong></span>
                     <span class="llm-statement">
                         <strong>Statement:</strong> ${escapeHTML(statement)}
                     </span>
@@ -260,6 +250,7 @@ function addCollapsibles(html) {
                         <strong>Risk:</strong> ${escapeHTML(risk)}
                     </span>
                 </summary>
+
                 <div class="llm-details">
                     ${formatRawHtml(hidden)}
                 </div>
@@ -285,18 +276,15 @@ function formatOutput(text) {
         gfm: true            // enable tables, strikethrough, etc.
     });
 
-    // Step 1: Markdown → HTML
-    const rawHtml = marked.parse(text);
+    // Step 1: Build collapsibles (still raw HTML inside)
+    const html = addCollapsibles(text);
 
-    // Step 2: Sanitize HTML to prevent XSS
-    const safeHtml = DOMPurify.sanitize(rawHtml, {
+    // Step 2: Sanitize everything
+    const safeHtml = DOMPurify.sanitize(html, {
         USE_PROFILES: { html: true }
     });
 
-    // Step 3: Make HTML more readable
-    const finalHtml = addCollapsibles(safeHtml);
-
-    return finalHtml;
+    return safeHtml;
 }
 
 function copyOutput() {
