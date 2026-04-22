@@ -3,8 +3,8 @@ import Groq from "groq-sdk";
 import dotenv from "dotenv";
 import cors from "cors";
 // import chromadb from "chromadb";
-// import { ChromaClient } from "chromadb";
-import { ChromaClient } from "@chroma-core/chromadb-client";
+import { ChromaClient } from "chromadb";
+// import { ChromaClient } from "@chroma-core/chromadb-client";
 
 dotenv.config();
 
@@ -26,59 +26,46 @@ const groq = new Groq({
 // ------------------------------
 // Chroma Client
 // ------------------------------
-// const client = new chromadb.PersistentClient({
-//   path: "./chroma_db",
-// });
-// const client = new ChromaClient({
-//   path: "http://127.0.0.1:8000"
-// });
-
-// const collection = client.getCollection({
-//   name: "ec_documents"
-// });
-// const CHROMA_URL = process.env.CHROMA_URL || "http://127.0.0.1:8000";
-
 let client;
 let collection;
 
-// Wait for Chroma to be ready
-async function waitForChroma(retries = 15, delayMs = 2000) {
-  for (let i = 0; i < retries; i++) {
-    try {
-    //   const testClient = new ChromaClient({
-    //     path: CHROMA_URL,
-    //   });
-      const testClient = new ChromaClient({
-        host: "127.0.0.1",
-        port: 8000,
-      });
-      // lightweight health check
-      await testClient.heartbeat?.();
+// ------------------------------
+// Chroma Client (REMOTE)
+// ------------------------------
+function initChromaClient() {
+  const CHROMA_URL = process.env.CHROMA_URL;
 
-      console.log("✅ Chroma is ready");
-      return testClient;
-
-    } catch (err) {
-      console.log(`⏳ Waiting for Chroma... (${i + 1}/${retries})`);
-      await new Promise((r) => setTimeout(r, delayMs));
-    }
+  if (!CHROMA_URL) {
+    throw new Error("CHROMA_URL is not defined in environment variables");
   }
 
-  throw new Error("❌ Chroma failed to start after retries");
-}
-
-// Initialize Chroma + collection before handling requests
-async function initChroma() {
-  client = await waitForChroma();
-
-  collection = await client.getOrCreateCollection({
-    name: "ec_documents",
+  return new ChromaClient({
+    path: CHROMA_URL, // IMPORTANT: use Render URL
   });
-
-  console.log("📦 Collection loaded: ec_documents");
 }
 
-// Start initialization immediately
+// Initialize Chroma
+async function initChroma() {
+  try {
+    client = initChromaClient();
+
+    // optional lightweight check
+    await client.heartbeat?.();
+
+    collection = await client.getOrCreateCollection({
+      name: "ec_documents",
+    });
+
+    console.log("📦 Connected to Chroma:", process.env.CHROMA_URL);
+    console.log("📦 Collection loaded: ec_documents");
+
+  } catch (err) {
+    console.error("❌ Failed to connect to Chroma:", err);
+    throw err;
+  }
+}
+
+// Start immediately
 await initChroma();
 
 
@@ -86,6 +73,10 @@ await initChroma();
 // RETRIEVAL (EMBEDDING-BASED)
 // ------------------------------
 async function retrieveContext(query, docType = null, topK = 6) {
+  if (!collection) {
+    throw new Error("Chroma collection not initialized");
+  }
+
   try {
     const results = await collection.query({
       queryTexts: [query],
