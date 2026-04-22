@@ -14,7 +14,7 @@
     <div class="header">
         <h1>DPPathfinder</h1>
         <p>AI-Driven Support for Implementing<br>the Digital Product Passport</p>
-        <p style="color:grey">Version 3.0 </p>
+        <p style="color:grey">Version 4.0 </p>
         <!-- <p style="color:grey">Version 1.0 <br> <a href="info.html" style="color:white; text-decoration:none">Information page</a> </p> -->
     </div>
 
@@ -129,7 +129,7 @@
     </div>
     
     <div class="footer">
-        <p style="color:grey">Version 3.0</p> 
+        <p style="color:grey">Version 4.0</p> 
         Created by <strong>Isabel Rutten</strong> as thesis intern of <strong>TNO Vector</strong>.
     </div>
 
@@ -200,29 +200,41 @@ async function submitForm() {
     }
 }
 
+// Helper: raw formatter
+function formatRawHtml(text) {
+    const rawHtml = marked.parse(text);
+    return DOMPurify.sanitize(rawHtml, {
+        USE_PROFILES: { html: true }
+    });
+}
+
 // Helper: turn output into readable collapsibles
 function addCollapsibles(html) {
     const container = document.createElement("div");
     container.innerHTML = html;
 
-    const text = container.innerText;
+    // Preserve line structure better than innerText
+    let text = container.textContent || "";
 
-    // Split items by ID or D
-    const items = text.split(/(?=ID\s+\d+)/g);
+    // Normalize line endings
+    text = text.replace(/\r\n/g, "\n");
+
+    // Split per item (handles "ID 1" or "D 1")
+    const items = text.split(/(?=\b(?:ID|D)\s+\d+)/g);
 
     function extractField(block, fieldName) {
         const regex = new RegExp(
-            fieldName + ":[\\s\\S]*?(?=\\n[A-Z][^:]+:|$)",
+            fieldName + ":\\s*([\\s\\S]*?)(?=\\n[A-Z][^:]+:|$)",
             "i"
         );
         const match = block.match(regex);
-        return match ? match[0].replace(new RegExp(fieldName + ":", "i"), "").trim() : "";
+        return match ? match[1].trim() : "";
     }
 
     return items.map(item => {
         if (!item.trim()) return "";
 
-        const idMatch = item.match(/ID\s+\d+/);
+        const idMatch = item.match(/\b(?:ID|D)\s+\d+/);
         const id = idMatch ? idMatch[0] : "Unknown";
 
         const statement = extractField(item, "Statement");
@@ -237,13 +249,19 @@ function addCollapsibles(html) {
 
         return `
             <details class="llm-item">
-                <summary>
-                    <strong>${escapeHTML(id)}</strong><br>
-                    <strong>Statement:</strong> ${escapeHTML(statement)}<br>
-                    <strong>Risk:</strong> ${escapeHTML(risk)}
+                <summary class="llm-summary">
+                    <span class="llm-id">
+                        <strong>${escapeHTML(id)}</strong>
+                    </span>
+                    <span class="llm-statement">
+                        <strong>Statement:</strong> ${escapeHTML(statement)}
+                    </span>
+                    <span class="llm-risk">
+                        <strong>Risk:</strong> ${escapeHTML(risk)}
+                    </span>
                 </summary>
                 <div class="llm-details">
-                    ${formatOutput(hidden)}
+                    ${formatRawHtml(hidden)}
                 </div>
             </details>
         `;
