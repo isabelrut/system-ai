@@ -16,6 +16,12 @@
         <p>AI-Driven Support for Implementing<br>the Digital Product Passport</p>
         <p style="color:grey">Version 4.0 </p>
         <!-- <p style="color:grey">Version 1.0 <br> <a href="info.html" style="color:white; text-decoration:none">Information page</a> </p> -->
+
+        <small class="form-text" style="display:inline-block;">
+            <i> Each requirement consists of an ID, a statement (the actual requirement itself), a rationale (a compliance-oriented reason behind the requirement), organization benefits (such as improved efficiency), a source (which are either published EU documents or EU working group documents), a priority (based on the MoSCoW method, which uses must/should/could/won't), a risk of implementation (about the possible complications that might occur), and system validation success criteria (to verify whether you adhere to this requirement). </i> <br> <br>
+            <i> Note that the DPP regulations are still bound to change. Hence, it is the users reponsibility to keep track of these changes. </i> <br> <br>
+            <i> This set of requirements has been generated using a Large Language Model. Although the used LLM has access to a relevant set of documents about the Digital Product Passport, it is still sensitive to hallucinations. Hence, it is recommended to only use these requirements as a starting point in your journey with the DPP. No rights can be derived from this LLM output. </i> <br>
+        </small>
     </div>
 
     <div class="container">
@@ -123,7 +129,8 @@
 
         <small id="disclaimer" class="form-text" style="display:none;">
             <i> Each requirement consists of an ID, a statement (the actual requirement itself), a rationale (a compliance-oriented reason behind the requirement), organization benefits (such as improved efficiency), a source (which are either published EU documents or EU working group documents), a priority (based on the MoSCoW method, which uses must/should/could/won't), a risk of implementation (about the possible complications that might occur), and system validation success criteria (to verify whether you adhere to this requirement). </i> <br> <br>
-            <i> Note that this set of requirements has been generated using a Large Language Model. Although the used LLM has access to a relevant set of documents about the Digital Product Passport, it is still sensitive to hallucinations. Hence, it is recommended to only use these requirements as a starting point in your journey with the DPP. No rights can be derived from this LLM output. </i> <br>
+            <i> Note that the DPP regulations are still bound to change. Hence, it is the users reponsibility to keep track of these changes. </i> <br> <br>
+            <i> This set of requirements has been generated using a Large Language Model. Although the used LLM has access to a relevant set of documents about the Digital Product Passport, it is still sensitive to hallucinations. Hence, it is recommended to only use these requirements as a starting point in your journey with the DPP. No rights can be derived from this LLM output. </i> <br>
         </small>
         
     </div>
@@ -211,10 +218,16 @@ function formatRawHtml(text) {
 // Helper: remove extra **
 function cleanHiddenText(text) {
     return text
-        // remove standalone bold markers
-        .replace(/^\s*\*\*\s*$/gm, "")
-        // remove repeated empty markdown artifacts
-        .replace(/\n{3,}/g, "\n\n")
+        // remove markdown bold entirely
+        .replace(/\*\*(.*?)\*\*/g, "$1")
+
+        // remove standalone markdown artifacts
+        .replace(/^\s*\*{1,2}\s*$/gm, "")
+        .replace(/^\s*[\*\-_]{1,}\s*$/gm, "")
+
+        // collapse excessive spacing (fixes visual "Risk gap")
+        .replace(/\n\s*\n\s*\n+/g, "\n\n")
+
         .trim();
 }
 
@@ -337,9 +350,9 @@ function copyOutput() {
         return text;
     }
 
-    const formattedText = getTextWithFormatting(tempDiv).trim();
-    const disclaimerText = "\n\nEach requirement consists of an ID, a statement (the actual requirement itself), a rationale (a compliance-oriented reason behind the requirement), organization benefits (such as improved efficiency), a source (which are either published EU documents or EU working group documents), a priority (based on the MoSCoW method, which uses must/should/could/won't), a risk of implementation (about the possible complications that might occur), and system validation success criteria (to verify whether you adhere to this requirement).\n\n Note that this set of requirements has been generated using a Large Language Model. Although the used LLM has access to a relevant set of documents about the Digital Product Passport, it is still sensitive to hallucinations. Hence, it is recommended to only use these requirements as a starting point in your journey with the DPP. No rights can be derived from this LLM output.";
-    const finalText = formattedText + disclaimerText
+    const formattedText = getTextWithFormatting(tempDiv).trim(); 
+    const disclaimerText = "\n\nEach requirement consists of an ID, a statement (the actual requirement itself), a rationale (a compliance-oriented reason behind the requirement), organization benefits (such as improved efficiency), a source (which are either published EU documents or EU working group documents), a priority (based on the MoSCoW method, which uses must/should/could/won't), a risk of implementation (about the possible complications that might occur), and system validation success criteria (to verify whether you adhere to this requirement).\n\n Note that the DPP regulations are still bound to change. Hence, it is the users reponsibility to keep track of these changes. \n\n This set of requirements has been generated using a Large Language Model. Although the used LLM has access to a relevant set of documents about the Digital Product Passport, it is still sensitive to hallucinations. Hence, it is recommended to only use these requirements as a starting point in your journey with the DPP. No rights can be derived from this LLM output.";
+    const finalText = formattedText + disclaimerText // TODO: ADD SOURCES
 
     navigator.clipboard.writeText(finalText)
         .then(() => alert("Action plan copied to clipboard!"))

@@ -201,11 +201,15 @@ app.post("/generate", async (req, res) => {
 
     const { input: userInput, docType } = req.body;
 
-    function buildContext(docs, metadata) {
+    function buildContext(docs, metadata, sourceCategory = "must") {
+      const prefix = sourceCategory === "other" ? "O" : "M";
+
       return docs.map((doc, i) => {
         const m = metadata[i];
+        const sourceLabel = `${prefix}${i + 1}`;
+
         return `
-    [Source ${i + 1}]
+    [Source ${sourceLabel}]
     Title: ${m.Name || `Document ${i + 1}`}
     Type: ${m.Doc_Type || "unknown"}
     URL: ${m.URL || "unknown"}
@@ -217,7 +221,10 @@ app.post("/generate", async (req, res) => {
       }).join("\n\n");
     }
 
-    function niceFormatContext(docs, metadata) {
+    function niceFormatContext(docs, metadata, sourceCategory = "must") {
+      // Decide prefix based on category
+      const prefix = sourceCategory === "other" ? "O" : "M";
+
       return `
         <ul>
           ${docs.map((doc, i) => {
@@ -228,7 +235,9 @@ app.post("/generate", async (req, res) => {
             const url = m.URL || "unknown";
             const section = m.section_title || "unknown";
 
-          return `<li> <b>[Source ${i + 1}] Title: ${title}</b> | <i>Type:</i> ${type} | <i>URL:</i> <a href="${url}">${url}</a> | <i>Section:</i> ${section} | <i>Content:</i> ${doc} </li>`;
+            const sourceLabel = `${prefix}${i + 1}`;
+
+          return `<li> <b>[Source ${sourceLabel}] Title: ${title}</b> | <i>Type:</i> ${type} | <i>URL:</i> <a href="${url}">${url}</a> | <i>Section:</i> ${section} | <i>Content:</i> ${doc} </li>`;
           }).join("")}
         </ul>
       `;    
@@ -240,9 +249,9 @@ app.post("/generate", async (req, res) => {
 
     const { docs: docs_a, metadata: metadata_a } =  retrieveContext(userInput, "commission", 6);
 
-    const context_a = docs_a.length ? buildContext(docs_a, metadata_a) : "No relevant published regulations found.";
+    const context_a = docs_a.length ? buildContext(docs_a, metadata_a, "must") : "No relevant published regulations found.";
 
-    const nice_context_a = docs_a.length ? niceFormatContext(docs_a, metadata_a) : "No nice format allowed for a.";
+    const nice_context_a = docs_a.length ? niceFormatContext(docs_a, metadata_a, "must") : "No nice format allowed for a.";
 
     console.log("Published regulations used:", metadata_a.map(m => m.URL));
 
@@ -252,9 +261,9 @@ app.post("/generate", async (req, res) => {
 
     const { docs: docs_b, metadata: metadata_b } =  retrieveContext(userInput, "", 6);
 
-    const context_b = docs_b.length ? buildContext(docs_b, metadata_b) : "No relevant documents found.";
+    const context_b = docs_b.length ? buildContext(docs_b, metadata_b, "other") : "No relevant documents found.";
 
-    const nice_context_b = docs_b.length ? niceFormatContext(docs_b, metadata_b) : "No nice format allowed for b.";
+    const nice_context_b = docs_b.length ? niceFormatContext(docs_b, metadata_b, "other") : "No nice format allowed for b.";
 
     console.log("Documents used:", metadata_b.map(m => m.URL));
 
