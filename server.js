@@ -99,7 +99,7 @@ const CHROMA_URL = process.env.CHROMA_URL;
 async function retrieveContext(query, docType = null, topK = 6) {
   try {
     const response = await fetch(
-      `${CHROMA_URL}/api/v1/collections/ec_documents/query`,
+      `${CHROMA_URL}/api/v2/collections/ec_documents/query`,
       {
         method: "POST",
         headers: {
@@ -114,7 +114,13 @@ async function retrieveContext(query, docType = null, topK = 6) {
       }
     );
 
-    const results = await response.json();
+    const text = await response.text();
+
+    if (!response.ok) {
+      throw new Error(`Chroma error ${response.status}: ${text}`);
+    }
+
+    const results = JSON.parse(text);
 
     return {
       docs: results.documents?.[0] || [],
