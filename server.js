@@ -2,7 +2,8 @@ import express from "express";
 import Groq from "groq-sdk";
 import dotenv from "dotenv";
 import cors from "cors";
-import chromadb from "chromadb";
+// import chromadb from "chromadb";
+import { ChromaClient } from "chromadb";
 
 dotenv.config();
 
@@ -24,13 +25,58 @@ const groq = new Groq({
 // ------------------------------
 // Chroma Client
 // ------------------------------
-const client = new chromadb.PersistentClient({
-  path: "./chroma_db",
-});
+// const client = new chromadb.PersistentClient({
+//   path: "./chroma_db",
+// });
+// const client = new ChromaClient({
+//   path: "http://127.0.0.1:8000"
+// });
 
-const collection = client.getCollection({
-  name: "ec_documents"
-});
+// const collection = client.getCollection({
+//   name: "ec_documents"
+// });
+const CHROMA_URL = process.env.CHROMA_URL || "http://127.0.0.1:8000";
+
+let client;
+let collection;
+
+// Wait for Chroma to be ready
+async function waitForChroma(retries = 15, delayMs = 2000) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const testClient = new ChromaClient({
+        path: CHROMA_URL,
+      });
+
+      // lightweight health check
+      await testClient.heartbeat?.();
+
+      console.log("✅ Chroma is ready");
+      return testClient;
+
+    } catch (err) {
+      console.log(`⏳ Waiting for Chroma... (${i + 1}/${retries})`);
+      await new Promise((r) => setTimeout(r, delayMs));
+    }
+  }
+
+  throw new Error("❌ Chroma failed to start after retries");
+}
+
+// Initialize Chroma + collection before handling requests
+async function initChroma() {
+  client = await waitForChroma();
+
+  collection = await client.getOrCreateCollection({
+    name: "ec_documents",
+  });
+
+  console.log("📦 Collection loaded: ec_documents");
+}
+
+// Start initialization immediately
+await initChroma();
+
 
 // ------------------------------
 // RETRIEVAL (EMBEDDING-BASED)
@@ -159,7 +205,7 @@ app.post("/generate", async (req, res) => {
     console.log("OTHER sources:", otherSources.map(s => s.url));
 
     // Some delay due to token space
-    await new Promise(resolve => setTimeout(resolve, 60000));
+    // await new Promise(resolve => setTimeout(resolve, 60000));
 
     // ----------------
     // 2a. Do first prompt to get must-haves only using published regulations documents
