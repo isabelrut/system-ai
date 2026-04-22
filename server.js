@@ -276,8 +276,8 @@ app.post("/generate", async (req, res) => {
           `
             You are an expert at requirements engineering, who is hired to adapt EU regulations to specific organizations. Assume that the user has a limited ICT or DPP background and that the information should be accessible and understandable to the user.
             Give a complete set of requirements that the user needs to adhere to comply to the Digital Product Passport regulations, in which you adapt to the users' sector, role, influence (company size), and digital maturity level, in which the customization to the user input is your most important goal
-            Only include the Must requirements from the MoSCow method (Must, Should, Could, Won't), only include the Must requirements, the rest will be created later. Note that a good requirement has the following characteristics:  Atomic; Necessary; Unambiguous; Complete; Consistent; Feasible; Verifiable; Traceable; Modifiable.
-            To ensure that the user does not get legal problems, the set of requirements must be as complete as possible to ensure compliance and the requirements should clearly state if there are unclear aspects. For example, the EU having to decide on details like product information.
+            Only include the Must requirements from the MoSCow method (Must, Should, Could, Won't), only include the Must requirements, the rest will be created later. Note that a good requirement has the following characteristics: Atomic; Necessary; Unambiguous; Complete; Consistent; Feasible; Verifiable; Traceable; Modifiable.
+            To ensure that the user does not get legal problems, the set of requirements must be as complete as possible to guarantee compliance and the requirements should clearly state if there are unclear aspects (e.g. to be determined details like product information).
             Use the provided context to make the requirements accurately and do not make unfounded claims or infer beyond your knowledge or the provided context without an explanation.
             Focus on what the organization of the user must do, not how other organizations in their supply chain can be controlled. Ensure that these requirements are solution-agnostic, as a requirement can have multiple solutions to ensure that an organization can comply to the DPP. 
             The user input is explained as follows:
@@ -332,14 +332,13 @@ app.post("/generate", async (req, res) => {
           content:
 
             `
-            You are an expert at requirements engineering, who is hired to adapt EU regulations to specific organizations. 
-            Assume that the user has a limited ICT or DPP background and that the information should be accessible and understandable to the user, in which the customization to the user input is your most important goal.
-            Give a set of requirements that the user should, could or won't have to do to comply to the Digital Product Passport regulations, in which you adapt to the users' sector, role, influence (company size), digital maturity level and compliance interest. 
+            You are an expert at requirements engineering, who is hired to adapt EU regulations to specific organizations. Assume that the user has a limited ICT or DPP background and that the information should be accessible and understandable to the user.
+            Give a set of requirements that the user should, could or won't have to do to comply to the Digital Product Passport regulations, in which you adapt to the users' sector, role, influence (company size), digital maturity level and compliance interest, in which the customization to the user input is your most important goal. 
             For this, you are allowed to be creative and find sector-specific solutions. As a basis, you are provided with an existing set of must-have requirements.
             Only include the Should, Could, and Won't requirements from the MoSCow method (Must, Should, Could, Won’t). Note that you do not have to have at least 1 of each type (e.g. won't might not be relevant). 
             These requirements should be ordered according to their priority (highest first) and the verb used from the MoSCoW method (should first, then could, then won't).
             Note that a good requirement has the following characteristics: Atomic; Necessary; Unambiguous; Complete; Consistent; Feasible; Verifiable; Traceable; Modifiable.
-            To ensure that the user does not get legal problems, the set of requirements must be as complete as possible to ensure compliance and the requirements should clearly state if there are unclear aspects. For example, the EU having to decide on details like product information.
+            To ensure that the user does not get legal problems, the set of requirements must be as complete as possible to guarantee compliance and the requirements should clearly state if there are unclear aspects (e.g. to be determined details like product information).
             Use the provided context to make the requirements accurately and do not make unfounded claims or infer beyond your knowledge or the provided context without an explanation.
             Focus on what the organization of the user should do, not how other organizations in their supply chain can be controlled. Ensure that these requirements are solution-agnostic, as a requirement can have multiple solutions to ensure that an organization can comply to the DPP. 
             The user input is explained as follows:
@@ -352,7 +351,6 @@ app.post("/generate", async (req, res) => {
             -	The influence (company size) indicates the set of regulations that the user needs to adhere to (as per enterprise sizes set by the EU: micro, small, medium, large) and the resources at their availability; 
             -	The digital maturity level indicates how complicated the ICT solution should be (e.g. incomplete means not complicated);
             -	The compliance interest indicates whether the company wants to comply at the absolute minimum (2), only with their direct environment (3), in a way that improves their position (4), by getting ahead of their competition (5), or simply does not want to comply at all (1) (this determines how extensive your list should be).
-
             Note that a good requirement includes the following:   
             -	ID (should be "ID X" with X as a number and numbering continues from the must requirements, allows for quick references);
             -	Statement (actual requirement): not explicit structure: [Condition] + [Subject] + “should/could/won't” + [Action] + [Constraint] (with should/could/won't from the MoSCoW method, that shows difference between requirements and recommendations, but you do not have to use all verbs);
