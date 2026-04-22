@@ -249,12 +249,12 @@ img {
 
 /* Header (collapsed view) */
 .llm-item summary.llm-summary {
-    background: #020059;
+    background: #41A765;
     color: #ffffff;
     padding: 12px 40px 12px 12px; /* space for arrow */
     cursor: pointer;
-    font-size: 14px;
-    line-height: 1.5;
+    font-size: 16px;
+    line-height: 1.6;
     list-style: none;
     position: relative;
 }
@@ -281,7 +281,7 @@ img {
 /* Layout inside summary */
 .llm-summary span {
     display: block;
-    margin-bottom: 4px;
+    margin-top: 4px;
 }
 
 .llm-id {
@@ -289,7 +289,7 @@ img {
 }
 
 .llm-summary strong {
-    color: #41A765;
+    color: #ffffff;
 }
 
 /* Expanded content */
@@ -302,7 +302,7 @@ img {
 
 /* Hover effect */
 .llm-item summary:hover {
-    background: #03007a;
+    background: #369a5a;
 }
 
 /* Labels inside details */

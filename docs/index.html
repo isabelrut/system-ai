@@ -208,6 +208,16 @@ function formatRawHtml(text) {
     });
 }
 
+// Helper: remove extra **
+function cleanHiddenText(text) {
+    return text
+        // remove standalone bold markers
+        .replace(/^\s*\*\*\s*$/gm, "")
+        // remove repeated empty markdown artifacts
+        .replace(/\n{3,}/g, "\n\n")
+        .trim();
+}
+
 // Helper: turn output into readable collapsibles
 function addCollapsibles(text) {
 
@@ -233,10 +243,15 @@ function addCollapsibles(text) {
         const statement = extractField(item, "Statement");
         const risk = extractField(item, "Risk");
 
-        let hidden = item
-            .replace(/\b(?:ID|D)\s+\d+/, "")
-            .replace(/Statement:[\s\S]*?(?=\n[A-Z][^:]+:|$)/i, "")
-            .replace(/Risk:[\s\S]*?(?=\n[A-Z][^:]+:|$)/i, "")
+        let hidden = cleanHiddenText(
+            item
+                .replace(/\b(?:ID|D)\s+\d+/, "")
+                .replace(/Statement:[\s\S]*?(?=\n[A-Z][^:]+:|$)/i, "")
+                .replace(/Risk:[\s\S]*?(?=\n[A-Z][^:]+:|$)/i, "")
+        );
+
+        hidden = hidden
+            .replace(/\n\s*\n\s*\n/g, "\n\n") // collapse excessive gaps
             .trim();
 
         return `
