@@ -1,0 +1,412 @@
+// server.js
+import express from "express";
+import Groq from "groq-sdk";
+import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+import cors from "cors";
+import fs from "fs";
+
+dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const app = express();
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY, // Only for LLM completions
+});
+
+// Enable CORS for frontend
+app.use(cors({
+  origin: "https://isabelrut.github.io",
+}));
+
+app.use(express.json());
+app.use(express.static(path.join(__dirname, "docs")));
+
+// ------------------------------
+// Load JSON data
+// ------------------------------
+const DATA_PATH = path.join(__dirname, "rag_chunks.json");
+let chunks = [];
+
+try {
+  const raw = fs.readFileSync(DATA_PATH, "utf-8");
+  chunks = JSON.parse(raw);
+  console.log(`Loaded ${chunks.length} chunks from JSON`);
+} catch (err) {
+  console.error("Failed to load chunks:", err);
+}
+
+// ------------------------------
+// Stopwords (basic)
+// ------------------------------
+const STOPWORDS = ["the", "and", "of", "in", "on", "for", "to", "a", "an", "with", "by", "is"];
+
+// ------------------------------
+// Detect sector from query
+// ------------------------------
+function detectSector(query) {
+  const q = query.toLowerCase();
+
+  if (q.includes("batteries")) return "Battery"; 
+  if (q.includes("battery")) return "Battery"; 
+  if (q.includes("textiles")) return "Textile"; 
+  if (q.includes("textile")) return "Textile"; 
+  if (q.includes("apparel")) return "Textile"; 
+  if (q.includes("toys")) return "Toys"; 
+  if (q.includes("toy")) return "Toys"; 
+  if (q.includes("construction")) return "Construction"; 
+  if (q.includes("iron")) return "Steel"; 
+  if (q.includes("steel")) return "Steel"; 
+
+  return null;
+}
+
+// ------------------------------
+// Check if document is generic
+// ------------------------------
+function isGenericDoc(c) {
+  const name = (c.metadata?.Name || "").toLowerCase();
+
+  return (
+    name.includes("ecodesign for sustainable products regulation") ||
+    name.includes("espr") ||
+    c.metadata?.Tags?.toLowerCase().includes("product")
+  );
+}
+
+// ------------------------------
+// Improved scoring function
+// ------------------------------
+function scoreChunk(chunk, query, sector) {
+  const words = query
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(w => !STOPWORDS.includes(w));
+
+  const text = chunk.text.toLowerCase();
+  const name = (chunk.metadata?.Name || "").toLowerCase();
+  const tags = (chunk.metadata?.Tags || "").toLowerCase();
+  const summary = (chunk.metadata?.Summary || "").toLowerCase();
+
+  const isGeneric =
+    name.includes("ecodesign for sustainable products regulation");
+
+  let score = 0;
+
+  for (const word of words) {
+    if (text.includes(word)) score += word.length > 4 ? 2 : 1;
+
+    // Strong metadata boosts
+    if (name.includes(word)) score += 3;
+    if (tags.includes(word)) score += 4;
+    if (summary.includes(word)) score += 2;
+
+  }
+
+  // Sector boost only for non-generic documents
+  if (
+    sector &&
+    !isGeneric && 
+    tags.includes(sector.toLowerCase())
+  ) {
+    score += 10;
+  }  
+
+  return score;
+}
+
+// ------------------------------
+// Retrieve top chunks
+// ------------------------------
+function retrieveContext(query, docType = null, topK = 4) {
+  if (!chunks.length) return { docs: [], metadata: [] };
+
+  const sector = detectSector(query);
+
+  // Step 1: filter by Doc_Type only (kept optional)
+  let baseCandidates = chunks.filter(c => {
+    if (docType && c.metadata?.Doc_Type !== docType) return false;
+    return true;
+  });
+
+  // Step 2: filter between generic docs and not generic docs
+  let genericPool = baseCandidates.filter(isGenericDoc);
+  let sectorPool = baseCandidates.filter(c => !isGenericDoc(c));
+
+  // Step 2a: try specific sector first
+  let sectorCandidates = sectorPool; 
+  if (sector) {
+    let filtered = sectorPool.filter(c =>
+      (c.metadata?.Tags || "").toLowerCase().includes(sector.toLowerCase())
+    );
+
+    if (filtered.length > 0) {
+      sectorCandidates = filtered;
+    }
+  }
+
+  // Step 2b: include generic text
+  let genericCandidates = genericPool;
+
+  // Step 3: score all candidates
+  function scoreAndRank(candidates) {
+    // score candidates
+    const scored = candidates.map(c => ({
+      text: c.text,
+      metadata: c.metadata,
+      score: scoreChunk(c, query, sector),
+    }));
+
+    // sort descending
+    scored.sort((a, b) => b.score - a.score);
+
+    return scored.filter(c => c.score > 0)
+  }
+
+  const scoredSector = scoreAndRank(sectorCandidates);
+  const scoredGeneric = scoreAndRank(genericCandidates);
+
+  // Step 4: take top from each 
+  const kSector = Math.ceil(topK / 2);
+  const kGeneric = Math.floor(topK / 2);
+
+  let topChunks = [
+    ...scoredSector.slice(0, kSector),
+    ...scoredGeneric.slice(0, kGeneric),
+  ];
+  
+  // Fallback if one side is empty
+  if (!topChunks.length) {
+    const allScored = scoreAndRank(baseCandidates);
+    topChunks = allScored.slice(0, topK);
+  }
+
+  return {
+    docs: topChunks.map(c => c.text),
+    metadata: topChunks.map(c => ({
+      ...c.metadata,
+      _isGeneric: isGenericDoc(c),
+    })),
+  };
+}
+
+// ------------------------------
+// /generate endpoint
+// ------------------------------
+app.post("/generate", async (req, res) => {
+  try {
+
+    const { input: userInput, docType } = req.body;
+
+    function buildContext(docs, metadata, sourceCategory = "must") {
+      const prefix = sourceCategory === "other" ? "O" : "M";
+
+      return docs.map((doc, i) => {
+        const m = metadata[i];
+        const sourceLabel = `${prefix}${i + 1}`;
+
+        return `
+    [Source ${sourceLabel}]
+    Title: ${m.Name || `Document ${i + 1}`}
+    Type: ${m.Doc_Type || "unknown"}
+    URL: ${m.URL || "unknown"}
+    Section: ${m.section_title || "unknown"}
+
+    Content:
+    ${doc}
+    `;
+      }).join("\n\n");
+    }
+
+    function niceFormatContext(docs, metadata, sourceCategory = "must") {
+      // Decide prefix based on category
+      const prefix = sourceCategory === "other" ? "O" : "M";
+
+      return `
+        <ul>
+          ${docs.map((doc, i) => {
+            const m = metadata[i];
+
+            const title = m.Name || `Document ${i + 1}`;
+            const type = m.Doc_Type || "unknown";
+            const url = m.URL || "unknown";
+            const section = m.section_title || "unknown";
+
+            const sourceLabel = `${prefix}${i + 1}`;
+
+          return `<li> <b>[Source ${sourceLabel}] Title: ${title}</b> | <i>Type:</i> ${type} | <i>URL:</i> <a href="${url}">${url}</a> | <i>Section:</i> ${section} | <i>Content:</i> ${doc} </li>`;
+          }).join("")}
+        </ul>
+      `;    
+    }
+
+    // ----------------
+    // 1a. Get relevant published regulations documents
+    // ----------------
+
+    const { docs: docs_a, metadata: metadata_a } =  retrieveContext(userInput, "commission", 6);
+
+    const context_a = docs_a.length ? buildContext(docs_a, metadata_a, "must") : "No relevant published regulations found.";
+
+    const nice_context_a = docs_a.length ? niceFormatContext(docs_a, metadata_a, "must") : "No nice format allowed for a.";
+
+    console.log("Published regulations used:", metadata_a.map(m => m.URL));
+
+    // ----------------
+    // 1b. Get all relevant documents
+    // ----------------
+
+    const { docs: docs_b, metadata: metadata_b } =  retrieveContext(userInput, "", 6);
+
+    const context_b = docs_b.length ? buildContext(docs_b, metadata_b, "other") : "No relevant documents found.";
+
+    const nice_context_b = docs_b.length ? niceFormatContext(docs_b, metadata_b, "other") : "No nice format allowed for b.";
+
+    console.log("Documents used:", metadata_b.map(m => m.URL));
+
+    // Some delay due to token space
+    await new Promise(resolve => setTimeout(resolve, 60000));
+
+    // ----------------
+    // 2a. Do first prompt to get must-haves only using published regulations documents
+    // ----------------
+
+    const completion1 = await groq.chat.completions.create({
+      // model: "openai/gpt-oss-120b",
+      // model="meta-llama/llama-4-scout-17b-16e-instruct",
+      model: "qwen/qwen3-32b",
+      messages: [
+        {
+          role: "system",
+          content:
+          `
+            You are an expert at requirements engineering, who is hired to adapt EU regulations to specific organizations. Assume that the user has a limited ICT or DPP background and that the information should be accessible and understandable to the user.
+            Give a complete set of requirements that the user needs to adhere to comply to the Digital Product Passport regulations, in which you adapt to the users' sector, role, influence (company size), and digital maturity level, in which the customization to the user input is your most important goal
+            Only include the Must requirements from the MoSCow method (Must, Should, Could, Won't), only include the Must requirements, the rest will be created later. Note that a good requirement has the following characteristics: Atomic; Necessary; Unambiguous; Complete; Consistent; Feasible; Verifiable; Traceable; Modifiable.
+            To ensure that the user does not get legal problems, the set of requirements must be as complete as possible to guarantee compliance and the requirements should clearly state if there are unclear aspects (e.g. to be determined details like product information).
+            Use the provided context to make the requirements accurately and do not make unfounded claims or infer beyond your knowledge or the provided context without an explanation.
+            Focus on what the organization of the user must do, not how other organizations in their supply chain can be controlled. Ensure that these requirements are solution-agnostic, as a requirement can have multiple solutions to ensure that an organization can comply to the DPP. 
+            The user input is explained as follows:
+            -	The users' sector indicate to what specific set of regulations the user needs to adhere to (e.g. relevant information for the sector, low value data (fine with public data) vs high value data (gives competitive advantage, so keep private));
+            -	The role indicates the responsibility of the user, which can mean the difference between creating or maintaining a DPP; the possible roles are:
+              -- Supplier: i.e. supply chain actor in ESPR, an entity that (predominantly) provides raw materials, components, or finished products to manufacturers or other entities within the supply chain, up to the point where the product reaches the customer
+              -- Economic operator: any business or organization involved in the supply chain of a product, including manufacturers, authorized representatives, importers, distributors, dealers, and fulfilment service providers; plays a broad role in the production, distribution, or sale of products
+              -- (Online) retailer: i.e. "dealer"in ESPR, intermediary entity who sells and offers products for sale to customers using (online) channel(s), has legal responsibility to ensure DPPs are easily accessible to consumers
+              -- Independent operator: entity independent of the manufacturer, involved in the repair, maintenance, waste management, or distribution of the products, e.g. small electronics repair shops, waste management organization
+            -	The influence (company size) indicates the set of regulations that the user needs to adhere to (as per enterprise sizes set by the EU: micro, small, medium, large) and the resources at their availability; 
+            -	The digital maturity level indicates how complicated the ICT solution should be (e.g. incomplete means not complicated);
+            -	The compliance interest indicates whether the company wants to comply at the absolute minimum (2), only with their direct environment (3), in a way that improves their position (4), by getting ahead of their competition (5), or simply does not want to comply at all (1).
+            Note that a good requirement includes the following:   
+            -	ID (should be "ID X" with X as a number and first is X=1, allows for quick references);
+            -	Statement (actual requirement): not explicit structure: [Condition] + [Subject] + “must” + [Action] + [Constraint] (with must from the MoSCoW method, that shows difference between requirements and recommendations);
+            -	Rationale (compliance oriented); 
+            -	Organization benefits (e.g. efficiency)
+            -	Source (state source number); 
+            -	Priority (including explanation); 
+            -	Risk (of Implementation) (including explanation, also if the user complies while regulations can change);  
+            -	System Verification Success Criteria.  
+            Don't use tables in your response, not even for illustration. The current date is ` + new Date() + `, which can be used when considering the regulations that are in-force. 
+            Do not start your response with any prefacing text, immediately start with your first requirement. Do not include any headers between the requirements. Do not end your response with any suggestions for other ways in which you can help.
+            Do not include a sources section, I will provide the overview to the user. 
+            `
+        },
+        {
+          role: "user",
+          content:
+            `Context from EU documents:\n${context_a}\n\nUser information:\n${userInput}`,
+        },
+      ],
+      temperature : 0.3, 
+      reasoning_effort : "none",
+      max_tokens : 1750, 
+    });
+
+    // Some delay due to token space
+    await new Promise(resolve => setTimeout(resolve, 60000));
+
+    // ----------------
+    // 2b. Do second prompt to get should/could/won't-haves using all documents
+    // ----------------
+
+    const completion2 = await groq.chat.completions.create({
+      // model: "openai/gpt-oss-120b",
+      // model="meta-llama/llama-4-scout-17b-16e-instruct",
+      model: "qwen/qwen3-32b",
+      messages: [
+        {
+          role: "system",
+          content:
+
+            `
+            You are an expert at requirements engineering, who is hired to adapt EU regulations to specific organizations. Assume that the user has a limited ICT or DPP background and that the information should be accessible and understandable to the user.
+            Give a set of requirements that the user should, could or won't have to do to comply to the Digital Product Passport regulations, in which you adapt to the users' sector, role, influence (company size), digital maturity level and compliance interest, in which the customization to the user input is your most important goal. 
+            For this, you are allowed to be creative and find sector-specific solutions. As a basis, you are provided with an existing set of must-have requirements.
+            Only include the Should, Could, and Won't requirements from the MoSCow method (Must, Should, Could, Won’t). Note that you do not have to have at least 1 of each type (e.g. won't might not be relevant). 
+            These requirements should be ordered according to their priority (highest first) and the verb used from the MoSCoW method (should first, then could, then won't).
+            Note that a good requirement has the following characteristics: Atomic; Necessary; Unambiguous; Complete; Consistent; Feasible; Verifiable; Traceable; Modifiable.
+            To ensure that the user does not get legal problems, the set of requirements must be as complete as possible to guarantee compliance and the requirements should clearly state if there are unclear aspects (e.g. to be determined details like product information).
+            Use the provided context to make the requirements accurately and do not make unfounded claims or infer beyond your knowledge or the provided context without an explanation.
+            Focus on what the organization of the user should do, not how other organizations in their supply chain can be controlled. Ensure that these requirements are solution-agnostic, as a requirement can have multiple solutions to ensure that an organization can comply to the DPP. 
+            The user input is explained as follows:
+            -	The users' sector indicate to what specific set of regulations the user needs to adhere to (e.g. relevant information for the sector, low value data (fine with public data) vs high value data (gives competitive advantage, so keep private));
+            -	The role indicates the responsibility of the user, which can mean the difference between creating or maintaining a DPP; the possible roles are:
+              -- Supplier: i.e. supply chain actor in ESPR, an entity that (predominantly) provides raw materials, components, or finished products to manufacturers or other entities within the supply chain, up to the point where the product reaches the customer
+              -- Economic operator: any business or organization involved in the supply chain of a product, including manufacturers, authorized representatives, importers, distributors, dealers, and fulfilment service providers; plays a broad role in the production, distribution, or sale of products
+              -- (Online) retailer: i.e. "dealer"in ESPR, intermediary entity who sells and offers products for sale to customers using (online) channel(s), has legal responsibility to ensure DPPs are easily accessible to consumers
+              -- Independent operator: entity independent of the manufacturer, involved in the repair, maintenance, waste management, or distribution of the products, e.g. small electronics repair shops, waste management organization
+            -	The influence (company size) indicates the set of regulations that the user needs to adhere to (as per enterprise sizes set by the EU: micro, small, medium, large) and the resources at their availability; 
+            -	The digital maturity level indicates how complicated the ICT solution should be (e.g. incomplete means not complicated);
+            -	The compliance interest indicates whether the company wants to comply at the absolute minimum (2), only with their direct environment (3), in a way that improves their position (4), by getting ahead of their competition (5), or simply does not want to comply at all (1) (this determines how extensive your list should be).
+            Note that a good requirement includes the following:   
+            -	ID (should be "ID X" with X as a number and numbering continues from the must requirements, allows for quick references);
+            -	Statement (actual requirement): not explicit structure: [Condition] + [Subject] + “should/could/won't” + [Action] + [Constraint] (with should/could/won't from the MoSCoW method, that shows difference between requirements and recommendations, but you do not have to use all verbs);
+            -	Rationale (compliance oriented); 
+            -	Organization benefits (e.g. efficiency)
+            -	Source (state source number); 
+            -	Priority (including explanation); 
+            -	Risk (of Implementation) (including explanation, also if the user complies while regulations can change);  
+            -	System Verification Success Criteria.  
+
+            Don't use tables in your response, not even for illustration. The current date is ` + new Date() + `, which can be used when considering the regulations that are in-force. 
+            Do not start your response with any prefacing text, immediately start with your first requirement. Do not include any headers between the requirements, like "Should requirements". Do not end your response with any suggestions for other ways in which you can help.
+            Do not include a sources section, I will provide the overview to the user. 
+            
+            `
+        },
+        {
+          role: "user",
+          content:
+            `Context from DPP-related documents:\n${context_b}\n\nUser information:\n${userInput}\n\nMust-requirements:\n${completion1.choices[0].message.content}`,
+        },
+      ],
+      temperature : 0.8, 
+      reasoning_effort : "none",
+      max_tokens : 1750, 
+    });
+
+    // 3. Output the first and second prompt together
+    res.json({
+      commission_only_output: completion1.choices[0].message.content,
+      full_context_output: completion2.choices[0].message.content,
+      sources: {
+        commission: nice_context_a,
+        full: nice_context_b
+      }
+    });
+
+  } catch (error) {
+    console.error("ERROR in /generate:", error);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+// ------------------------------
+// Start server
+// ------------------------------
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
