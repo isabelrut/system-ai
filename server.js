@@ -99,7 +99,7 @@ const CHROMA_URL = process.env.CHROMA_URL;
 async function retrieveContext(query, docType = null, topK = 6) {
   try {
     const response = await fetch(
-      `${CHROMA_URL}/api/v2/collections/ec_documents/query`,
+      `${CHROMA_URL}/api/v2/collections/eac4e8b6-b8c1-4ee5-81e0-ed2f211af085/query`,
       {
         method: "POST",
         headers: {
