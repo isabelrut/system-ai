@@ -3,7 +3,8 @@ import Groq from "groq-sdk";
 import dotenv from "dotenv";
 import cors from "cors";
 // import chromadb from "chromadb";
-import { ChromaClient } from "chromadb";
+// import { ChromaClient } from "chromadb";
+import { ChromaClient } from "@chroma-core/chromadb-client";
 
 dotenv.config();
 
@@ -35,7 +36,7 @@ const groq = new Groq({
 // const collection = client.getCollection({
 //   name: "ec_documents"
 // });
-const CHROMA_URL = process.env.CHROMA_URL || "http://127.0.0.1:8000";
+// const CHROMA_URL = process.env.CHROMA_URL || "http://127.0.0.1:8000";
 
 let client;
 let collection;
@@ -44,10 +45,13 @@ let collection;
 async function waitForChroma(retries = 15, delayMs = 2000) {
   for (let i = 0; i < retries; i++) {
     try {
+    //   const testClient = new ChromaClient({
+    //     path: CHROMA_URL,
+    //   });
       const testClient = new ChromaClient({
-        path: CHROMA_URL,
+        host: "127.0.0.1",
+        port: 8000,
       });
-
       // lightweight health check
       await testClient.heartbeat?.();
 
