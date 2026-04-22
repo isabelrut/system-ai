@@ -3,7 +3,7 @@ import Groq from "groq-sdk";
 import dotenv from "dotenv";
 import cors from "cors";
 // import chromadb from "chromadb";
-import { ChromaClient } from "chromadb";
+// import { ChromaClient } from "chromadb";
 // import { ChromaClient } from "@chroma-core/chromadb-client";
 
 dotenv.config();
@@ -23,72 +23,103 @@ const groq = new Groq({
   apiKey: process.env.GROQ_API_KEY,
 });
 
-// ------------------------------
-// Chroma Client
-// ------------------------------
-let client;
-let collection;
+// // ------------------------------
+// // Chroma Client
+// // ------------------------------
+// let client;
+// let collection;
 
-// ------------------------------
-// Chroma Client (REMOTE)
-// ------------------------------
-function initChromaClient() {
-  const CHROMA_URL = process.env.CHROMA_URL;
+// // ------------------------------
+// // Chroma Client (REMOTE)
+// // ------------------------------
+// function initChromaClient() {
+//   const CHROMA_URL = process.env.CHROMA_URL;
 
-  if (!CHROMA_URL) {
-    throw new Error("CHROMA_URL is not defined in environment variables");
-  }
+//   if (!CHROMA_URL) {
+//     throw new Error("CHROMA_URL is not defined in environment variables");
+//   }
 
-  return new ChromaClient({
-    path: CHROMA_URL, // IMPORTANT: use Render URL
-  });
-}
+//   return new ChromaClient({
+//     path: CHROMA_URL, // IMPORTANT: use Render URL
+//   });
+// }
 
-// Initialize Chroma
-async function initChroma() {
-  try {
-    client = initChromaClient();
+// // Initialize Chroma
+// async function initChroma() {
+//   try {
+//     client = initChromaClient();
 
-    // optional lightweight check
-    await client.heartbeat?.();
+//     // optional lightweight check
+//     await client.heartbeat?.();
 
-    collection = await client.getOrCreateCollection({
-      name: "ec_documents",
-    });
+//     collection = await client.getOrCreateCollection({
+//       name: "ec_documents",
+//     });
 
-    console.log("📦 Connected to Chroma:", process.env.CHROMA_URL);
-    console.log("📦 Collection loaded: ec_documents");
+//     console.log("📦 Connected to Chroma:", process.env.CHROMA_URL);
+//     console.log("📦 Collection loaded: ec_documents");
 
-  } catch (err) {
-    console.error("❌ Failed to connect to Chroma:", err);
-    throw err;
-  }
-}
+//   } catch (err) {
+//     console.error("❌ Failed to connect to Chroma:", err);
+//     throw err;
+//   }
+// }
 
-// Start immediately
-await initChroma();
-
+// // Start immediately
+// await initChroma();
+const CHROMA_URL = process.env.CHROMA_URL;
 
 // ------------------------------
 // RETRIEVAL (EMBEDDING-BASED)
 // ------------------------------
-async function retrieveContext(query, docType = null, topK = 6) {
-  if (!collection) {
-    throw new Error("Chroma collection not initialized");
-  }
+// async function retrieveContext(query, docType = null, topK = 6) {
+//   if (!collection) {
+//     throw new Error("Chroma collection not initialized");
+//   }
 
+//   try {
+//     const results = await collection.query({
+//       queryTexts: [query],
+//       nResults: topK,
+//       where: docType ? { Doc_Type: docType } : undefined,
+//       include: ["documents", "metadatas", "distances"]
+//     });
+
+//     return {
+//       docs: results.documents?.[0] || [],
+//       metadata: results.metadatas?.[0] || [],
+//       distances: results.distances?.[0] || []
+//     };
+
+//   } catch (err) {
+//     console.error("Retrieval error:", err);
+//     return { docs: [], metadata: [], distances: [] };
+//   }
+// }
+async function retrieveContext(query, docType = null, topK = 6) {
   try {
-    const results = await collection.query({
-      queryTexts: [query],
-      nResults: topK,
-      where: docType ? { Doc_Type: docType } : undefined,
-      include: ["documents", "metadatas", "distances"]
-    });
+    const response = await fetch(
+      `${CHROMA_URL}/api/v1/collections/ec_documents/query`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query_texts: [query],
+          n_results: topK,
+          where: docType ? { Doc_Type: docType } : undefined,
+          include: ["documents", "metadatas", "distances"],
+        }),
+      }
+    );
+
+    const results = await response.json();
 
     return {
       docs: results.documents?.[0] || [],
       metadata: results.metadatas?.[0] || [],
-      distances: results.distances?.[0] || []
+      distances: results.distances?.[0] || [],
     };
 
   } catch (err) {
