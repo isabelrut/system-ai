@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<!-- saved from url=(0038)https://isabelrut.github.io/system-ai/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>DPPathfinder</title>
+    <link rel="stylesheet" href="./Case-8_files/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Prepare html output for html -->
+    <script src="./Case-8_files/marked.min.js.download"></script>
+    <script src="./Case-8_files/purify.min.js.download"></script>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>DPPathfinder</h1>
+        <p>AI-Driven Support for Implementing<br>the Digital Product Passport</p>
+        <p style="color:grey">Version 4.0 </p>
+        <!-- <p style="color:grey">Version 1.0 <br> <a href="info.html" style="color:white; text-decoration:none">Information page</a> </p> -->
+
+        <small class="form-text" style="display:inline-block;">
+            <b>Each requirement consists of</b> <i> an ID, a statement (the actual requirement itself), a rationale (a compliance-oriented reason behind the requirement), organization benefits (such as improved efficiency), a source (which are either published EU documents or EU working group documents), a priority (based on the MoSCoW method, which uses must/should/could/won't), a risk of implementation (about the possible complications that might occur), and system validation success criteria (to verify whether you adhere to this requirement). </i> <br>
+            <i> Note that the </i> <b>DPP regulations are still bound to change</b>. <i> Hence, it is the users reponsibility to keep track of these changes. </i> <br>
+            <i> This set of requirements has been generated using a Large Language Model. Although the used LLM has access to a relevant set of documents about the Digital Product Passport, it is still sensitive to hallucinations. Hence, it is recommended to only use these requirements as a starting point in your journey with the DPP. </i> <b>No rights can be derived from this LLM output</b>. <br>
+        </small>
+    </div>
+
+    <div class="container">
+
+        <p class="intro">
+            Fill in the following forms to find out what <em>you</em> need to do to take part in the DPP ecosystem.
+        </p>
+
+        <div class="form-group">
+            <label for="sector">1. What sector is your organization working in?</label>
+            <select id="sector" name="sector"> 
+                <option value="ICT products">ICT products</option>
+                <option value="Textiles/apparel">Textiles/apparel</option>
+                <option value="Construction products">Construction products</option>
+                <option value="Batteries">Batteries</option>
+                <option value="Recycled content">Recycled content</option>
+                <option value="Iron and steel">Iron and steel</option>
+                <option value="Repairability">Repairability</option>
+                <option value="Energy-related products">Energy-related products</option>
+                <option value="Furniture">Furniture</option>
+                <option value="Footwear">Footwear</option>
+                <option value="Aluminium">Aluminium</option>
+                <option value="Mattresses">Mattresses</option>
+                <option value="Tyres">Tyres</option>
+                <option value="Toys">Toys</option>
+                <option value="Plastic">Plastic</option>
+                <option value="Fuels">Fuels</option>
+                <option value="Chemicals">Chemicals</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="size">2. What is your company size according to <a href="https://single-market-economy.ec.europa.eu/smes/sme-fundamentals/sme-definition_en">EU regulations</a>?</label>
+            <img src="./Case-8_files/SME-table.png" alt="SME sizes according to the EU"> <br>
+            <select id="size" name="size"> 
+                <option value="micro">Micro</option>
+                <option value="small">Small</option>
+                <option value="medium">Medium</option>
+                <option value="large">Large</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="role">3. What role does your organization take in the <a href="https://coe-dsc.nl/wp-content/uploads/2026/01/Dutch-Digital-Product-Passport-Landscape-Scan-Version-1.0-final-1.pdf">DPP ecosystem</a>?</label>
+            <img src="./Case-8_files/Ecosystem-framework.png" alt="DPP Ecosystem Framework"> <br>
+            <select id="role" name="role"> 
+                <option value="Economic operator">Economic operator</option>
+                <option value="Supplier">Supplier</option>
+                <option value="Retailer">Retailer</option>
+                <option value="Independent operator">Independent operator</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="maturity">4. What is the <a href="https://www.mdpi.com/2504-2289/7/1/17">digital maturity level</a> of your organization?</label>
+            <img src="./Case-8_files/digital-maturity-model.png" alt="Digital Maturity Model" style="width: 40%"> <br>
+            <small class="form-text">
+                The figure shows a digital maturity model that starts at incomplete, meaning there has been no digitalization in the company. Next, performed means that a planning has been made. Managed focuses on ensuring existing business processes are digitized through technology. Established means that digital transformation has been done based on existing standard. Predictable seizes those benefits by applying quantitative techniques on real-time data, with data analytics on business processes. Lastly, optimizing focuses on innovation and continuous improvement.  <br>
+            </small>
+            <select id="maturity" name="maturity"> 
+                <option value="incomplete">Incomplete</option>
+                <option value="performed">Performed</option>
+                <option value="managed">Managed</option>
+                <option value="established">Established</option>
+                <option value="predictable">Predictable</option>
+                <option value="optimizing">Optimizing</option>
+            </select> 
+        </div>
+
+        <div class="form-group">
+            <label for="implementation">5. What level of DPP implementation does your organization aim for?</label>
+            <img src="./Case-8_files/DPP-maturity-model.png" alt="DPP Maturity Model"> <br>
+            <select id="implementation" name="implementation"> 
+                <option value="two">2: Entity level compliance</option>
+                <option value="three">3: Ecosystem level compliance</option>
+                <option value="four">4: Value adding</option>
+                <option value="five">5: Competitive advantage</option>
+            </select> 
+        </div>
+        
+        <button class="main-button" onclick="submitForm()">
+            DISCOVER YOUR REQUIREMENTS<br>TO IMPLEMENT THE DPP
+        </button>
+
+        <div id="llm-output" class="llm-output">
+                
+            <details class="llm-item">
+                <summary class="llm-summary">
+                    <span class="llm-id"><strong>ID 1</strong></span>
+                    <span class="llm-statement">
+                        <strong>Statement:</strong> The organization must ensure that all toys sold online are equipped with a Digital Product Passport (DPP) that is easily accessible to consumers at the point of sale and during the product lifecycle.
+                    </span>
+                    <span class="llm-risk">
+                        <strong>Risk:</strong> High – if the DPP is not accessible or not compliant with evolving regulations, the organization may face enforcement actions.
+                    </span>
+                </summary>
+
+                <div class="llm-details">
+                    <p>Rationale: To comply with the EU’s ESPR (Ecodesign for Sustainable Products Regulation) and ensure transparency, traceability, and sustainability of products.<br>Organization benefits: Enhances consumer trust, improves brand reputation, and supports circular economy goals.<br>Source: M4<br>Priority: Must – failure to provide a DPP accessible to consumers would result in non-compliance and potential legal penalties.  </p>
+<p>System Verification Success Criteria: All products listed in the online store have a valid and accessible DPP, verified through a random audit of 10% of listings.</p>
+
+                </div>
+            </details>
+        
+            <details class="llm-item">
+                <summary class="llm-summary">
+                    <span class="llm-id"><strong>ID 2</strong></span>
+                    <span class="llm-statement">
+                        <strong>Statement:</strong> The organization must collect and maintain accurate, up-to-date, and standardized product information for each toy, including material composition, energy consumption, and end-of-life instructions, in accordance with EU harmonized standards.
+                    </span>
+                    <span class="llm-risk">
+                        <strong>Risk:</strong> Medium – incorrect data could result in enforcement actions or reputational damage.
+                    </span>
+                </summary>
+
+                <div class="llm-details">
+                    <p>Rationale: To ensure transparency and support informed consumer choices, as required by ESPR and the Toy Safety Regulation.<br>Organization benefits: Streamlines product data management, supports compliance with multiple regulations, and facilitates product recalls or updates.<br>Source: M1, M4<br>Priority: Must – incomplete or inaccurate product information may lead to non-compliance and consumer safety risks.  </p>
+<p>System Verification Success Criteria: 100% of product records contain all required fields, verified through internal audits and compliance checks.</p>
+
+                </div>
+            </details>
+        
+            <details class="llm-item">
+                <summary class="llm-summary">
+                    <span class="llm-id"><strong>ID 3</strong></span>
+                    <span class="llm-statement">
+                        <strong>Statement:</strong> The organization must integrate the DPP system with its existing product information management (PIM) and inventory systems to ensure real-time synchronization of product data across all sales channels.
+                    </span>
+                    <span class="llm-risk">
+                        <strong>Risk:</strong> Medium – system integration delays could hinder timely compliance.
+                    </span>
+                </summary>
+
+                <div class="llm-details">
+                    <p>Rationale: To maintain data consistency and avoid discrepancies between product listings and DPP content, especially for large-scale operations.<br>Organization benefits: Reduces manual data entry errors, improves operational efficiency, and supports scalability.<br>Source: M2<br>Priority: Must – data inconsistency may lead to compliance failures and consumer confusion.  </p>
+<p>System Verification Success Criteria: Data synchronization is confirmed through automated testing between PIM and DPP systems.</p>
+
+                </div>
+            </details>
+        
+            <details class="llm-item">
+                <summary class="llm-summary">
+                    <span class="llm-id"><strong>ID 4</strong></span>
+                    <span class="llm-statement">
+                        <strong>Statement:</strong> The organization must ensure that the DPP is accessible to consumers through a user-friendly interface, including a direct link on the product page and a QR code on the physical product packaging.
+                    </span>
+                    <span class="llm-risk">
+                        <strong>Risk:</strong> Medium – poor user experience may lead to low consumer engagement and compliance issues.
+                    </span>
+                </summary>
+
+                <div class="llm-details">
+                    <p>Rationale: To meet the accessibility requirements of ESPR and ensure that consumers can easily access the DPP at all touchpoints.<br>Organization benefits: Enhances user experience and supports transparency, which can be leveraged for marketing and competitive advantage.<br>Source: M1, M4<br>Priority: Must – failure to provide accessible DPPs may result in enforcement actions.  </p>
+<p>System Verification Success Criteria: All physical products have a QR code, and all online product pages have a direct DPP link, verified through field checks and user testing.</p>
+
+                </div>
+            </details>
+        
+            <details class="llm-item">
+                <summary class="llm-summary">
+                    <span class="llm-id"><strong>ID 5</strong></span>
+                    <span class="llm-statement">
+                        <strong>Statement:</strong> The organization must establish a governance process for the validation and verification of DPP data, including internal audits and third-party verification where required by regulation.
+                    </span>
+                    <span class="llm-risk">
+                        <strong>Risk:</strong> Medium – lack of governance may result in inconsistent or incorrect data.
+                    </span>
+                </summary>
+
+                <div class="llm-details">
+                    <p>Rationale: To ensure the accuracy and integrity of the data provided in the DPP, as mandated by ESPR and the Toy Safety Regulation.<br>Organization benefits: Reduces the risk of non-compliance and supports continuous improvement of data quality.<br>Source: M3<br>Priority: Must – unverified data may lead to legal and reputational risks.  </p>
+<p>System Verification Success Criteria: A documented governance process is in place, and internal audits are conducted quarterly.</p>
+
+                </div>
+            </details>
+        
+            <details class="llm-item">
+                <summary class="llm-summary">
+                    <span class="llm-id"><strong>ID 6</strong></span>
+                    <span class="llm-statement">
+                        <strong>Statement:</strong> The organization must ensure that the DPP system is compliant with data privacy regulations, including the General Data Protection Regulation (GDPR), when handling personal data of consumers or suppliers.
+                    </span>
+                    <span class="llm-risk">
+                        <strong>Risk:</strong> High – data privacy violations can lead to enforcement actions and loss of consumer trust.
+                    </span>
+                </summary>
+
+                <div class="llm-details">
+                    <p>Rationale: To avoid legal penalties and protect the rights of data subjects, as required by EU data protection laws.<br>Organization benefits: Ensures legal compliance and protects the organization from data breach risks.<br>Source: M2<br>Priority: Must – non-compliance with GDPR can result in significant fines and legal action.  </p>
+<p>System Verification Success Criteria: A Data Protection Impact Assessment (DPIA) is conducted, and the system is certified as GDPR-compliant.</p>
+
+                </div>
+            </details>
+        
+            <details class="llm-item">
+                <summary class="llm-summary">
+                    <span class="llm-id"><strong>ID 7</strong></span>
+                    <span class="llm-statement">
+                        <strong>Statement:</strong> The organization must provide training to relevant staff on the use of the DPP system, including how to update product data, respond to consumer queries, and manage compliance documentation.
+                    </span>
+                    <span class="llm-risk">
+                        <strong>Risk:</strong> Medium – lack of training may lead to incorrect data entry or poor consumer service.
+                    </span>
+                </summary>
+
+                <div class="llm-details">
+                    <p>Rationale: To ensure that all staff involved in product management and customer service are capable of maintaining and supporting the DPP system effectively.<br>Organization benefits: Improves operational efficiency, reduces errors, and supports a culture of compliance.<br>Source: M5<br>Priority: Must – untrained staff may introduce errors or fail to maintain compliance.  </p>
+<p>System Verification Success Criteria: Training records are maintained for all relevant staff, and competency is verified through assessments.</p>
+
+                </div>
+            </details>
+        
+            <details class="llm-item">
+                <summary class="llm-summary">
+                    <span class="llm-id"><strong>ID 8</strong></span>
+                    <span class="llm-statement">
+                        <strong>Statement:</strong> The organization must monitor and report on the performance of the DPP system, including data accuracy, system uptime, and user engagement, to identify areas for improvement.
+                    </span>
+                    <span class="llm-risk">
+                        <strong>Risk:</strong> Low – however, without monitoring, the organization may not fully leverage the DPP for strategic advantage.
+                    </span>
+                </summary>
+
+                <div class="llm-details">
+                    <p>Rationale: To support continuous improvement and meet the organization’s strategic goal of gaining a competitive advantage through digital innovation.<br>Organization benefits: Enables data-driven decision-making and supports the organization’s digital maturity at the optimizing level.<br>Source: M2, M4<br>Priority: Must – failure to monitor system performance may result in undetected compliance issues or missed business opportunities.  </p>
+<p>System Verification Success Criteria: Performance reports are generated monthly and reviewed by senior management.</p>
+
+                </div>
+            </details>
+        
+                <br>
+                
+            <details class="llm-item">
+                <summary class="llm-summary">
+                    <span class="llm-id"><strong>ID 9</strong></span>
+                    <span class="llm-statement">
+                        <strong>Statement:</strong> The organization should incorporate sustainability claims into the DPP content for toys, supported by verifiable data on raw materials, energy consumption, and recyclability.
+                    </span>
+                    <span class="llm-risk">
+                        <strong>Risk:</strong> Medium – unsupported sustainability claims may be seen as greenwashing, leading to reputational damage.
+                    </span>
+                </summary>
+
+                <div class="llm-details">
+                    <p>Rationale: To align with EU sustainability goals and improve consumer perception by demonstrating commitment to eco-friendly practices.<br>Organization benefits: Increases marketability of products, aligns with growing consumer demand for sustainability, and positions the company as an industry leader.<br>Source: O4, O5<br>Priority: Should – aligns with strategic goals of gaining a competitive advantage and supports the organization’s digital maturity level (Optimizing).  </p>
+<p>System Verification Success Criteria: Sustainability claims are present in at least 75% of DPPs and are linked to verified product data.</p>
+
+                </div>
+            </details>
+        
+            <details class="llm-item">
+                <summary class="llm-summary">
+                    <span class="llm-id"><strong>ID 10</strong></span>
+                    <span class="llm-statement">
+                        <strong>Statement:</strong> The organization should implement a feedback mechanism through the DPP platform to collect user insights on product usage, satisfaction, and end-of-life experiences.
+                    </span>
+                    <span class="llm-risk">
+                        <strong>Risk:</strong> Low – but without feedback, the organization may miss out on valuable consumer insights.
+                    </span>
+                </summary>
+
+                <div class="llm-details">
+                    <p>Rationale: To improve product design and customer service, and to enhance the organization’s understanding of consumer behavior.<br>Organization benefits: Enables continuous improvement of product offerings and consumer engagement, supporting a data-driven business strategy.<br>Source: O2, O5<br>Priority: Should – supports the strategic aim of leveraging DPPs for competitive advantage and innovation.  </p>
+<p>System Verification Success Criteria: A feedback option is available in the DPP interface, with data collected and analyzed quarterly.</p>
+
+                </div>
+            </details>
+        
+            <details class="llm-item">
+                <summary class="llm-summary">
+                    <span class="llm-id"><strong>ID 11</strong></span>
+                    <span class="llm-statement">
+                        <strong>Statement:</strong> The organization could integrate the DPP system with a blockchain-based solution to ensure immutable and transparent tracking of product data across the supply chain.
+                    </span>
+                    <span class="llm-risk">
+                        <strong>Risk:</strong> High – blockchain integration requires significant investment and may involve regulatory uncertainties in implementation.
+                    </span>
+                </summary>
+
+                <div class="llm-details">
+                    <p>Rationale: To enhance trust in the DPP and demonstrate leadership in digital innovation and transparency.<br>Organization benefits: Positions the organization as a forward-thinking leader in digital supply chain transparency and may attract premium customers.<br>Source: O2, O4<br>Priority: Could – an optional strategic enhancement for a large, digitally mature organization aiming for competitive advantage.  </p>
+<p>System Verification Success Criteria: A proof-of-concept or pilot project is initiated to evaluate blockchain integration feasibility within 6 months.</p>
+
+                </div>
+            </details>
+        
+            <details class="llm-item">
+                <summary class="llm-summary">
+                    <span class="llm-id"><strong>ID 12</strong></span>
+                    <span class="llm-statement">
+                        <strong>Statement:</strong> The organization could use the DPP to provide personalized product recommendations and lifecycle support to consumers, leveraging consumer data (with appropriate consent).
+                    </span>
+                    <span class="llm-risk">
+                        <strong>Risk:</strong> Medium – misuse of consumer data could lead to privacy concerns or regulatory issues.
+                    </span>
+                </summary>
+
+                <div class="llm-details">
+                    <p>Rationale: To enhance customer experience and loyalty by offering tailored value based on product usage and lifecycle stage.<br>Organization benefits: Increases customer retention and supports long-term brand loyalty, aligning with digital maturity at the optimizing level.<br>Source: O2, O5<br>Priority: Could – supports the organization’s goal of gaining a competitive advantage through added value.  </p>
+<p>System Verification Success Criteria: A feature for personalized recommendations is implemented with opt-in consent mechanisms and data minimization principles.</p>
+
+                </div>
+            </details>
+        
+            <details class="llm-item">
+                <summary class="llm-summary">
+                    <span class="llm-id"><strong>ID 13</strong></span>
+                    <span class="llm-statement">
+                        <strong>Statement:</strong> The organization won't have to comply with the DPP requirements for toys that are not sold in the EU or are imported for further processing or re-export, unless required by national laws in those jurisdictions.
+                    </span>
+                    <span class="llm-risk">
+                        <strong>Risk:</strong> Low – but the organization should monitor for potential regulatory changes in target markets.
+                    </span>
+                </summary>
+
+                <div class="llm-details">
+                    <p>Rationale: As an EU-based retailer with online sales, the organization is primarily obligated under EU regulations such as ESPR and the Toy Safety Regulation.<br>Organization benefits: Reduces unnecessary compliance costs for non-EU related products and allows focus on core compliance obligations.<br>Source: O1, O3<br>Priority: Won’t – this is beyond the scope of EU regulation unless extended by other jurisdictions.  </p>
+<p>System Verification Success Criteria: A review of product listings confirms that only EU-bound toys are subject to DPP compliance.</p>
+
+                </div>
+            </details>
+        
+                <br> 
+                <h3> Sources for must have requirements </h3>
+                <br> 
+                
+        <ul>
+          <li> <b>[Source M1] Title: Proposal for the regulation on the safety of toys</b> | <i>Type:</i> commission | <i>URL:</i> <a href="https://single-market-economy.ec.europa.eu/system/files/2023-07/COM_2023_462_1_EN_ACT_part1_v4.pdf">https://single-market-economy.ec.europa.eu/system/files/2023-07/COM_2023_462_1_EN_ACT_part1_v4.pdf</a> | <i>Section:</i> EN 9  EN | <i>Content:</i> Option 2b would entail administrative costs for businesses and benefits. The overall additional administrative burden of the introduction of the digital product passport has been estimated, based on current market structure and expected average production per enterprise, at approximately EUR 18 million one-off and EUR 10.5 million recurrent, per year. </li><li> <b>[Source M2] Title: Proposal for the regulation on the safety of toys</b> | <i>Type:</i> commission | <i>URL:</i> <a href="https://single-market-economy.ec.europa.eu/system/files/2023-07/COM_2023_462_1_EN_ACT_part1_v4.pdf">https://single-market-economy.ec.europa.eu/system/files/2023-07/COM_2023_462_1_EN_ACT_part1_v4.pdf</a> | <i>Section:</i> 1. CONTEXT OF THE PROPOSAL | <i>Content:</i> Finally, the Commission Communication of 16 March 2023 on the long-term competitiveness of the EU5 outlines how the EU can build on its strengths and go beyond merely bridging the growth and innovation gap. To foster competitiveness, the Commission proposes in this Communication to work on nine mutually reinforcing drivers of competitiveness, including a functioning internal market and digitalisation through broad-based take-up of digital tools </li><li> <b>[Source M3] Title: Proposal for the regulation on the safety of toys</b> | <i>Type:</i> commission | <i>URL:</i> <a href="https://single-market-economy.ec.europa.eu/system/files/2023-07/COM_2023_462_1_EN_ACT_part1_v4.pdf">https://single-market-economy.ec.europa.eu/system/files/2023-07/COM_2023_462_1_EN_ACT_part1_v4.pdf</a> | <i>Section:</i> EN 26  EN | <i>Content:</i> (69) In order to take into account technical and scientific progress as well as the level of digital readiness of market surveillance authorities and of children and their supervisors, the power to adopt acts in accordance with Article 290 of the Treaty on the Functioning of the European Union should also be delegated to the Commission in respect of amending this Regulation with regard to the information that is to be included in the product passport and the information that is to be included in </li><li> <b>[Source M4] Title: Ecodesign for Sustainable Products Regulation: JRC Study on new product priorities</b> | <i>Type:</i> commission | <i>URL:</i> <a href="https://publications.jrc.ec.europa.eu/repository/handle/JRC138903">https://publications.jrc.ec.europa.eu/repository/handle/JRC138903</a> | <i>Section:</i> COMMODITY CHEMICALS | <i>Content:</i> tion of energy demand, and green technologies for efficient supply of energy (38). The whole processes effi-ciency may also be optimised by means of digital technologies such as the internet of things, big data, artificial intelligence, smart sensors and robotics whereas re-skilling and up-skilling of the workforce involved in the production and use of chemicals also has a role (1).
+Potential measures under ESPR:
+- performance requirement on maximum level of life cycle energy consumption </li><li> <b>[Source M5] Title: Ecodesign for Sustainable Products Regulation: JRC Study on new product priorities</b> | <i>Type:</i> commission | <i>URL:</i> <a href="https://publications.jrc.ec.europa.eu/repository/handle/JRC138903">https://publications.jrc.ec.europa.eu/repository/handle/JRC138903</a> | <i>Section:</i> Table 1 (Page 296) | <i>Content:</i> - : tion of energy demand, and green technologies for efficient supply of energy (38). The whole processes effi-
+ciency may also be optimised by means of digital technologies such as the internet of things, big data,
+artificial intelligence, smart sensors and robotics whereas re-skilling and up-skilling of the workforce involved
+in the production and use of chemicals also has a role (1).
+Potential measures under ESPR:
+- performance requirement on maximum level of life cycle energy consumption </li><li> <b>[Source M6] Title: Ecodesign for Sustainable Products Regulation: JRC Study on new product priorities</b> | <i>Type:</i> commission | <i>URL:</i> <a href="https://publications.jrc.ec.europa.eu/repository/handle/JRC138903">https://publications.jrc.ec.europa.eu/repository/handle/JRC138903</a> | <i>Section:</i> Page 73 | <i>Content:</i> 37  P4Planet is a European co-programmed public-private Partnership established between A.SPIRE – as the private entity – and the European Commission in the context of the Cluster 4 (Digital, Industry and Space) of Horizon Europe funding programme. The Partnership’s aim is to transform the European process industries to achieve circularity and overall climate neutrality at the EU level by 2050 while enhancing their global competitiveness. </li>
+        </ul>
+      
+                <br> 
+                <h3> Sources for other requirements </h3>
+                <br> 
+                
+        <ul>
+          <li> <b>[Source O1] Title: Proposal for the regulation on the safety of toys</b> | <i>Type:</i> commission | <i>URL:</i> <a href="https://single-market-economy.ec.europa.eu/system/files/2023-07/COM_2023_462_1_EN_ACT_part1_v4.pdf">https://single-market-economy.ec.europa.eu/system/files/2023-07/COM_2023_462_1_EN_ACT_part1_v4.pdf</a> | <i>Section:</i> EN 9  EN | <i>Content:</i> Option 2b would entail administrative costs for businesses and benefits. The overall additional administrative burden of the introduction of the digital product passport has been estimated, based on current market structure and expected average production per enterprise, at approximately EUR 18 million one-off and EUR 10.5 million recurrent, per year. </li><li> <b>[Source O2] Title: Proposal for the regulation on the safety of toys</b> | <i>Type:</i> commission | <i>URL:</i> <a href="https://single-market-economy.ec.europa.eu/system/files/2023-07/COM_2023_462_1_EN_ACT_part1_v4.pdf">https://single-market-economy.ec.europa.eu/system/files/2023-07/COM_2023_462_1_EN_ACT_part1_v4.pdf</a> | <i>Section:</i> 1. CONTEXT OF THE PROPOSAL | <i>Content:</i> Finally, the Commission Communication of 16 March 2023 on the long-term competitiveness of the EU5 outlines how the EU can build on its strengths and go beyond merely bridging the growth and innovation gap. To foster competitiveness, the Commission proposes in this Communication to work on nine mutually reinforcing drivers of competitiveness, including a functioning internal market and digitalisation through broad-based take-up of digital tools </li><li> <b>[Source O3] Title: Proposal for the regulation on the safety of toys</b> | <i>Type:</i> commission | <i>URL:</i> <a href="https://single-market-economy.ec.europa.eu/system/files/2023-07/COM_2023_462_1_EN_ACT_part1_v4.pdf">https://single-market-economy.ec.europa.eu/system/files/2023-07/COM_2023_462_1_EN_ACT_part1_v4.pdf</a> | <i>Section:</i> EN 26  EN | <i>Content:</i> (69) In order to take into account technical and scientific progress as well as the level of digital readiness of market surveillance authorities and of children and their supervisors, the power to adopt acts in accordance with Article 290 of the Treaty on the Functioning of the European Union should also be delegated to the Commission in respect of amending this Regulation with regard to the information that is to be included in the product passport and the information that is to be included in </li><li> <b>[Source O4] Title: Ecodesign for Sustainable Products Regulation: JRC Study on new product priorities</b> | <i>Type:</i> commission | <i>URL:</i> <a href="https://publications.jrc.ec.europa.eu/repository/handle/JRC138903">https://publications.jrc.ec.europa.eu/repository/handle/JRC138903</a> | <i>Section:</i> COMMODITY CHEMICALS | <i>Content:</i> tion of energy demand, and green technologies for efficient supply of energy (38). The whole processes effi-ciency may also be optimised by means of digital technologies such as the internet of things, big data, artificial intelligence, smart sensors and robotics whereas re-skilling and up-skilling of the workforce involved in the production and use of chemicals also has a role (1).
+Potential measures under ESPR:
+- performance requirement on maximum level of life cycle energy consumption </li><li> <b>[Source O5] Title: Ecodesign for Sustainable Products Regulation: JRC Study on new product priorities</b> | <i>Type:</i> commission | <i>URL:</i> <a href="https://publications.jrc.ec.europa.eu/repository/handle/JRC138903">https://publications.jrc.ec.europa.eu/repository/handle/JRC138903</a> | <i>Section:</i> Table 1 (Page 296) | <i>Content:</i> - : tion of energy demand, and green technologies for efficient supply of energy (38). The whole processes effi-
+ciency may also be optimised by means of digital technologies such as the internet of things, big data,
+artificial intelligence, smart sensors and robotics whereas re-skilling and up-skilling of the workforce involved
+in the production and use of chemicals also has a role (1).
+Potential measures under ESPR:
+- performance requirement on maximum level of life cycle energy consumption </li><li> <b>[Source O6] Title: Ecodesign for Sustainable Products Regulation: JRC Study on new product priorities</b> | <i>Type:</i> commission | <i>URL:</i> <a href="https://publications.jrc.ec.europa.eu/repository/handle/JRC138903">https://publications.jrc.ec.europa.eu/repository/handle/JRC138903</a> | <i>Section:</i> Page 73 | <i>Content:</i> 37  P4Planet is a European co-programmed public-private Partnership established between A.SPIRE – as the private entity – and the European Commission in the context of the Cluster 4 (Digital, Industry and Space) of Horizon Europe funding programme. The Partnership’s aim is to transform the European process industries to achieve circularity and overall climate neutrality at the EU level by 2050 while enhancing their global competitiveness. </li>
+        </ul>
+      
+            </div>
+
+        <!-- Copy button -->
+        <button id="copy-button" class="copy-button" onclick="copyOutput()" style="display: inline-block;">
+            Copy Requirements
+        </button>
+
+        <br> 
+        
+        <!-- Buttons for the next steps -->
+        <button id="info-button-1" class="copy-button" onclick="location.href = &#39;https://cirpass2.eu/&#39;" style="display: inline-block; background-color: rgb(65, 167, 101);">
+            Get more information on European level!
+        </button>
+        
+        <button id="info-button-2" class="copy-button" onclick="location.href = &#39;https://coe-dpp.nl/&#39;" style="display: inline-block; background-color: rgb(65, 167, 101);">
+            Get more information as a Dutch organization!
+        </button>
+
+        <br> 
+        <br> 
+
+        <small id="disclaimer" class="form-text" style="display: inline-block;">
+            <i> Each requirement consists of an ID, a statement (the actual requirement itself), a rationale (a compliance-oriented reason behind the requirement), organization benefits (such as improved efficiency), a source (which are either published EU documents or EU working group documents), a priority (based on the MoSCoW method, which uses must/should/could/won't), a risk of implementation (about the possible complications that might occur), and system validation success criteria (to verify whether you adhere to this requirement). </i> <br> <br>
+            <i> Note that the DPP regulations are still bound to change. Hence, it is the users reponsibility to keep track of these changes. </i> <br> <br>
+            <i> This set of requirements has been generated using a Large Language Model. Although the used LLM has access to a relevant set of documents about the Digital Product Passport, it is still sensitive to hallucinations. Hence, it is recommended to only use these requirements as a starting point in your journey with the DPP. No rights can be derived from this LLM output. </i> <br>
+        </small>
+        
+    </div>
+    
+    <div class="footer">
+        <p style="color:grey">Version 4.0</p> 
+        Created by <strong>Isabel Rutten</strong> as thesis intern of <strong>TNO Vector</strong>.
+    </div>
+
+
+
+
+
+
+<script>
+async function submitForm() {
+    // Gather input values
+    const sector = document.getElementById("sector").value.trim();
+    const size = document.getElementById("size").value.trim();
+    const role = document.getElementById("role").value.trim();
+    const maturity = document.getElementById("maturity").value.trim();
+    // const technical = document.getElementById("technical").value.trim();
+    const implementation = document.getElementById("implementation").value.trim();
+
+    // Basic validation (optional)
+    if (!sector || !size || !role || !maturity || !implementation) {
+        alert("Please fill out all fields.");
+        return;
+    }
+
+    // Build prompt text combining all answers
+    const prompt = `
+1. Sector: ${sector}
+2. Organization size: ${size}
+3. Organization role in DPP Ecosystem: ${role}
+4. Digital maturity (The digital maturity model starts at incomplete (no digitalization in the company). Next, performed means that a planning has been made. Managed focuses on ensuring existing business processes are digitized through technology. Established means that digital transformation has been done based on existing standard. Predictable seizes those benefits by applying quantitative techniques on real-time data, with data analytics on business processes. Lastly, optimizing focuses on innovation and continuous improvement.): ${maturity} 
+5. Aim of implementation level (with 2: Entity level compliance, 3: Ecosystem level compliance, 4: Value adding, 5: Competitive advantage):  ${implementation}
+`;
+
+    // Show a loading indicator
+    const outputDiv = document.getElementById("llm-output");
+    outputDiv.innerHTML = "Generating custom requirements...";
+
+    // Call backend
+    try {
+        const response = await fetch("https://system-ai-335a.onrender.com/generate", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ input: prompt })
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+            outputDiv.innerHTML = "Error: " + escapeHTML(data.error);
+        } else {
+            outputDiv.innerHTML = `
+                ${formatOutput(data.commission_only_output)}
+                <br>
+                ${formatOutput(data.full_context_output)}
+                <br> 
+                <h3> Sources for must have requirements </h3>
+                <br> 
+                ${data.sources.commission}
+                <br> 
+                <h3> Sources for other requirements </h3>
+                <br> 
+                ${data.sources.full}
+            `;
+            showCopyButtonIfNeeded();
+        }
+    } catch (err) {
+        outputDiv.innerHTML = "Request failed: " + escapeHTML(err.message);
+    }
+}
+
+// Helper: raw formatter
+function formatRawHtml(text) {
+    const rawHtml = marked.parse(text);
+    return DOMPurify.sanitize(rawHtml, {
+        USE_PROFILES: { html: true }
+    });
+}
+
+// Helper: remove extra **
+function cleanHiddenText(text) {
+    return text
+        // remove markdown bold entirely
+        .replace(/\*\*(.*?)\*\*/g, "$1")
+
+        // remove standalone markdown artifacts
+        .replace(/^\s*\*{1,2}\s*$/gm, "")
+        .replace(/^\s*[\*\-_]{1,}\s*$/gm, "")
+
+        // collapse excessive spacing (fixes visual "Risk gap")
+        .replace(/\n\s*\n\s*\n+/g, "\n\n")
+
+        .trim();
+}
+
+// Helper: turn output into readable collapsibles
+function addCollapsibles(text) {
+
+    text = text.replace(/\r\n/g, "\n");
+
+    const items = text.split(/(?=\b(?:ID|D)\s+\d+)/g);
+
+    function extractField(block, fieldName) {
+        const regex = new RegExp(
+            fieldName + ":\\s*([\\s\\S]*?)(?=\\n[A-Z][^:]+:|$)",
+            "i"
+        );
+        const match = block.match(regex);
+        return match ? match[1].trim() : "";
+    }
+
+    return items.map(item => {
+        if (!item.trim()) return "";
+
+        const idMatch = item.match(/\b(?:ID|D)\s+\d+/);
+        const id = idMatch ? idMatch[0] : "Unknown";
+
+        const statement = extractField(item, "Statement");
+        const risk = extractField(item, "Risk");
+
+        let hidden = cleanHiddenText(
+            item
+                .replace(/\b(?:ID|D)\s+\d+/, "")
+                .replace(/Statement:[\s\S]*?(?=\n[A-Z][^:]+:|$)/i, "")
+                .replace(/Risk:[\s\S]*?(?=\n[A-Z][^:]+:|$)/i, "")
+        );
+
+        hidden = hidden
+            .replace(/\n\s*\n\s*\n/g, "\n\n") // collapse excessive gaps
+            .trim();
+
+        return `
+            <details class="llm-item">
+                <summary class="llm-summary">
+                    <span class="llm-id"><strong>${escapeHTML(id)}</strong></span>
+                    <span class="llm-statement">
+                        <strong>Statement:</strong> ${escapeHTML(statement)}
+                    </span>
+                    <span class="llm-risk">
+                        <strong>Risk:</strong> ${escapeHTML(risk)}
+                    </span>
+                </summary>
+
+                <div class="llm-details">
+                    ${formatRawHtml(hidden)}
+                </div>
+            </details>
+        `;
+    }).join("");
+}
+
+// Helper: escape HTML entities to prevent injection
+function escapeHTML(str) {
+    return str.replace(/&/g, "&amp;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;");
+}
+
+// Helper: format text output nicely
+function formatOutput(text) {
+    if (!text || typeof text !== "string") return "";
+
+    // Configure marked (GitHub-flavored markdown)
+    marked.setOptions({
+        // breaks: true,        // convert \n to <br>
+        gfm: true            // enable tables, strikethrough, etc.
+    });
+
+    // Step 1: Build collapsibles (still raw HTML inside)
+    const html = addCollapsibles(text);
+
+    // Step 2: Sanitize everything
+    const safeHtml = DOMPurify.sanitize(html, {
+        USE_PROFILES: { html: true }
+    });
+
+    return safeHtml;
+}
+
+function copyOutput() {
+    const outputDiv = document.getElementById("llm-output");
+
+    if (outputDiv.innerHTML.trim() === "") return;
+
+    // Convert HTML to nicely formatted plain text
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = outputDiv.innerHTML;
+
+    // Recursively extract text with line breaks
+    function getTextWithFormatting(element) {
+        let text = "";
+        element.childNodes.forEach(node => {
+            if (node.nodeType === Node.TEXT_NODE) {
+                text += node.textContent;
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
+                const tag = node.tagName.toLowerCase();
+                if (tag === "br") {
+                    text += "\n";
+                } else if (tag === "p") {
+                    text += getTextWithFormatting(node) + "\n\n";
+                } else if (tag === "li") {
+                    text += "- " + getTextWithFormatting(node) + "\n";
+                } else if (tag === "ul" || tag === "ol") {
+                    text += getTextWithFormatting(node) + "\n";
+                } else if (tag === "strong") {
+                    text += node.textContent; // bold as plain text
+                } else {
+                    text += getTextWithFormatting(node);
+                }
+            }
+        });
+        return text;
+    }
+
+    const formattedText = getTextWithFormatting(tempDiv).trim(); 
+    const disclaimerText = "\n\nEach requirement consists of an ID, a statement (the actual requirement itself), a rationale (a compliance-oriented reason behind the requirement), organization benefits (such as improved efficiency), a source (which are either published EU documents or EU working group documents), a priority (based on the MoSCoW method, which uses must/should/could/won't), a risk of implementation (about the possible complications that might occur), and system validation success criteria (to verify whether you adhere to this requirement).\n\n Note that the DPP regulations are still bound to change. Hence, it is the users reponsibility to keep track of these changes. \n\n This set of requirements has been generated using a Large Language Model. Although the used LLM has access to a relevant set of documents about the Digital Product Passport, it is still sensitive to hallucinations. Hence, it is recommended to only use these requirements as a starting point in your journey with the DPP. No rights can be derived from this LLM output.";
+    const finalText = formattedText + disclaimerText // TODO: ADD SOURCES
+
+    navigator.clipboard.writeText(finalText)
+        .then(() => alert("Action plan copied to clipboard!"))
+        .catch(err => alert("Failed to copy: " + err));
+}
+
+
+// Show the copy button only when there’s content
+function showCopyButtonIfNeeded() {
+    const outputDiv = document.getElementById("llm-output");
+    const copyButton = document.getElementById("copy-button");
+    const infoButtonOne = document.getElementById("info-button-1");
+    const infoButtonTwo = document.getElementById("info-button-2");
+    const disclaimer = document.getElementById("disclaimer");
+
+    if (outputDiv.textContent.trim() !== "") {
+        copyButton.style.display = "inline-block";
+        infoButtonOne.style.display = "inline-block";
+        infoButtonTwo.style.display = "inline-block";
+        disclaimer.style.display = "inline-block";
+    } else {
+        copyButton.style.display = "none";
+        infoButtonOne.style.display = "none";
+        infoButtonTwo.style.display = "none";
+        disclaimer.style.display = "none";
+    }
+}
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body></html>
