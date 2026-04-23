@@ -1,196 +1,199 @@
-// server.js
 import express from "express";
 import Groq from "groq-sdk";
 import dotenv from "dotenv";
-import path from "path";
-import { fileURLToPath } from "url";
 import cors from "cors";
-import fs from "fs";
+// import chromadb from "chromadb";
+// import { ChromaClient } from "chromadb";
+// import { ChromaClient } from "@chroma-core/chromadb-client";
 
 dotenv.config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const app = express();
+
+// ------------------------------
+// Middleware
+// ------------------------------
+app.use(cors({ origin: "https://isabelrut.github.io" }));
+app.use(express.json());
+
+// ------------------------------
+// LLM Client
+// ------------------------------
 const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY, // Only for LLM completions
+  apiKey: process.env.GROQ_API_KEY,
 });
 
-// Enable CORS for frontend
-app.use(cors({
-  origin: "https://isabelrut.github.io",
-}));
+// // ------------------------------
+// // Chroma Client
+// // ------------------------------
+// let client;
+// let collection;
 
-app.use(express.json());
-app.use(express.static(path.join(__dirname, "docs")));
+// // ------------------------------
+// // Chroma Client (REMOTE)
+// // ------------------------------
+// function initChromaClient() {
+//   const CHROMA_URL = process.env.CHROMA_URL;
 
-// ------------------------------
-// Load JSON data
-// ------------------------------
-const DATA_PATH = path.join(__dirname, "rag_chunks.json");
-let chunks = [];
+//   if (!CHROMA_URL) {
+//     throw new Error("CHROMA_URL is not defined in environment variables");
+//   }
 
-try {
-  const raw = fs.readFileSync(DATA_PATH, "utf-8");
-  chunks = JSON.parse(raw);
-  console.log(`Loaded ${chunks.length} chunks from JSON`);
-} catch (err) {
-  console.error("Failed to load chunks:", err);
-}
+//   return new ChromaClient({
+//     path: CHROMA_URL, // IMPORTANT: use Render URL
+//   });
+// }
 
-// ------------------------------
-// Stopwords (basic)
-// ------------------------------
-const STOPWORDS = ["the", "and", "of", "in", "on", "for", "to", "a", "an", "with", "by", "is"];
+// // Initialize Chroma
+// async function initChroma() {
+//   try {
+//     client = initChromaClient();
 
-// ------------------------------
-// Detect sector from query
-// ------------------------------
-function detectSector(query) {
-  const q = query.toLowerCase();
+//     // optional lightweight check
+//     await client.heartbeat?.();
 
-  if (q.includes("batteries")) return "Battery"; 
-  if (q.includes("battery")) return "Battery"; 
-  if (q.includes("textiles")) return "Textile"; 
-  if (q.includes("textile")) return "Textile"; 
-  if (q.includes("apparel")) return "Textile"; 
-  if (q.includes("toys")) return "Toys"; 
-  if (q.includes("toy")) return "Toys"; 
-  if (q.includes("construction")) return "Construction"; 
-  if (q.includes("iron")) return "Steel"; 
-  if (q.includes("steel")) return "Steel"; 
+//     collection = await client.getOrCreateCollection({
+//       name: "ec_documents",
+//     });
 
-  return null;
-}
+//     console.log("📦 Connected to Chroma:", process.env.CHROMA_URL);
+//     console.log("📦 Collection loaded: ec_documents");
 
-// ------------------------------
-// Check if document is generic
-// ------------------------------
-function isGenericDoc(c) {
-  const name = (c.metadata?.Name || "").toLowerCase();
+//   } catch (err) {
+//     console.error("❌ Failed to connect to Chroma:", err);
+//     throw err;
+//   }
+// }
 
-  return (
-    name.includes("ecodesign for sustainable products regulation") ||
-    name.includes("espr") ||
-    c.metadata?.Tags?.toLowerCase().includes("product")
-  );
-}
+// // Start immediately
+// await initChroma();
+const CHROMA_URL = process.env.CHROMA_URL;
 
 // ------------------------------
-// Improved scoring function
+// RETRIEVAL (EMBEDDING-BASED)
 // ------------------------------
-function scoreChunk(chunk, query, sector) {
-  const words = query
-    .toLowerCase()
-    .split(/\s+/)
-    .filter(w => !STOPWORDS.includes(w));
+// async function retrieveContext(query, docType = null, topK = 6) {
+//   if (!collection) {
+//     throw new Error("Chroma collection not initialized");
+//   }
 
-  const text = chunk.text.toLowerCase();
-  const name = (chunk.metadata?.Name || "").toLowerCase();
-  const tags = (chunk.metadata?.Tags || "").toLowerCase();
-  const summary = (chunk.metadata?.Summary || "").toLowerCase();
+//   try {
+//     const results = await collection.query({
+//       queryTexts: [query],
+//       nResults: topK,
+//       where: docType ? { Doc_Type: docType } : undefined,
+//       include: ["documents", "metadatas", "distances"]
+//     });
 
-  const isGeneric =
-    name.includes("ecodesign for sustainable products regulation");
+//     return {
+//       docs: results.documents?.[0] || [],
+//       metadata: results.metadatas?.[0] || [],
+//       distances: results.distances?.[0] || []
+//     };
 
-  let score = 0;
-
-  for (const word of words) {
-    if (text.includes(word)) score += word.length > 4 ? 2 : 1;
-
-    // Strong metadata boosts
-    if (name.includes(word)) score += 3;
-    if (tags.includes(word)) score += 4;
-    if (summary.includes(word)) score += 2;
-
-  }
-
-  // Sector boost only for non-generic documents
-  if (
-    sector &&
-    !isGeneric && 
-    tags.includes(sector.toLowerCase())
-  ) {
-    score += 10;
-  }  
-
-  return score;
-}
-
-// ------------------------------
-// Retrieve top chunks
-// ------------------------------
-function retrieveContext(query, docType = null, topK = 4) {
-  if (!chunks.length) return { docs: [], metadata: [] };
-
-  const sector = detectSector(query);
-
-  // Step 1: filter by Doc_Type only (kept optional)
-  let baseCandidates = chunks.filter(c => {
-    if (docType && c.metadata?.Doc_Type !== docType) return false;
-    return true;
-  });
-
-  // Step 2: filter between generic docs and not generic docs
-  let genericPool = baseCandidates.filter(isGenericDoc);
-  let sectorPool = baseCandidates.filter(c => !isGenericDoc(c));
-
-  // Step 2a: try specific sector first
-  let sectorCandidates = sectorPool; 
-  if (sector) {
-    let filtered = sectorPool.filter(c =>
-      (c.metadata?.Tags || "").toLowerCase().includes(sector.toLowerCase())
+//   } catch (err) {
+//     console.error("Retrieval error:", err);
+//     return { docs: [], metadata: [], distances: [] };
+//   }
+// }
+async function retrieveContext(query, docType = null, topK = 6) {
+  try {
+    const response = await fetch(
+      `${CHROMA_URL}/api/v2/collections/eac4e8b6-b8c1-4ee5-81e0-ed2f211af085/query`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query_texts: [query],
+          n_results: topK,
+          where: docType ? { Doc_Type: docType } : undefined,
+          include: ["documents", "metadatas", "distances"],
+        }),
+      }
     );
 
-    if (filtered.length > 0) {
-      sectorCandidates = filtered;
+    const text = await response.text();
+
+    if (!response.ok) {
+      throw new Error(`Chroma error ${response.status}: ${text}`);
     }
+
+    const results = JSON.parse(text);
+
+    return {
+      docs: results.documents?.[0] || [],
+      metadata: results.metadatas?.[0] || [],
+      distances: results.distances?.[0] || [],
+    };
+
+  } catch (err) {
+    console.error("Retrieval error:", err);
+    return { docs: [], metadata: [], distances: [] };
+  }
+}
+
+// ------------------------------
+// SOURCE BUILDER
+// ------------------------------
+function buildSources(docs, metadata, category = "must") {
+  const prefix = category === "other" ? "O" : "M";
+
+  return docs.map((doc, i) => {
+    const m = metadata[i] || {};
+
+    return {
+      id: `${prefix}${i + 1}`,
+      title: m.Name || `Document ${i + 1}`,
+      type: m.Doc_Type || "unknown",
+      url: m.URL || "unknown",
+      section: m.section_title || "unknown",
+      content: doc
+    };
+  });
+}
+
+// ------------------------------
+// FORMAT FOR LLM
+// ------------------------------
+function formatContextForLLM(sources, label = "M") {
+  if (!sources.length) {
+    return `No ${label === "M" ? "must" : "other"} context available.`;
   }
 
-  // Step 2b: include generic text
-  let genericCandidates = genericPool;
+  return sources.map(src => `
+[Source ${src.id}]
+Title: ${src.title}
+Type: ${src.type}
+URL: ${src.url}
+Section: ${src.section}
 
-  // Step 3: score all candidates
-  function scoreAndRank(candidates) {
-    // score candidates
-    const scored = candidates.map(c => ({
-      text: c.text,
-      metadata: c.metadata,
-      score: scoreChunk(c, query, sector),
-    }));
+Content:
+${src.content}
+`).join("\n\n");
+}
 
-    // sort descending
-    scored.sort((a, b) => b.score - a.score);
+// ------------------------------
+// OPTIONAL: HTML FORMAT (frontend/debug)
+// ------------------------------
+function formatContextHTML(sources, label = "M") {
+  if (!sources.length) return `<p>No ${label} context available.</p>`;
 
-    return scored.filter(c => c.score > 0)
-  }
-
-  const scoredSector = scoreAndRank(sectorCandidates);
-  const scoredGeneric = scoreAndRank(genericCandidates);
-
-  // Step 4: take top from each 
-  const kSector = Math.ceil(topK / 2);
-  const kGeneric = Math.floor(topK / 2);
-
-  let topChunks = [
-    ...scoredSector.slice(0, kSector),
-    ...scoredGeneric.slice(0, kGeneric),
-  ];
-  
-  // Fallback if one side is empty
-  if (!topChunks.length) {
-    const allScored = scoreAndRank(baseCandidates);
-    topChunks = allScored.slice(0, topK);
-  }
-
-  return {
-    docs: topChunks.map(c => c.text),
-    metadata: topChunks.map(c => ({
-      ...c.metadata,
-      _isGeneric: isGenericDoc(c),
-    })),
-  };
+  return `
+  <ul>
+    ${sources.map(src => `
+      <li>
+        <b>[${src.id}] ${src.title}</b><br/>
+        <i>Type:</i> ${src.type} |
+        <i>Section:</i> ${src.section} |
+        <i>URL:</i> <a href="${src.url}">${src.url}</a>
+        <br/><br/>
+        ${src.content}
+      </li>
+    `).join("")}
+  </ul>
+  `;
 }
 
 // ------------------------------
@@ -201,74 +204,40 @@ app.post("/generate", async (req, res) => {
 
     const { input: userInput, docType } = req.body;
 
-    function buildContext(docs, metadata, sourceCategory = "must") {
-      const prefix = sourceCategory === "other" ? "O" : "M";
+    // =========================
+    // 1. MUST CONTEXT (authority layer)
+    // =========================
+    const mustResult = await retrieveContext(userInput, "commission", 6);
 
-      return docs.map((doc, i) => {
-        const m = metadata[i];
-        const sourceLabel = `${prefix}${i + 1}`;
+    const mustSources = buildSources(
+      mustResult.docs,
+      mustResult.metadata,
+      "must"
+    );
 
-        return `
-    [Source ${sourceLabel}]
-    Title: ${m.Name || `Document ${i + 1}`}
-    Type: ${m.Doc_Type || "unknown"}
-    URL: ${m.URL || "unknown"}
-    Section: ${m.section_title || "unknown"}
+    const context_a = formatContextForLLM(mustSources, "M");
+    const nice_context_a = formatContextHTML(mustSources, "M");
 
-    Content:
-    ${doc}
-    `;
-      }).join("\n\n");
-    }
+    console.log("MUST sources:", mustSources.map(s => s.url));
 
-    function niceFormatContext(docs, metadata, sourceCategory = "must") {
-      // Decide prefix based on category
-      const prefix = sourceCategory === "other" ? "O" : "M";
+    // =========================
+    // 2. OTHER CONTEXT (supporting layer)
+    // =========================
+    const otherResult = await retrieveContext(userInput, docType || null, 6);
 
-      return `
-        <ul>
-          ${docs.map((doc, i) => {
-            const m = metadata[i];
+    const otherSources = buildSources(
+      otherResult.docs,
+      otherResult.metadata,
+      "other"
+    );
 
-            const title = m.Name || `Document ${i + 1}`;
-            const type = m.Doc_Type || "unknown";
-            const url = m.URL || "unknown";
-            const section = m.section_title || "unknown";
+    const context_b = formatContextForLLM(otherSources, "O");
+    const nice_context_b = formatContextHTML(otherSources, "O");
 
-            const sourceLabel = `${prefix}${i + 1}`;
-
-          return `<li> <b>[Source ${sourceLabel}] Title: ${title}</b> | <i>Type:</i> ${type} | <i>URL:</i> <a href="${url}">${url}</a> | <i>Section:</i> ${section} | <i>Content:</i> ${doc} </li>`;
-          }).join("")}
-        </ul>
-      `;    
-    }
-
-    // ----------------
-    // 1a. Get relevant published regulations documents
-    // ----------------
-
-    const { docs: docs_a, metadata: metadata_a } =  retrieveContext(userInput, "commission", 6);
-
-    const context_a = docs_a.length ? buildContext(docs_a, metadata_a, "must") : "No relevant published regulations found.";
-
-    const nice_context_a = docs_a.length ? niceFormatContext(docs_a, metadata_a, "must") : "No nice format allowed for a.";
-
-    console.log("Published regulations used:", metadata_a.map(m => m.URL));
-
-    // ----------------
-    // 1b. Get all relevant documents
-    // ----------------
-
-    const { docs: docs_b, metadata: metadata_b } =  retrieveContext(userInput, "", 6);
-
-    const context_b = docs_b.length ? buildContext(docs_b, metadata_b, "other") : "No relevant documents found.";
-
-    const nice_context_b = docs_b.length ? niceFormatContext(docs_b, metadata_b, "other") : "No nice format allowed for b.";
-
-    console.log("Documents used:", metadata_b.map(m => m.URL));
+    console.log("OTHER sources:", otherSources.map(s => s.url));
 
     // Some delay due to token space
-    await new Promise(resolve => setTimeout(resolve, 60000));
+    // await new Promise(resolve => setTimeout(resolve, 60000));
 
     // ----------------
     // 2a. Do first prompt to get must-haves only using published regulations documents
