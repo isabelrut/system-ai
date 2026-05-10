@@ -435,6 +435,16 @@ function addCollapsibles(text) {
         const statement = extractField(item, "Statement");
         const risk = extractField(item, "Risk");
 
+        let requirementClass = "requirement-default";
+
+        if (/\bmust\b/i.test(statement)) {
+            requirementClass = "requirement-must";
+        } else if (/\bshould\b/i.test(statement)) {
+            requirementClass = "requirement-should";
+        } else if (/\bcould\b/i.test(statement)) {
+            requirementClass = "requirement-could";
+        }
+
         let hidden = cleanHiddenText(
             item
                 .replace(/\b(?:ID|D)\s+\d+/, "")
@@ -447,7 +457,7 @@ function addCollapsibles(text) {
             .trim();
 
         return `
-            <details class="llm-item">
+            <details class="llm-item ${requirementClass}">
                 <summary class="llm-summary">
                     <span class="llm-id"><strong>${escapeHTML(id)}</strong></span>
                     <span class="llm-statement">

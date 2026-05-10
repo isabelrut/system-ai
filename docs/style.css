@@ -310,6 +310,24 @@ img {
     color: #020059;
 }
 
+/* MUST = red */
+.requirement-must {
+    background-color: #ffe5e5;
+    border-left: 6px solid #d32f2f;
+}
+
+/* SHOULD = orange */
+.requirement-should {
+    background-color: #fff3e0;
+    border-left: 6px solid #f57c00;
+}
+
+/* COULD = yellow */
+.requirement-could {
+    background-color: #fffde7;
+    border-left: 6px solid #fbc02d;
+}
+
 /* ===========================
    Help boxes for user input
 =========================== */
