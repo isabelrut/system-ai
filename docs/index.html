@@ -30,7 +30,7 @@
             Fill in the following forms to find out what <em>you</em> need to do to take part in the DPP ecosystem.
         </p>
 
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label for="sector">1. What sector is your organization working in?</label>
             <select id="sector" name="sector"> 
                 <option value="ICT products">ICT products</option>
@@ -109,6 +109,192 @@
                 <option value="ICT">ICT Implementation</option>
                 <option value="Sustainability">Sustainability</option>
             </select> 
+        </div> -->
+
+        <!-- 1. Sector -->
+        <div class="form-group">
+            <label for="sector">
+                1. What sector is your organization working in?
+            </label>
+
+            <select id="sector" name="sector">
+                <option value="">Select a sector</option>
+                <option value="ICT products">ICT products</option>
+                <option value="Textiles/apparel">Textiles/apparel</option>
+                <option value="Construction products">Construction products</option>
+                <option value="Batteries">Batteries</option>
+                <option value="Recycled content">Recycled content</option>
+                <option value="Iron and steel">Iron and steel</option>
+                <option value="Repairability">Repairability</option>
+                <option value="Energy-related products">Energy-related products</option>
+                <option value="Furniture">Furniture</option>
+                <option value="Footwear">Footwear</option>
+                <option value="Aluminium">Aluminium</option>
+                <option value="Mattresses">Mattresses</option>
+                <option value="Tyres">Tyres</option>
+                <option value="Toys">Toys</option>
+                <option value="Plastic">Plastic</option>
+                <option value="Fuels">Fuels</option>
+                <option value="Chemicals">Chemicals</option>
+            </select>
+        </div>
+
+
+        <!-- 2. Company size -->
+        <div class="form-group">
+            <label>
+                2. What is your company size according to
+                <a href="https://single-market-economy.ec.europa.eu/smes/sme-fundamentals/sme-definition_en" target="_blank">
+                    EU regulations
+                </a>?
+            </label>
+
+            <div class="radio-group">
+                <label class="radio-option">
+                    <input type="radio" name="size" value="micro">
+                    <span>Micro</span>
+                    <small>&lt;10 employees</small>
+                </label>
+
+                <label class="radio-option">
+                    <input type="radio" name="size" value="small">
+                    <span>Small</span>
+                    <small>&lt;50 employees</small>
+                </label>
+
+                <label class="radio-option">
+                    <input type="radio" name="size" value="medium">
+                    <span>Medium</span>
+                    <small>&lt;250 employees</small>
+                </label>
+
+                <label class="radio-option">
+                    <input type="radio" name="size" value="large">
+                    <span>Large</span>
+                    <small>250+ employees</small>
+                </label>
+            </div>
+
+            <details class="help-box">
+                <summary>View full EU SME classification table</summary>
+
+                <img
+                    src="SME-table.png"
+                    alt="SME sizes according to EU regulations"
+                    class="help-image"
+                >
+            </details>
+        </div>
+
+
+        <!-- 3. Role -->
+        <div class="form-group">
+            <label for="role">
+                3. What role does your organization take in the
+                <a href="https://coe-dsc.nl/wp-content/uploads/2026/01/Dutch-Digital-Product-Passport-Landscape-Scan-Version-1.0-final-1.pdf" target="_blank">
+                    DPP ecosystem
+                </a>?
+            </label>
+
+            <select id="role" name="role">
+                <option value="">Select a role</option>
+                <option value="Economic operator">Economic operator</option>
+                <option value="Supplier">Supplier</option>
+                <option value="Retailer">Retailer</option>
+                <option value="Independent operator">Independent operator</option>
+            </select>
+
+            <details class="help-box">
+                <summary>View DPP ecosystem framework</summary>
+
+                <img
+                    src="Ecosystem-framework.png"
+                    alt="DPP Ecosystem Framework"
+                    class="help-image"
+                >
+            </details>
+        </div>
+
+
+        <!-- 4. Digital maturity -->
+        <div class="form-group">
+            <label for="maturity">
+                4. What is the
+                <a href="https://www.mdpi.com/2504-2289/7/1/17" target="_blank">
+                    digital maturity level
+                </a>
+                of your organization?
+            </label>
+
+            <select id="maturity" name="maturity">
+                <option value="">Select maturity level</option>
+                <option value="incomplete">Incomplete</option>
+                <option value="performed">Performed</option>
+                <option value="managed">Managed</option>
+                <option value="established">Established</option>
+                <option value="predictable">Predictable</option>
+                <option value="optimizing">Optimizing</option>
+            </select>
+
+            <details class="help-box">
+                <summary>How are the maturity levels defined?</summary>
+
+                <p class="help-text">
+                    <strong>Incomplete:</strong> No digitalization activities.<br>
+                    <strong>Performed:</strong> Initial digital planning exists.<br>
+                    <strong>Managed:</strong> Existing processes are digitized.<br>
+                    <strong>Established:</strong> Transformation follows standards.<br>
+                    <strong>Predictable:</strong> Real-time analytics and quantitative optimization.<br>
+                    <strong>Optimizing:</strong> Continuous innovation and improvement.
+                </p>
+
+                <img
+                    src="digital-maturity-model.png"
+                    alt="Digital Maturity Model"
+                    class="help-image small-image"
+                >
+            </details>
+        </div>
+
+
+        <!-- 5. DPP implementation -->
+        <div class="form-group">
+            <label for="implementation">
+                5. What level of DPP implementation does your organization aim for?
+            </label>
+
+            <select id="implementation" name="implementation">
+                <option value="">Select implementation level</option>
+                <option value="two">2: Entity level compliance</option>
+                <option value="three">3: Ecosystem level compliance</option>
+                <option value="four">4: Value adding</option>
+                <option value="five">5: Competitive advantage</option>
+            </select>
+
+            <details class="help-box">
+                <summary>View DPP maturity model</summary>
+
+                <img
+                    src="DPP-maturity-model.png"
+                    alt="DPP Maturity Model"
+                    class="help-image"
+                >
+            </details>
+        </div>
+
+
+        <!-- 6. Perspective -->
+        <div class="form-group">
+            <label for="perspective">
+                6. What perspective are you most interested in?
+            </label>
+
+            <select id="perspective" name="perspective">
+                <option value="">Select a perspective</option>
+                <option value="Business">Business</option>
+                <option value="ICT">ICT Implementation</option>
+                <option value="Sustainability">Sustainability</option>
+            </select>
         </div>
         
         
@@ -126,11 +312,11 @@
         <br> 
         
         <!-- Buttons for the next steps -->
-        <button id="info-button-1" class="copy-button" onclick="location.href = 'https://cirpass2.eu/'" style="display:none; background-color:#41A765;">
+        <button id="info-button-1" class="copy-button" onclick="window.open('https://cirpass2.eu/', '_blank')" style="display:none; background-color:#41A765;">
             Get more information on European level!
         </button>
         
-        <button id="info-button-2" class="copy-button" onclick="location.href = 'https://coe-dpp.nl/'" style="display:none; background-color:#41A765;">
+        <button id="info-button-2" class="copy-button" onclick="window.open('https://coe-dpp.nl/', '_blank')" style="display:none; background-color:#41A765;">
             Get more information as a Dutch organization!
         </button>
 
