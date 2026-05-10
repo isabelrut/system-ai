@@ -333,7 +333,7 @@ img {
 =========================== */
 
 /* Expandable help sections */
-.help-box {
+/* .help-box {
     margin-top: 0.75rem;
     padding: 0.85rem 1rem;
     background: #f8fafc;
@@ -354,25 +354,25 @@ img {
 
 .help-box summary::before {
     content: "ⓘ ";
-}
+} */
 
 /* Images inside help sections */
-.help-image {
+/* .help-image {
     width: 100%;
     max-width: 100%;
     margin-top: 1rem;
     border-radius: 6px;
-}
+} */
 
 /* Optional smaller variant */
-.small-image {
+/* .small-image {
     max-width: 400px;
-}
+} */
 
 /* Supporting explanatory text */
-.help-text {
+/* .help-text {
     margin-top: 1rem;
     font-size: 0.95rem;
     line-height: 1.5;
     color: #374151;
-}
+} */
