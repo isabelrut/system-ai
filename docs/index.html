@@ -101,6 +101,16 @@
                 <option value="five">5: Competitive advantage</option>
             </select> 
         </div>
+
+        <div class="form-group">
+            <label for="perspective">6. What perspective are you most interested in?</label>
+            <select id="perspective" name="perspective"> 
+                <option value="Business">Business</option>
+                <option value="ICT">ICT Implementation</option>
+                <option value="Sustainability">Sustainability</option>
+            </select> 
+        </div>
+        
         
         <button class="main-button" onclick="submitForm()">
             DISCOVER YOUR REQUIREMENTS<br>TO IMPLEMENT THE DPP
@@ -154,9 +164,10 @@ async function submitForm() {
     const maturity = document.getElementById("maturity").value.trim();
     // const technical = document.getElementById("technical").value.trim();
     const implementation = document.getElementById("implementation").value.trim();
+    const perspective = document.getElementById("perspective").value.trim();
 
     // Basic validation (optional)
-    if (!sector || !size || !role || !maturity || !implementation) {
+    if (!sector || !size || !role || !maturity || !implementation || !perspective) {
         alert("Please fill out all fields.");
         return;
     }
@@ -164,10 +175,11 @@ async function submitForm() {
     // Build prompt text combining all answers
     const prompt = `
 1. Sector: ${sector}
-2. Organization size: ${size}
-3. Organization role in DPP Ecosystem: ${role}
-4. Digital maturity (The digital maturity model starts at incomplete (no digitalization in the company). Next, performed means that a planning has been made. Managed focuses on ensuring existing business processes are digitized through technology. Established means that digital transformation has been done based on existing standard. Predictable seizes those benefits by applying quantitative techniques on real-time data, with data analytics on business processes. Lastly, optimizing focuses on innovation and continuous improvement.): ${maturity} 
-5. Aim of implementation level (with 2: Entity level compliance, 3: Ecosystem level compliance, 4: Value adding, 5: Competitive advantage):  ${implementation}
+2. Size: ${size}
+3. Role: ${role}
+4. Digital maturity: ${maturity} 
+5. Implementation level:  ${implementation}
+6. Perspective: ${perspective}
 `;
 
     // Show a loading indicator
