@@ -309,3 +309,52 @@ img {
 .llm-details strong {
     color: #020059;
 }
+
+/* ===========================
+   Help boxes for user input
+=========================== */
+
+/* Expandable help sections */
+.help-box {
+    margin-top: 0.75rem;
+    padding: 0.85rem 1rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+}
+
+.help-box summary {
+    cursor: pointer;
+    font-weight: 500;
+    color: #2563eb;
+    list-style: none;
+}
+
+.help-box summary::-webkit-details-marker {
+    display: none;
+}
+
+.help-box summary::before {
+    content: "ⓘ ";
+}
+
+/* Images inside help sections */
+.help-image {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 1rem;
+    border-radius: 6px;
+}
+
+/* Optional smaller variant */
+.small-image {
+    max-width: 400px;
+}
+
+/* Supporting explanatory text */
+.help-text {
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #374151;
+}

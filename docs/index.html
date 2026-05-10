@@ -149,31 +149,12 @@
                 </a>?
             </label>
 
-            <div class="radio-group">
-                <label class="radio-option">
-                    <input type="radio" name="size" value="micro">
-                    <span>Micro</span>
-                    <small>&lt;10 employees</small>
-                </label>
-
-                <label class="radio-option">
-                    <input type="radio" name="size" value="small">
-                    <span>Small</span>
-                    <small>&lt;50 employees</small>
-                </label>
-
-                <label class="radio-option">
-                    <input type="radio" name="size" value="medium">
-                    <span>Medium</span>
-                    <small>&lt;250 employees</small>
-                </label>
-
-                <label class="radio-option">
-                    <input type="radio" name="size" value="large">
-                    <span>Large</span>
-                    <small>250+ employees</small>
-                </label>
-            </div>
+            <select id="size" name="size"> 
+                <option value="micro">Micro (<10 employees)</option>
+                <option value="small">Small (<50 employees)</option>
+                <option value="medium">Medium (<250 employees)</option>
+                <option value="large">Large (250+ employees)</option>
+            </select>
 
             <details class="help-box">
                 <summary>View full EU SME classification table</summary>
