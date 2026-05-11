@@ -38,9 +38,6 @@ function buildContext(
 Title:
 ${m.Name || "Unknown"}
 
-Type:
-${m.Doc_Type || "Unknown"}
-
 URL:
 ${m.URL || "Unknown"}
 
@@ -49,9 +46,6 @@ ${m.Date || "Unknown"}
 
 Date in force:
 ${m.Date_In_Force || "Unknown"}
-
-Section:
-${m.section_title || "Unknown"}
 
 Content:
 ${doc}
@@ -155,7 +149,7 @@ ${userInput}
       ],
 
       temperature: 0.3,
-      max_tokens: 1750,
+      max_tokens: 1700,
     });
 
     // Prompt 2
@@ -218,7 +212,7 @@ ${completion1.choices[0].message.content}
       ],
 
       temperature: 0.7,
-      max_tokens: 1750,
+      max_tokens: 1700,
     });
 
     res.json({
