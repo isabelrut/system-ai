@@ -1,113 +1,283 @@
+// server.js
+import express from "express";
+import Groq from "groq-sdk";
 import dotenv from "dotenv";
+import path from "path";
+import { fileURLToPath } from "url";
+import cors from "cors";
+import fs from "fs";
+
 dotenv.config();
 
-import express from "express";
-import cors from "cors";
-
-import Groq from "groq-sdk";
-
-import { retrieveContext }
-  from "./retrieve.js";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
-
 const groq = new Groq({
-  apiKey:
-    process.env.GROQ_API_KEY,
+  apiKey: process.env.GROQ_API_KEY, // Only for LLM completions
 });
 
+// Enable CORS for frontend
 app.use(cors({
-  origin:
-    "https://isabelrut.github.io",
+  origin: "https://isabelrut.github.io",
 }));
 
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "docs")));
 
-function buildContext(
-  docs,
-  metadata
-) {
+// ------------------------------
+// Load JSON data
+// ------------------------------
+const DATA_PATH = path.join(__dirname, "rag_chunks.json");
+let chunks = [];
 
-  return docs.map((doc, i) => {
-
-    const m = metadata[i];
-
-    return `
-[Source ${i + 1}]
-
-Title:
-${m.Name || "Unknown"}
-
-Type:
-${m.Doc_Type || "Unknown"}
-
-URL:
-${m.URL || "Unknown"}
-
-Date published:
-${m.Date || "Unknown"}
-
-Date in force:
-${m.Date_In_Force || "Unknown"}
-
-Section:
-${m.section_title || "Unknown"}
-
-Content:
-${doc}
-`;
-  }).join("\n\n");
+try {
+  const raw = fs.readFileSync(DATA_PATH, "utf-8");
+  chunks = JSON.parse(raw);
+  console.log(`Loaded ${chunks.length} chunks from JSON`);
+} catch (err) {
+  console.error("Failed to load chunks:", err);
 }
 
-app.post(
-  "/generate",
-  async (req, res) => {
+// ------------------------------
+// Stopwords (basic)
+// ------------------------------
+const STOPWORDS = ["the", "and", "of", "in", "on", "for", "to", "a", "an", "with", "by", "is"];
 
+// ------------------------------
+// Detect sector from query
+// ------------------------------
+function detectSector(query) {
+  const q = query.toLowerCase();
+
+  if (q.includes("batteries")) return "Battery"; 
+  if (q.includes("battery")) return "Battery"; 
+  if (q.includes("textiles")) return "Textile"; 
+  if (q.includes("textile")) return "Textile"; 
+  if (q.includes("apparel")) return "Textile"; 
+  if (q.includes("toys")) return "Toys"; 
+  if (q.includes("toy")) return "Toys"; 
+  if (q.includes("construction")) return "Construction"; 
+  if (q.includes("iron")) return "Steel"; 
+  if (q.includes("steel")) return "Steel"; 
+
+  return null;
+}
+
+// ------------------------------
+// Check if document is generic
+// ------------------------------
+function isGenericDoc(c) {
+  const name = (c.metadata?.Name || "").toLowerCase();
+
+  return (
+    name.includes("ecodesign for sustainable products regulation") ||
+    name.includes("espr") ||
+    c.metadata?.Tags?.toLowerCase().includes("product")
+  );
+}
+
+// ------------------------------
+// Improved scoring function
+// ------------------------------
+function scoreChunk(chunk, query, sector) {
+  const words = query
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(w => !STOPWORDS.includes(w));
+
+  const text = chunk.text.toLowerCase();
+  const name = (chunk.metadata?.Name || "").toLowerCase();
+  const tags = (chunk.metadata?.Tags || "").toLowerCase();
+  const summary = (chunk.metadata?.Summary || "").toLowerCase();
+
+  const isGeneric =
+    name.includes("ecodesign for sustainable products regulation");
+
+  let score = 0;
+
+  for (const word of words) {
+    if (text.includes(word)) score += word.length > 4 ? 2 : 1;
+
+    // Strong metadata boosts
+    if (name.includes(word)) score += 3;
+    if (tags.includes(word)) score += 4;
+    if (summary.includes(word)) score += 2;
+
+  }
+
+  // Sector boost only for non-generic documents
+  if (
+    sector &&
+    !isGeneric && 
+    tags.includes(sector.toLowerCase())
+  ) {
+    score += 10;
+  }  
+
+  return score;
+}
+
+// ------------------------------
+// Retrieve top chunks
+// ------------------------------
+function retrieveContext(query, docType = null, topK = 4) {
+  if (!chunks.length) return { docs: [], metadata: [] };
+
+  const sector = detectSector(query);
+
+  // Step 1: filter by Doc_Type only (kept optional)
+  let baseCandidates = chunks.filter(c => {
+    if (docType && c.metadata?.Doc_Type !== docType) return false;
+    return true;
+  });
+
+  // Step 2: filter between generic docs and not generic docs
+  let genericPool = baseCandidates.filter(isGenericDoc);
+  let sectorPool = baseCandidates.filter(c => !isGenericDoc(c));
+
+  // Step 2a: try specific sector first
+  let sectorCandidates = sectorPool; 
+  if (sector) {
+    let filtered = sectorPool.filter(c =>
+      (c.metadata?.Tags || "").toLowerCase().includes(sector.toLowerCase())
+    );
+
+    if (filtered.length > 0) {
+      sectorCandidates = filtered;
+    }
+  }
+
+  // Step 2b: include generic text
+  let genericCandidates = genericPool;
+
+  // Step 3: score all candidates
+  function scoreAndRank(candidates) {
+    // score candidates
+    const scored = candidates.map(c => ({
+      text: c.text,
+      metadata: c.metadata,
+      score: scoreChunk(c, query, sector),
+    }));
+
+    // sort descending
+    scored.sort((a, b) => b.score - a.score);
+
+    return scored.filter(c => c.score > 0)
+  }
+
+  const scoredSector = scoreAndRank(sectorCandidates);
+  const scoredGeneric = scoreAndRank(genericCandidates);
+
+  // Step 4: take top from each 
+  const kSector = Math.ceil(topK / 2);
+  const kGeneric = Math.floor(topK / 2);
+
+  let topChunks = [
+    ...scoredSector.slice(0, kSector),
+    ...scoredGeneric.slice(0, kGeneric),
+  ];
+  
+  // Fallback if one side is empty
+  if (!topChunks.length) {
+    const allScored = scoreAndRank(baseCandidates);
+    topChunks = allScored.slice(0, topK);
+  }
+
+  return {
+    docs: topChunks.map(c => c.text),
+    metadata: topChunks.map(c => ({
+      ...c.metadata,
+      _isGeneric: isGenericDoc(c),
+    })),
+  };
+}
+
+// ------------------------------
+// /generate endpoint
+// ------------------------------
+app.post("/generate", async (req, res) => {
   try {
 
-    const {
-      input: userInput
-    } = req.body;
+    const { input: userInput, docType } = req.body;
 
-    // Published regulations
-    const {
-      docs: docsA,
-      metadata: metadataA
-    } = await retrieveContext(
-      userInput,
-      "regulation",
-      6
-    );
+    function buildContext(docs, metadata, sourceCategory = "must") {
+      const prefix = sourceCategory === "other" ? "O" : "M";
 
-    // Full context
-    const {
-      docs: docsB,
-      metadata: metadataB
-    } = await retrieveContext(
-      userInput,
-      null,
-      6
-    );
+      return docs.map((doc, i) => {
+        const m = metadata[i];
+        const sourceLabel = `${prefix}${i + 1}`;
 
-    const contextA =
-      buildContext(
-        docsA,
-        metadataA
-      );
+        return `
+    [Source ${sourceLabel}]
+    Title: ${m.Name || `Document ${i + 1}`}
+    Type: ${m.Doc_Type || "unknown"}
+    URL: ${m.URL || "unknown"}
+    Section: ${m.section_title || "unknown"}
 
-    const contextB =
-      buildContext(
-        docsB,
-        metadataB
-      );
+    Content:
+    ${doc}
+    `;
+      }).join("\n\n");
+    }
 
-    // Prompt 1
-    const completion1 =
-      await groq.chat.completions.create({
+    function niceFormatContext(docs, metadata, sourceCategory = "must") {
+      // Decide prefix based on category
+      const prefix = sourceCategory === "other" ? "O" : "M";
 
-      model:
-        "qwen/qwen3-32b",
+      return `
+        <ul>
+          ${docs.map((doc, i) => {
+            const m = metadata[i];
 
+            const title = m.Name || `Document ${i + 1}`;
+            const type = m.Doc_Type || "unknown";
+            const url = m.URL || "unknown";
+            const section = m.section_title || "unknown";
+
+            const sourceLabel = `${prefix}${i + 1}`;
+
+          return `<li> <b>[Source ${sourceLabel}] Title: ${title}</b> | <i>URL:</i> <a href="${url}">${url}</a> | <i>Section:</i> ${section} </li>`;
+          }).join("")}
+        </ul>
+      `;    
+    }
+
+    // ----------------
+    // 1a. Get relevant published regulations documents
+    // ----------------
+
+    const { docs: docs_a, metadata: metadata_a } =  retrieveContext(userInput, "commission", 6);
+
+    const context_a = docs_a.length ? buildContext(docs_a, metadata_a, "must") : "No relevant published regulations found.";
+
+    const nice_context_a = docs_a.length ? niceFormatContext(docs_a, metadata_a, "must") : "No nice format allowed for a.";
+
+    console.log("Published regulations used:", metadata_a.map(m => m.URL));
+
+    // ----------------
+    // 1b. Get all relevant documents
+    // ----------------
+
+    const { docs: docs_b, metadata: metadata_b } =  retrieveContext(userInput, "", 6);
+
+    const context_b = docs_b.length ? buildContext(docs_b, metadata_b, "other") : "No relevant documents found.";
+
+    const nice_context_b = docs_b.length ? niceFormatContext(docs_b, metadata_b, "other") : "No nice format allowed for b.";
+
+    console.log("Documents used:", metadata_b.map(m => m.URL));
+
+    // Some delay due to token space
+    await new Promise(resolve => setTimeout(resolve, 60000));
+
+    // ----------------
+    // 2a. Do first prompt to get must-haves only using published regulations documents
+    // ----------------
+
+    const completion1 = await groq.chat.completions.create({
+      // model: "openai/gpt-oss-120b",
+      // model="meta-llama/llama-4-scout-17b-16e-instruct",
+      model: "qwen/qwen3-32b",
       messages: [
         {
           role: "system",
@@ -144,31 +314,30 @@ app.post(
         {
           role: "user",
           content:
-`
-Context:
-${contextA}
-
-User:
-${userInput}
-`
-        }
+            `Context from EU documents:\n${context_a}\n\nUser information:\n${userInput}`,
+        },
       ],
-
-      temperature: 0.3,
-      max_tokens: 1750,
+      temperature : 0.3, 
+      reasoning_effort : "none",
+      max_tokens : 1750, 
     });
 
-    // Prompt 2
-    const completion2 =
-      await groq.chat.completions.create({
+    // Some delay due to token space
+    await new Promise(resolve => setTimeout(resolve, 60000));
 
-      model:
-        "qwen/qwen3-32b",
+    // ----------------
+    // 2b. Do second prompt to get should/could/won't-haves using all documents
+    // ----------------
 
+    const completion2 = await groq.chat.completions.create({
+      // model: "openai/gpt-oss-120b",
+      // model="meta-llama/llama-4-scout-17b-16e-instruct",
+      model: "qwen/qwen3-32b",
       messages: [
         {
           role: "system",
           content:
+
             `
             You are an expert at requirements engineering, who is hired to adapt EU regulations to specific organizations. Assume that the user has a limited ICT or DPP background and that the information should be accessible and understandable to the user.
             Give a set of requirements that the user should or could do to comply to the Digital Product Passport regulations, in which you adapt to the users' sector, role, influence (company size), digital maturity level and compliance interest, in which the customization to the user input is your most important goal. 
@@ -204,57 +373,34 @@ ${userInput}
         {
           role: "user",
           content:
-`
-Context:
-${contextB}
-
-User:
-${userInput}
-
-Must requirements:
-${completion1.choices[0].message.content}
-`
-        }
+            `Context from DPP-related documents:\n${context_b}\n\nUser information:\n${userInput}\n\nMust-requirements:\n${completion1.choices[0].message.content}`,
+        },
       ],
-
-      temperature: 0.7,
-      max_tokens: 1750,
+      temperature : 0.9, 
+      reasoning_effort : "none",
+      max_tokens : 1750, 
     });
 
+    // 3. Output the first and second prompt together
     res.json({
-
-      commission_only_output:
-        completion1
-          .choices[0]
-          .message.content,
-
-      full_context_output:
-        completion2
-          .choices[0]
-          .message.content,
-
+      commission_only_output: completion1.choices[0].message.content,
+      full_context_output: completion2.choices[0].message.content,
       sources: {
-        commission: metadataA,
-        full: metadataB,
+        commission: nice_context_a,
+        full: nice_context_b
       }
     });
 
-  } catch (err) {
-
-    console.error(err);
-
-    res.status(500).json({
-      error: "Server error"
-    });
+  } catch (error) {
+    console.error("ERROR in /generate:", error);
+    res.status(500).json({ error: "Something went wrong" });
   }
 });
 
-const PORT =
-  process.env.PORT || 3000;
-
+// ------------------------------
+// Start server
+// ------------------------------
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-
-  console.log(
-    `Server running on ${PORT}`
-  );
+  console.log(`Server running on port ${PORT}`);
 });
