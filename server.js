@@ -23,6 +23,17 @@ app.use(cors({
 
 app.use(express.json());
 
+function excelDateToJS(value) {
+  if (!value || typeof value !== "number") return value;
+
+  const utc_days = Math.floor(value - 25569);
+  const utc_value = utc_days * 86400;
+
+  return new Date(utc_value * 1000)
+    .toISOString()
+    .split("T")[0];
+}
+
 function buildContext(
   docs,
   metadata
@@ -42,14 +53,58 @@ URL:
 ${m.URL || "Unknown"}
 
 Date published:
-${m.Date || "Unknown"}
+${excelDateToJS(m.Date) || "Unknown"}
 
 Date in force:
-${m.Date_In_Force || "Unknown"}
+${excelDateToJS(m.Date_In_Force) || "Unknown"}
 
 Content:
 ${doc}
 `;
+  }).join("\n\n");
+}
+
+// Helper: escape HTML entities to prevent injection
+function escapeHTML(str) {
+    return str.replace(/&/g, "&amp;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;");
+}
+
+function buildHTML(docs, metadata) {
+  return docs.map((doc, i) => {
+    const m = metadata[i];
+
+    return `
+<div class="source-card">
+
+  <div class="source-header">
+    <strong class="source-title">
+      ${escapeHTML(m.Name || "Unknown")}
+    </strong>
+  </div>
+
+  <div class="source-meta">
+    <div>
+      <span class="label">URL:</span>
+      <a href="${m.URL || "#"}" target="_blank" rel="noopener noreferrer">
+        ${escapeHTML(m.URL || "Unknown")}
+      </a>
+    </div>
+
+    <div>
+      <span class="label">Date published:</span>
+      ${escapeHTML(String(excelDateToJS(m.Date) || "Unknown"))}
+    </div>
+
+    <div>
+      <span class="label">Date in force:</span>
+      ${escapeHTML(String(excelDateToJS(m.Date_In_Force) || "Unknown"))}
+    </div>
+  </div>
+
+</div>
+    `;
   }).join("\n\n");
 }
 
@@ -154,6 +209,7 @@ ${userInput}
 
       temperature: 0.3,
       max_tokens: 1700,
+      reasoning_format: "hidden",
     });
 
     // Prompt 2
@@ -217,11 +273,20 @@ ${completion1.choices[0].message.content}
 
       temperature: 0.7,
       max_tokens: 1700,
+      reasoning_format: "hidden",
     });
 
-    console.log("Metadata A to output:", metadataA);
+    const htmlA =
+      buildHTML(
+        docsA,
+        metadataA
+      );
 
-    console.log("Metadata B to output:", metadataB);
+    const htmlB =
+      buildHTML(
+        docsB,
+        metadataB
+      );
 
     res.json({
 
@@ -236,8 +301,8 @@ ${completion1.choices[0].message.content}
           .message.content,
 
       sources: {
-        commission: metadataA,
-        full: metadataB,
+        commission: htmlA,
+        full: htmlB,
       }
     });
 
