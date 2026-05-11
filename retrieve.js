@@ -9,8 +9,13 @@ export async function retrieveContext(
   topK = 6
 ) {
 
+  const enrichedQuery = `
+  Give sources that contain relevant information for Digital Product Passport implementation based on the following user input.
+
+  `+ query;
+
   const embedding =
-    await embedText(query);
+    await embedText(enrichedQuery);
 
   let sql = `
     SELECT
@@ -34,7 +39,7 @@ export async function retrieveContext(
   }
 
   sql += `
-    ORDER BY distance
+  ORDER BY embedding <=> $1 ASC NULLS LAST
     LIMIT ${topK}
   `;
 
