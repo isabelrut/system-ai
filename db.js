@@ -6,26 +6,21 @@ import pgvector from "pgvector/pg";
 
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  ssl: { rejectUnauthorized: false },
 });
 
 async function initDB() {
   try {
     console.log("Initializing DB...");
 
-    // 1. Enable extension
-    await pool.query(`
-      CREATE EXTENSION IF NOT EXISTS vector;
-    `);
+    await pool.query(`CREATE EXTENSION IF NOT EXISTS vector;`);
+    console.log("pgvector enabled");
 
-    console.log("pgvector enabled (or already exists)");
+    // IMPORTANT FIX: use a real client
+    const client = await pool.connect();
+    await pgvector.registerType(client);
+    client.release();
 
-    // 2. Register type AFTER extension exists
-    await pgvector.registerType(pool);
-
-    // 3. Create table
     await pool.query(`
       CREATE TABLE IF NOT EXISTS documents (
         id SERIAL PRIMARY KEY,
@@ -35,7 +30,6 @@ async function initDB() {
       );
     `);
 
-    // 4. Create index
     await pool.query(`
       CREATE INDEX IF NOT EXISTS documents_embedding_idx
       ON documents
