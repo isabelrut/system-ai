@@ -95,6 +95,10 @@ app.post(
         metadataB
       );
 
+    console.log("Context A to output:", contextA);
+
+    console.log("Context B to output:", contextB);
+
     // Prompt 1
     const completion1 =
       await groq.chat.completions.create({
@@ -128,10 +132,10 @@ app.post(
             -	ID (should be "ID X" with X as a number and first is X=1, allows for quick references);
             -	Statement (actual requirement): not explicit structure: [Condition] + [Subject] + “must” + [Action] + [Constraint] (with must from the MoSCoW method, that shows difference between requirements and recommendations);
             -	Risk (those existing up to the point of taking action);  
-            -	Source (be compliance oriented, so fully include the source (i.e. the relevant regulation) and the quote); 
+            -	Source (be compliance oriented, so fully include the source (i.e. the relevant regulation), the link, and the quote); 
             -	Details (should contain relevant information based on the perspective, e.g. financial details and business benefits for business, or technology implementation and validation criteria for ICT).
             Don't use tables in your response, not even for illustration. The current date is ` + new Date() + `, which can be used when considering the regulations that are in-force. 
-            Do not start your response with any prefacing text, immediately start with your first requirement. Do not include any headers between the requirements. Do not end your response with any suggestions for other ways in which you can help.
+            It is very important that you do not start your response with any prefacing text, immediately start with your first requirement. Do not include any headers between the requirements. Do not end your response with any suggestions for other ways in which you can help.
             REMEMBER: The most important goal of this request is to customize to all user input!
             `
         },
@@ -188,10 +192,10 @@ ${userInput}
             -	ID (should be "ID X" with X as a number and numbering continues from the must requirements, allows for quick references);
             -	Statement (actual requirement): not explicit structure: [Condition] + [Subject] + “should/could” + [Action] + [Constraint] (with should/could from the MoSCoW method, that shows difference between requirements and recommendations, but you do not have to use all verbs);
             -	Risk (those existing up to the point of taking action);  
-            -	Source (be compliance oriented, so fully include the source (i.e. the relevant regulation) and the quote); 
+            -	Source (be compliance oriented, so fully include the source (i.e. the relevant regulation), the link, and the quote); 
             -	Details (should contain relevant information based on the perspective, e.g. financial details and business benefits for business, or technology implementation and validation criteria for ICT).
             Don't use tables in your response, not even for illustration. The current date is ` + new Date() + `, which can be used when considering the regulations that are in-force. 
-            Do not start your response with any prefacing text, immediately start with your first requirement. Do not include any headers between the requirements, like "Should requirements". Do not end your response with any suggestions for other ways in which you can help.
+            It is very important that you do not start your response with any prefacing text, immediately start with your first requirement. Do not include any headers between the requirements, like "Should requirements". Do not end your response with any suggestions for other ways in which you can help.
             REMEMBER: The most important goal of this request is to customize to all user input!
             `
         },
@@ -214,6 +218,10 @@ ${completion1.choices[0].message.content}
       temperature: 0.7,
       max_tokens: 1700,
     });
+
+    console.log("Metadata A to output:", metadataA);
+
+    console.log("Metadata B to output:", metadataB);
 
     res.json({
 
