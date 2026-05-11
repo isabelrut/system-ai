@@ -76,7 +76,7 @@ app.post(
     } = await retrieveContext(
       userInput,
       "regulation",
-      6
+      4
     );
 
     // Full context
@@ -86,7 +86,7 @@ app.post(
     } = await retrieveContext(
       userInput,
       null,
-      6
+      4
     );
 
     const contextA =
