@@ -586,18 +586,18 @@ function showCopyButtonIfNeeded() {
     const copyButton = document.getElementById("copy-button");
     const infoButtonOne = document.getElementById("info-button-1");
     const infoButtonTwo = document.getElementById("info-button-2");
-    const disclaimer = document.getElementById("disclaimer");
+    // const disclaimer = document.getElementById("disclaimer");
 
     if (outputDiv.textContent.trim() !== "") {
         copyButton.style.display = "inline-block";
         infoButtonOne.style.display = "inline-block";
         infoButtonTwo.style.display = "inline-block";
-        disclaimer.style.display = "inline-block";
+        // disclaimer.style.display = "inline-block";
     } else {
         copyButton.style.display = "none";
         infoButtonOne.style.display = "none";
         infoButtonTwo.style.display = "none";
-        disclaimer.style.display = "none";
+        // disclaimer.style.display = "none";
     }
 }
 
