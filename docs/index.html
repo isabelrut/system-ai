@@ -208,10 +208,10 @@
 
             <select id="role" name="role">
                 <option value="">Select a role</option>
-                <option value="Economic operator">Economic operator</option>
+                <option value="Economic operator">Manufacturer or Importer</option>
                 <option value="Supplier">Supplier</option>
                 <option value="Retailer">Retailer</option>
-                <option value="Independent operator">Independent operator</option>
+                <option value="Independent operator">Repairer or Waste Manager</option>
             </select>
 
             <details class="help-box">
@@ -229,21 +229,22 @@
         <!-- 4. Digital maturity -->
         <div class="form-group">
             <label for="maturity">
-                4. What is the
+                <!-- 4. What is the
                 <a href="https://www.mdpi.com/2504-2289/7/1/17" target="_blank">
                     digital maturity level
                 </a>
-                of your organization?
+                of your organization? -->
+                How far along are you in your digitalization journey?
             </label>
 
             <select id="maturity" name="maturity">
                 <option value="">Select maturity level</option>
-                <option value="incomplete">Incomplete</option>
-                <option value="performed">Performed</option>
-                <option value="managed">Managed</option>
-                <option value="established">Established</option>
-                <option value="predictable">Predictable</option>
-                <option value="optimizing">Optimizing</option>
+                <option value="incomplete">Digital tools are used in separate areas, but there is no clear organization-wide approach.</option>
+                <option value="performed">The organization has started planning and discussing how to improve digital ways of working.</option>
+                <option value="managed">Important daily processes are supported by digital systems and tools.</option>
+                <option value="established">Digital ways of working are clear, consistent, and followed across the organization.</option>
+                <option value="predictable">The organization uses data and real-time insights to measure performance and make improvements.</option>
+                <option value="optimizing">The organization continuously improves, innovates, and adapts using digital technology and data.</option>
             </select>
 
             <details class="help-box">
@@ -275,10 +276,10 @@
 
             <select id="implementation" name="implementation">
                 <option value="">Select implementation level</option>
-                <option value="two">2: Entity level compliance</option>
-                <option value="three">3: Ecosystem level compliance</option>
-                <option value="four">4: Value adding</option>
-                <option value="five">5: Competitive advantage</option>
+                <option value="two">Accept DPP in processes</option>
+                <option value="three">Include DPP with supply-chain support</option>
+                <option value="four">Leverage the DPP in product proposition</option>
+                <option value="five">Be a key player with the DPP</option>
             </select>
 
             <details class="help-box">
@@ -301,9 +302,9 @@
 
             <select id="perspective" name="perspective">
                 <option value="">Select a perspective</option>
-                <option value="Business">Business</option>
+                <option value="Business">Business Impact</option>
                 <option value="ICT">ICT Implementation</option>
-                <option value="Sustainability">Sustainability</option>
+                <option value="Sustainability">Sustainability Benefits</option>
             </select>
         </div>
         
@@ -341,7 +342,7 @@
          -->
     </div>
     
-    <iframe width="640px" height="480px" src="https://forms.office.com/Pages/ResponsePage.aspx?id=ujzz4PV5YkaC5w5TbNoSMky758Gqz3BGmiRiauivYCNUMVpMWENLSFlMUklOWURYSjYwRUVRSE5OUy4u&embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border: none; max-width:100%; max-height:100vh" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
+    <!-- <iframe width="640px" height="480px" src="https://forms.office.com/Pages/ResponsePage.aspx?id=ujzz4PV5YkaC5w5TbNoSMky758Gqz3BGmiRiauivYCNUMVpMWENLSFlMUklOWURYSjYwRUVRSE5OUy4u&embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border: none; max-width:100%; max-height:100vh" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe> -->
 
     <div class="footer">
         <p style="color:grey">Version 5.0</p> 
@@ -354,6 +355,124 @@
 
 
 <script>
+
+let loadingInterval = null; 
+
+function startFakeLoading() {
+
+    const outputDiv = document.getElementById("llm-output");
+
+    // Initial loading UI
+    outputDiv.innerHTML = `
+        <div id="loading-status" style="font-weight:bold; margin-bottom:8px;">
+            Starting generation...
+        </div>
+
+        <div style="
+            width:100%;
+            height:20px;
+            background:#ddd;
+            border-radius:10px;
+            overflow:hidden;
+            margin-bottom:8px;
+        ">
+            <div id="progress-bar" style="
+                width:0%;
+                height:100%;
+                background:#4CAF50;
+                transition:width 1s ease;
+            "></div>
+        </div>
+
+        <div id="time-remaining" style="color:#666; font-size:14px;">
+            Approximately 90 seconds remaining
+        </div>
+    `;
+
+    const progressBar = document.getElementById("progress-bar");
+    const statusDiv = document.getElementById("loading-status");
+    const timeDiv = document.getElementById("time-remaining");
+
+    let progress = 0;
+
+    // Fake total duration
+    const totalDuration = 90;
+
+    const messages = [
+        "Analyzing your input...",
+        "Generating custom requirements...",
+        "Reviewing implementation details...",
+        "Building requirement structure...",
+        "Finalizing output..."
+    ];
+
+    loadingInterval = setInterval(() => {
+
+        // More realistic slowing progress
+        if (progress < 50) {
+            progress += Math.random() * 6;
+        }
+        else if (progress < 80) {
+            progress += Math.random() * 3;
+        }
+        else if (progress < 95) {
+            progress += Math.random() * 1;
+        }
+
+        // Never exceed 95% before actual completion
+        progress = Math.min(progress, 95);
+
+        progressBar.style.width = progress + "%";
+
+        // Rotate messages
+        if (progress < 20) {
+            statusDiv.innerHTML = messages[0];
+        }
+        else if (progress < 40) {
+            statusDiv.innerHTML = messages[1];
+        }
+        else if (progress < 60) {
+            statusDiv.innerHTML = messages[2];
+        }
+        else if (progress < 80) {
+            statusDiv.innerHTML = messages[3];
+        }
+        else {
+            statusDiv.innerHTML = messages[4];
+        }
+
+        // Fake remaining time
+        const remaining = Math.max(
+            5,
+            Math.ceil(totalDuration * (1 - progress / 100))
+        );
+
+        timeDiv.innerHTML = `Approximately ${remaining} seconds remaining`;
+
+    }, 1000);
+}
+
+function stopFakeLoading() {
+
+    clearInterval(loadingInterval);
+
+    const progressBar = document.getElementById("progress-bar");
+    const statusDiv = document.getElementById("loading-status");
+    const timeDiv = document.getElementById("time-remaining");
+
+    if (progressBar) {
+        progressBar.style.width = "100%";
+    }
+
+    if (statusDiv) {
+        statusDiv.innerHTML = "Completed!";
+    }
+
+    if (timeDiv) {
+        timeDiv.innerHTML = "";
+    }
+}
+
 async function submitForm() {
     // Gather input values
     const sector = document.getElementById("sector").value.trim();
@@ -381,8 +500,10 @@ async function submitForm() {
 `;
 
     // Show a loading indicator
+    startFakeLoading();
+
     const outputDiv = document.getElementById("llm-output");
-    outputDiv.innerHTML = "Generating custom requirements...";
+    // outputDiv.innerHTML = "Generating custom requirements...";
 
     // Call backend
     try {
@@ -393,6 +514,8 @@ async function submitForm() {
         });
 
         const data = await response.json();
+
+        stopFakeLoading();
 
         if (data.error) {
             outputDiv.innerHTML = "Error: " + escapeHTML(data.error);
@@ -413,6 +536,9 @@ async function submitForm() {
             showCopyButtonIfNeeded();
         }
     } catch (err) {
+
+        stopFakeLoading();
+
         outputDiv.innerHTML = "Request failed: " + escapeHTML(err.message);
     }
 }
