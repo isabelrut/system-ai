@@ -89,7 +89,12 @@ export async function retrieveContext(
         (_, value) => `6. Perspective: ${perspectiveDescriptions[value.trim()] || value}`
     );
 
-  console.log(enrichedQuery)
+  enrichedQuery = `
+  Based on the user input below, find relevant documents on the Digital Product Passport, as part of the Ecodesign Requirements for Sustainable Products. If you cannot find any relevant documents, then use the ESPR / di-07. 
+  
+  ` + enrichedQuery;
+
+  console.log(enrichedQuery);
 
   const embedding =
     await embedText(enrichedQuery);
