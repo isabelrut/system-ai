@@ -208,7 +208,7 @@ ${userInput}
       ],
 
       temperature: 0.3,
-      max_tokens: 1700,
+      max_tokens: 1600,
       reasoning_effort: "none",
     });
 
@@ -272,7 +272,7 @@ ${completion1.choices[0].message.content}
       ],
 
       temperature: 0.7,
-      max_tokens: 1700,
+      max_tokens: 1600,
       reasoning_effort: "none",
     });
 
