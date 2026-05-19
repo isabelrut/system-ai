@@ -71,7 +71,7 @@ export async function retrieveContext(
   topK = 6
 ) {
 
-  const enrichedQuery = query
+  let enrichedQuery = query
     .replace(
         /3\. Role: (.*)/,
         (_, value) => `3. Role: ${roleDescriptions[value.trim()] || value}`
