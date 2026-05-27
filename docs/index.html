@@ -687,10 +687,13 @@ function parseFields(block) {
         const line = rawLine.trim();
         if (!line) continue;
 
-        // ID line
-        const idMatch = line.match(/^ID\s*\d+\s*:.*$/i);
+        // ID line (clean "Title:" if present)
+        const idMatch = line.match(/^ID\s*\d+\s*:\s*(.*)$/i);
         if (idMatch) {
-            data.idLine = idMatch[0].trim();
+            data.idLine = idMatch[1]
+                .replace(/^Title\s*:\s*/i, "") // <-- key fix
+                .trim();
+
             currentKey = null;
             continue;
         }
