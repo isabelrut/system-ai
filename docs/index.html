@@ -154,7 +154,7 @@
                     digital maturity level
                 </a>
                 of your organization? -->
-                How far along are you in your digitalization journey?
+                4. How far along are you in your digitalization journey?
             </label>
 
             <select id="maturity" name="maturity">
@@ -550,6 +550,8 @@ function addCollapsibles(text) {
 
         const idLineMatch = item.match(/^\s*ID\s*\d+\s*:.*$/m);
         const idLine = idLineMatch ? idLineMatch[0].trim() : "Unknown";
+
+        console.log(escapeHTML(idLine));
 
         const statement = extractField(item, "Statement");
         const risk = extractField(item, "Risk");

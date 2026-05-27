@@ -401,6 +401,8 @@ ${completion1.choices[0].message.content}
         metadataA
       );
 
+    console.log("We will output the following for the first source date:"  + htmlDate); 
+
     res.json({
 
       commission_only_output:
