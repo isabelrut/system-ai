@@ -687,17 +687,22 @@ function parseFields(block) {
         const line = rawLine.trim();
         if (!line) continue;
 
-        // ID line (clean "Title:" if present)
-        const idMatch = line.match(/^ID\s*\d+\s*:\s*(.*)$/i);
+        const idMatch = line.match(/^(ID\s*\d+\s*:\s*)(.*)$/i);
+
         if (idMatch) {
-            data.idLine = idMatch[1]
-                .replace(/^Title\s*:\s*/i, "") // <-- key fix
+            const prefix = idMatch[1];
+            let content = idMatch[2] || "";
+
+            content = content
+                .replace(/^\s*Title\s*:\s*/i, "")
                 .trim();
+
+            data.idLine = (prefix + content).trim();
 
             currentKey = null;
             continue;
         }
-
+        
         // Field headers
         const fieldMatch = line.match(/^(Statement|Risk|Source|Details)\s*:\s*(.*)$/i);
         if (fieldMatch) {
