@@ -531,30 +531,28 @@ function addCollapsibles(text) {
 
     text = text.replace(/\r\n/g, "\n");
 
-    const items = text.split(/(?=\b(?:ID|D)\s+\d+)/g);
-
-    function extractField(block, fieldName) {
-        const regex = new RegExp(
-            fieldName + ":\\s*([\\s\\S]*?)(?=\\n[A-Z][^:]+:|$)",
-            "i"
-        );
-        const match = block.match(regex);
-        return match ? match[1].trim() : "";
-    }
+    const items = text.split(/(?=\b(?:ID|D)\s*\d+\s*:)/g);
 
     return items.map(item => {
         if (!item.trim()) return "";
 
-        // const idMatch = item.match(/\b(?:ID|D)\s+\d+/);
-        // const id = idMatch ? idMatch[0] : "Unknown";
+        const parsed = parseFields(item);
 
-        const idLineMatch = item.match(/^\s*ID\s*\d+\s*:.*$/m);
-        const idLine = idLineMatch ? idLineMatch[0].trim() : "Unknown";
+        const idLine = parsed.idLine || "Unknown";
+        const statement = (parsed.statement || "").trim();
+        const risk = (parsed.risk || "").trim();
 
-        console.log(escapeHTML(idLine));
+        let hidden = [
+            parsed.source ? `Source: ${parsed.source}` : "",
+            parsed.details ? `Details: ${parsed.details}` : "",
+            parsed.other.join("\n")
+        ]
+            .filter(Boolean)
+            .join("\n\n");
 
-        const statement = extractField(item, "Statement");
-        const risk = extractField(item, "Risk");
+        hidden = cleanHiddenText(hidden)
+            .replace(/\n\s*\n\s*\n/g, "\n\n")
+            .trim();
 
         let requirementClass = "requirement-default";
 
@@ -566,24 +564,15 @@ function addCollapsibles(text) {
             requirementClass = "requirement-could";
         }
 
-        let hidden = cleanHiddenText(
-            item
-                .replace(/\b(?:ID|D)\s+\d+/, "")
-                .replace(/Statement:[\s\S]*?(?=\n[A-Z][^:]+:|$)/i, "")
-                .replace(/Risk:[\s\S]*?(?=\n[A-Z][^:]+:|$)/i, "")
-        );
-
-        hidden = hidden
-            .replace(/\n\s*\n\s*\n/g, "\n\n") // collapse excessive gaps
-            .trim();
-
         return `
             <details class="llm-item ${requirementClass}">
                 <summary class="llm-summary">
                     <span class="llm-id"><strong>${escapeHTML(idLine)}</strong></span>
+
                     <span class="llm-statement">
                         <strong>Statement:</strong> ${escapeHTML(statement)}
                     </span>
+
                     <span class="llm-risk">
                         <strong>Risk:</strong> ${escapeHTML(risk)}
                     </span>
@@ -595,6 +584,125 @@ function addCollapsibles(text) {
             </details>
         `;
     }).join("");
+}
+
+// function addCollapsibles(text) {
+
+//     text = text.replace(/\r\n/g, "\n");
+
+//     const items = text.split(/(?=\b(?:ID|D)\s+\d+)/g);
+
+//     function extractField(block, fieldName) {
+//         const regex = new RegExp(
+//             fieldName + ":\\s*([\\s\\S]*?)(?=\\n[A-Z][^:]+:|$)",
+//             "i"
+//         );
+//         const match = block.match(regex);
+//         return match ? match[1].trim() : "";
+//     }
+
+//     return items.map(item => {
+//         if (!item.trim()) return "";
+
+//         // const idMatch = item.match(/\b(?:ID|D)\s+\d+/);
+//         // const id = idMatch ? idMatch[0] : "Unknown";
+
+//         // const idLineMatch = item.match(/^\s*ID\s*\d+\s*:.*$/m);
+//         // const idLine = idLineMatch ? idLineMatch[0].trim() : "Unknown";
+
+//         // console.log("We have an id that is " +escapeHTML(idLine));
+
+//         // const statement = extractField(item, "Statement");
+//         // const risk = extractField(item, "Risk");
+
+//         // console.log("Our statement is " +escapeHTML(statement));
+
+//         const parsed = parseFields(item);
+
+//         const idLine = parsed.idLine || "Unknown";
+//         const statement = parsed.statement || "";
+//         const risk = parsed.risk || "";
+//         const details = parsed.details || "";
+
+//         let requirementClass = "requirement-default";
+
+//         if (/\bmust\b/i.test(statement)) {
+//             requirementClass = "requirement-must";
+//         } else if (/\bshould\b/i.test(statement)) {
+//             requirementClass = "requirement-should";
+//         } else if (/\bcould\b/i.test(statement)) {
+//             requirementClass = "requirement-could";
+//         }
+
+//         let hidden = cleanHiddenText(
+//             item
+//                 .replace(/^\s*ID\s*\d+:\s*.*$/im, "")
+//                 .replace(/^\s*Statement\s*:.*$/im, "")
+//                 .replace(/^\s*Risk\s*:.*$/im, "")
+//                 // .replace(/\b(?:ID|D)\s+\d+/, "")
+//                 // .replace(/Statement:[\s\S]*?(?=\n[A-Z][^:]+:|$)/i, "")
+//                 // .replace(/Risk:[\s\S]*?(?=\n[A-Z][^:]+:|$)/i, "")
+//         );
+
+//         hidden = hidden
+//             .replace(/\n\s*\n\s*\n/g, "\n\n") // collapse excessive gaps
+//             .trim();
+
+//         return `
+//             <details class="llm-item ${requirementClass}">
+//                 <summary class="llm-summary">
+//                     <span class="llm-id"><strong>${escapeHTML(idLine)}</strong></span>
+//                     <span class="llm-statement">
+//                         <strong>Statement:</strong> ${escapeHTML(statement)}
+//                     </span>
+//                     <span class="llm-risk">
+//                         <strong>Risk:</strong> ${escapeHTML(risk)}
+//                     </span>
+//                 </summary>
+
+//                 <div class="llm-details">
+//                     ${formatRawHtml(hidden)}
+//                 </div>
+//             </details>
+//         `;
+//     }).join("");
+// }
+
+function parseFields(block) {
+    const lines = block.split("\n");
+
+    const data = {
+        idLine: "",
+        statement: "",
+        risk: "",
+        details: "",
+        source: ""
+    };
+
+    let currentKey = null;
+
+    for (let line of lines) {
+        const trimmed = line.trim();
+
+        const match = trimmed.match(/^(ID\s*\d+:\s*.*)/i);
+        if (match) {
+            data.idLine = match[1];
+            continue;
+        }
+
+        const fieldMatch = trimmed.match(/^(Statement|Risk|Details|Source)\s*:\s*(.*)$/i);
+        if (fieldMatch) {
+            currentKey = fieldMatch[1].toLowerCase();
+            data[currentKey] = fieldMatch[2] || "";
+            continue;
+        }
+
+        if (currentKey && trimmed) {
+            data[currentKey] += " " + trimmed;
+        }
+    }
+
+    return data;
 }
 
 // Helper: escape HTML entities to prevent injection
