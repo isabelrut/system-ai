@@ -545,7 +545,7 @@ function addCollapsibles(text) {
         let hidden = [
             parsed.source ? `Source: ${parsed.source}` : "",
             parsed.details ? `Details: ${parsed.details}` : "",
-            parsed.other.join("\n")
+            (parsed.other || []).join("\n")
         ]
             .filter(Boolean)
             .join("\n\n");
@@ -668,6 +668,7 @@ function addCollapsibles(text) {
 //     }).join("");
 // }
 
+// Robust block parser for LLM output
 function parseFields(block) {
     const lines = block.split("\n");
 
@@ -675,30 +676,38 @@ function parseFields(block) {
         idLine: "",
         statement: "",
         risk: "",
+        source: "",
         details: "",
-        source: ""
+        other: []
     };
 
     let currentKey = null;
 
-    for (let line of lines) {
-        const trimmed = line.trim();
+    for (let rawLine of lines) {
+        const line = rawLine.trim();
+        if (!line) continue;
 
-        const match = trimmed.match(/^(ID\s*\d+:\s*.*)/i);
-        if (match) {
-            data.idLine = match[1];
+        // ID line
+        const idMatch = line.match(/^ID\s*\d+\s*:.*$/i);
+        if (idMatch) {
+            data.idLine = idMatch[0].trim();
+            currentKey = null;
             continue;
         }
 
-        const fieldMatch = trimmed.match(/^(Statement|Risk|Details|Source)\s*:\s*(.*)$/i);
+        // Field headers
+        const fieldMatch = line.match(/^(Statement|Risk|Source|Details)\s*:\s*(.*)$/i);
         if (fieldMatch) {
             currentKey = fieldMatch[1].toLowerCase();
             data[currentKey] = fieldMatch[2] || "";
             continue;
         }
 
-        if (currentKey && trimmed) {
-            data[currentKey] += " " + trimmed;
+        // Multi-line continuation support
+        if (currentKey) {
+            data[currentKey] += " " + line;
+        } else {
+            data.other.push(line);
         }
     }
 
