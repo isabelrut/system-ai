@@ -140,6 +140,22 @@ input, textarea, select {
   opacity: 0.9;
 }
 
+.sources-button {
+  margin-top: 0.75rem;
+  background-color: #020059;
+  color: white;
+  border: none;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.sources-button:hover {
+  opacity: 0.9;
+}
+
 /* ===========================
    LLM Output
 =========================== */
@@ -251,7 +267,7 @@ img {
 .llm-item summary.llm-summary {
     background: #41A765;
     color: #ffffff;
-    padding: 12px 40px 12px 12px; /* space for arrow */
+    padding: 12px 12px 12px 40px;
     cursor: pointer;
     font-size: 16px;
     line-height: 1.6;
@@ -264,18 +280,18 @@ img {
     display: none;
 }
 
-/* Custom arrow */
-.llm-item summary::after {
-    content: "▼";
+/* Custom arrow links */
+.llm-item summary::before {
+    content: "▶";
     position: absolute;
-    right: 12px;
+    left: 12px;
     top: 14px;
     transition: transform 0.2s ease;
 }
 
-/* Rotate arrow when open */
-.llm-item[open] summary::after {
-    transform: rotate(180deg);
+/* Pijltje omlaag wanneer open */
+.llm-item[open] summary::before {
+    transform: rotate(90deg);
 }
 
 /* Layout inside summary */
@@ -326,6 +342,50 @@ img {
 .requirement-could {
     background-color: #fffde7;
     border-left: 6px solid #fbc02d;
+}
+
+/* ===========================
+   Legend
+=========================== */
+
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin: 20px 0 28px;
+  padding: 12px 20px;
+  background: #020059;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  color: white;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+}
+
+.must {
+  background-color: #d32f2f;
+}
+
+.should {
+  background-color: #f57c00;
+}
+
+.could {
+  background-color: #fbc02d;
 }
 
 /* ===========================

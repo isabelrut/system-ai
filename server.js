@@ -71,11 +71,73 @@ function escapeHTML(str) {
               .replace(/>/g, "&gt;");
 }
 
-function buildHTML(docs, metadata) {
-  return docs.map((doc, i) => {
-    const m = metadata[i];
+// function buildHTML(docs, metadata) {
+//   return docs.map((doc, i) => {
+//     const m = metadata[i];
 
-    return `
+//     return `
+// <div class="source-card">
+
+//   <div class="source-header">
+//     <strong class="source-title">
+//       ${escapeHTML(m.Name || "Unknown")}
+//     </strong>
+//   </div>
+
+//   <div class="source-meta">
+//     <div>
+//       <span class="label">URL:</span>
+//       <a href="${m.URL || "#"}" target="_blank" rel="noopener noreferrer">
+//         ${escapeHTML(m.URL || "Unknown")}
+//       </a>
+//     </div>
+
+//     <div>
+//       <span class="label">Date published:</span>
+//       ${escapeHTML(String(excelDateToJS(m.Date) || "Unknown"))}
+//     </div>
+
+//     <div>
+//       <span class="label">Date in force:</span>
+//       ${escapeHTML(String(excelDateToJS(m.Date_In_Force) || "Unknown"))}
+//     </div>
+//   </div>
+
+// </div>
+//     `;
+//   }).join("\n\n");
+// }
+
+function buildHTML(docs, metadata) {
+  const seen = new Set();
+
+  return docs
+    .filter((doc, i) => {
+      const m = metadata[i] || {};
+
+      // Build a unique key from the fields that define a duplicate
+      const key = JSON.stringify({
+        Name: m.Name || "",
+        URL: m.URL || "",
+        Date: m.Date || "",
+        Date_In_Force: m.Date_In_Force || ""
+      });
+
+      // Skip if already seen
+      if (seen.has(key)) {
+        return false;
+      }
+
+      seen.add(key);
+      return true;
+    })
+    .map((doc, i) => {
+      // IMPORTANT:
+      // after filter(), indexes no longer match original metadata indexes,
+      // so retrieve metadata differently
+      const m = metadata[docs.indexOf(doc)];
+
+      return `
 <div class="source-card">
 
   <div class="source-header">
@@ -104,8 +166,51 @@ function buildHTML(docs, metadata) {
   </div>
 
 </div>
-    `;
-  }).join("\n\n");
+      `;
+    })
+    .join("\n\n");
+}
+
+// Return start date of legislation
+function getLowestDateInForce(docs, metadata) {
+  let lowestDate = null;
+
+  docs.forEach((doc, i) => {
+    const m = metadata[i] || {};
+
+    // Ignore missing dates
+    if (!m.Date_In_Force || m.Date_In_Force === "N.A.") {
+      return;
+    }
+
+    // Convert Excel date
+    const converted = excelDateToJS(m.Date_In_Force);
+
+    if (!converted) {
+      return;
+    }
+
+    const dateObj = new Date(converted);
+
+    // Ignore invalid dates
+    if (isNaN(dateObj.getTime())) {
+      return;
+    }
+
+    // Keep earliest date
+    if (lowestDate === null || dateObj < lowestDate) {
+      lowestDate = dateObj;
+    }
+  });
+
+  // Return formatted string
+  return lowestDate
+    ? lowestDate.toLocaleDateString("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      })
+    : "N.A.";
 }
 
 app.post(
@@ -150,9 +255,9 @@ app.post(
         metadataB
       );
 
-    console.log("Context A to output:", contextA);
+    // console.log("Context A to output:", contextA);
 
-    console.log("Context B to output:", contextB);
+    // console.log("Context B to output:", contextB);
 
     // Prompt 1
     const completion1 =
@@ -185,6 +290,7 @@ app.post(
             6.  The perspective determines what details should be more extensive, choosing between business (cost-benefits, financial business case), ICT (implementation), and sustainability (how to leverage).
             Note that a good requirement includes the following:   
             -	ID (should be "ID X" with X as a number and first is X=1, allows for quick references);
+            -	Title (short description, should be formatted with previous as "ID X: Title");
             -	Statement (actual requirement): not explicit structure: [Condition] + [Subject] + “must” + [Action] + [Constraint] (with must from the MoSCoW method, that shows difference between requirements and recommendations);
             -	Risk (those existing up to the point of taking action);  
             -	Source (fully include source, link, and quote); 
@@ -246,6 +352,7 @@ ${userInput}
             6.  The perspective determines what details should be more extensive, choosing between business (cost-benefits, financial business case), ICT (implementation), and sustainability (how to leverage).
             Note that a good requirement includes the following:   
             -	ID (should be "ID X" with X as a number and numbering continues from the must requirements, allows for quick references);
+            -	Title (short description, should be formatted with previous as "ID: Title");
             -	Statement (actual requirement): not explicit structure: [Condition] + [Subject] + “should/could” + [Action] + [Constraint] (with should/could from the MoSCoW method, that shows difference between requirements and recommendations, but you do not have to use all verbs);
             -	Risk (those existing up to the point of taking action);  
             -	Source (fully include source, link, and quote); 
@@ -288,6 +395,12 @@ ${completion1.choices[0].message.content}
         metadataB
       );
 
+    const htmlDate = 
+      getLowestDateInForce(
+        docsA,
+        metadataA
+      );
+
     res.json({
 
       commission_only_output:
@@ -303,6 +416,7 @@ ${completion1.choices[0].message.content}
       sources: {
         commission: htmlA,
         full: htmlB,
+        date: htmlDate,
       }
     });
 

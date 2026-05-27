@@ -94,7 +94,7 @@ export async function retrieveContext(
   
   ` + enrichedQuery;
 
-  console.log(enrichedQuery);
+  // console.log(enrichedQuery);
 
   const embedding =
     await embedText(enrichedQuery);
