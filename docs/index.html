@@ -558,6 +558,8 @@ async function submitForm() {
         if (data.error) {
             outputDiv.innerHTML = "Error: " + escapeHTML(data.error);
         } else {
+            console.log("Our output (for decoding statement troubles) is " +escapeHTML(data.commission_only_output));
+
             outputDiv.innerHTML = `
                 ${formatOutput(data.commission_only_output)}
                 <br>
@@ -625,6 +627,8 @@ function addCollapsibles(text) {
         const idLine = parsed.idLine || "Unknown";
         const statement = (parsed.statement || "").trim();
         const risk = (parsed.risk || "").trim();
+
+        console.log("We have a statement that is " + statement);
 
         let hidden = [
             parsed.source ? `Source: ${parsed.source}` : "",
@@ -763,8 +767,9 @@ function parseFields(block) {
         source: "",
         details: "",
         other: []
-    };
-
+    }; 
+    // CHECK WHETHER THIS GUY ABOVE HOLDS UP!!!
+ 
     let currentKey = null;
 
     for (let rawLine of lines) {
