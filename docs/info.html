@@ -7,101 +7,226 @@
     <!-- Prepare html output for html -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify/dist/purify.min.js"></script>
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet"
+href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
 </head>
 
 <body>
 
     <div class="header">
         <h1>DPPathfinder</h1>
-        <p>AI-Driven Support for Implementing<br>the Digital Product Passport</p>
-        <p style="color:grey">Version 1.0 </p>
-        <!-- <p style="color:grey">Version 1.0 <br> <a href="info.html" style="color:white; text-decoration:none">Information page</a> </p> -->
+        <h3>AI-Driven Support for Implementing the Digital Product Passport in your Organization</h3>
+        <p style="color:grey">Created by <strong>Isabel Rutten</strong> as thesis intern of <strong>TNO Vector</strong>.<br>Version 7.0</p>
+
+        <!-- <p><a href="https://single-market-economy.ec.europa.eu/smes/sme-fundamentals/sme-definition_en" target="_blank" style="color:white">Starting in 2024,</a> the European Union will implement a new regulation requiring nearly all products sold in the EU to feature a Digital Product Passport (DPP). This initiative, part of the Ecodesign for Sustainable Products Regulation, aims to enhance transparency across product value chains by providing comprehensive information about each product’s origin, materials, environmental impact, and disposal recommendations. The DPP is designed to close the gap between consumer demands for transparency and the current lack of reliable product data. </p> -->
+
     </div>
 
     <div class="container">
 
-        <p class="intro">
-            Fill in the following forms to find out what <em>you</em> need to do to take part in the DPP ecosystem.
-        </p>
+        <h4>What is the ESPR?</h4>
+        <ul class="icon-list">
+            <li>
+                <span class="material-symbols-outlined">gavel</span>
+                ESPR = <a href="https://green-forum.ec.europa.eu/implementing-ecodesign-sustainable-products-regulation_en" target="_blank">Ecodesign for Sustainable Products Regulation (EU, 2024)</a>.
+            </li>
+            <li>
+                <span class="material-symbols-outlined">eco</span>
+                Creates sustainability requirements for products sold in the EU.
+            </li>
+            <li>
+                <span class="material-symbols-outlined">recycling</span>
+                Aims to make products more durable, repairable, recyclable, and transparent.
+            </li>
+            <li>
+                <span class="material-symbols-outlined">schedule</span>
+                Specific DPP requirements will be introduced product group by product group through delegated acts over the coming years.
+            </li>
+        </ul>
 
-        <div class="form-group">
-            <label for="sector">1. What sector is your organization working in?</label>
-            <input id="sector" type="text" placeholder="Toys sector">
-        </div>
+        <h4>What is a Digital Product Passport (DPP)?</h4>
+        <ul class="icon-list">
+            <li>
+                <span class="material-symbols-outlined">description</span>
+                A digital record containing key product information.
+            </li>
+            <li>
+                <span class="material-symbols-outlined">qr_code</span>
+                Accessible through a QR code, RFID tag, or similar identifier.
+            </li>
+            <li>
+                <span class="material-symbols-outlined">hub</span>
+                Follows the product throughout its lifecycle.
+            </li>
+        </ul>
 
-        <div class="form-group">
-            <label for="activity">2. What does your organization do?</label>
-            <small class="form-text">
-                (e.g. company size, supply chain role)  <br>
-            </small>
-            <input id="activity" type="text" placeholder="Small wooden toys manufacturer of ~20 people">
-        </div>
+        <br>
 
-        <div class="form-group">
-            <label for="maturity">3. What is the digital maturity level of your organization?</label>
-            <small class="form-text">
-                (e.g. process automation, product information storage)  <br>
-            </small>
-            <input id="maturity" type="text" placeholder="We store the basic product information in Excel sheets">
-        </div>
+        <h4>Why is the EU introducing DPPs?</h4>
+        <ul class="icon-list">
+            <li>
+                <span class="material-symbols-outlined">visibility</span>
+                Improve product transparency.
+            </li>
+            <li>
+                <span class="material-symbols-outlined">autorenew</span>
+                Support circular economy goals.
+            </li>
+            <li>
+                <span class="material-symbols-outlined">build_circle</span>
+                Enable repair, reuse, remanufacturing, and recycling.
+            </li>
+            <li>
+                <span class="material-symbols-outlined">verified</span>
+                Help authorities verify compliance.
+            </li>
+        </ul>
 
-        <div class="form-group">
-            <label for="technical">4. How strong is your computer science background?</label>
-            <small class="form-text">
-                (used to customize the output to your background)  <br>
-            </small>
-            <input id="technical" type="text" placeholder="Common ICT knowledge">
-        </div>
+        <h4>What information will a DPP contain?</h4>
+        <ul class="icon-list">
+            <li>
+                <span class="material-symbols-outlined">badge</span>
+                Product identification details.
+            </li>
+            <li>
+                <span class="material-symbols-outlined">inventory_2</span>
+                Material composition.
+            </li>
+            <li>
+                <span class="material-symbols-outlined">eco</span>
+                Carbon footprint and environmental data.
+            </li>
+            <li>
+                <span class="material-symbols-outlined">build</span>
+                Repair and maintenance information.
+            </li>
+            <li>
+                <span class="material-symbols-outlined">verified</span>
+                Compliance and certification data.
+            </li>
+            <li>
+                <span class="material-symbols-outlined">recycling</span>
+                End-of-life and recycling instructions.
+            </li>
+        </ul>
 
-        <div class="form-group">
-            <label for="implementation">5. What level of DPP implementation does your organization aim for?</label>
-            <small class="form-text">
-                (with 1: Entity level compliance, 2: Ecosystem level compliance, <br> 3: Value adding, 4: Competitive advantage) <br>
-            </small>
-            <input id="implementation" type="number" min="1" max="4" placeholder="2">
-        </div>
-        
-        <button class="main-button" onclick="submitForm()">
-            DISCOVER YOUR REQUIREMENTS<br>TO IMPLEMENT THE DPP
+        <br>
+
+        <h4>How does the DPP benefit businesses?</h4>
+        <ul class="icon-list">
+            <li>
+                <span class="material-symbols-outlined">gavel</span>
+                Easier compliance with EU regulations.
+            </li>
+            <li>
+                <span class="material-symbols-outlined">hub</span>
+                Better supply chain visibility.
+            </li>
+            <li>
+                <span class="material-symbols-outlined">analytics</span>
+                Improved sustainability reporting.
+            </li>
+            <li>
+                <span class="material-symbols-outlined">autorenew</span>
+                New opportunities for circular business models.
+            </li>
+        </ul>
+
+        <h4>How does the DPP benefit consumers?</h4>
+        <ul class="icon-list">
+            <li>
+                <span class="material-symbols-outlined">visibility</span>
+                More transparency about products.
+            </li>
+            <li>
+                <span class="material-symbols-outlined">compare_arrows</span>
+                Easier comparison of sustainability claims.
+            </li>
+            <li>
+                <span class="material-symbols-outlined">build_circle</span>
+                Better access to repair and maintenance information.
+            </li>
+            <li>
+                <span class="material-symbols-outlined">verified_user</span>
+                Increased confidence in product information.
+            </li>
+        </ul>
+
+        <br>
+
+        <h4>How will this tool help you?</h4>
+        <ul class="icon-list">
+            <li>
+                <span class="material-symbols-outlined">fact_check</span>
+                Generate a set of relevant DPP requirements for your organization.
+            </li>
+            <li>
+                <span class="material-symbols-outlined">gavel</span>
+                Retrieves relevant EU regulations for your situation.
+            </li>
+            <li>
+                <span class="material-symbols-outlined">rocket_launch</span>
+                Support you in utilizing the DPP to its full potential.
+            </li>
+        </ul>
+
+        <h4>Disclaimer for using the tool:</h4>
+        <ul class="icon-list">
+            <li>
+                <span class="material-symbols-outlined">info</span>
+                The DPP regulations are still <u>subject to change.</u> It is the user's responsibility to keep track of these changes.</li>
+            <li>
+                <span class="material-symbols-outlined">warning</span>
+                This set of requirements has been generated using a Large Language Model. Although it has access to a relevant set of documents about the Digital Product Passport, <u>the used LLM is still sensitive to hallucinations</u>. 
+                </li>
+            <li>
+                <span class="material-symbols-outlined">priority_high</span>
+                Hence, it is recommended to only use these requirements as a starting point in your journey with the DPP. <u>No rights can be derived from this LLM output.</u></li>
+        </ul>
+
+        <button class="main-button" onclick="location.href='index.html'">
+            Start your DPP journey within 5 minutes!
         </button>
 
-        <div id="llm-output" class="llm-output"></div>
+        <!-- <p style="color:grey">Version 1.0 <br> <a href="info.html" style="color:white; text-decoration:none">Information page</a> </p> -->
+<!-- 
+        <small class="form-text" style="display:inline-block;">
+            <b>Each requirement consists of</b> <i> an ID, a statement (the actual requirement itself), a rationale (a compliance-oriented reason behind the requirement), organization benefits (such as improved efficiency), a source (which are either published EU documents or EU working group documents), a priority (based on the MoSCoW method, which uses must/should/could/won't), a risk of implementation (about the possible complications that might occur), and system validation success criteria (to verify whether you adhere to this requirement). </i> <br>
+            <i> Note that the </i> <b>DPP regulations are still bound to change</b>. <i> Hence, it is the users reponsibility to keep track of these changes. </i> <br>
+            <i> This set of requirements has been generated using a Large Language Model. Although the used LLM has access to a relevant set of documents about the Digital Product Passport, it is still sensitive to hallucinations. Hence, it is recommended to only use these requirements as a starting point in your journey with the DPP. </i> <b>No rights can be derived from this LLM output</b>. <br>
+        </small> -->
 
-        <!-- Copy button -->
-        <button id="copy-button" class="copy-button" onclick="copyOutput()" style="display:none;">
-            Copy Requirements
-        </button>
+        <!-- <details class="help-box" style="display:inline-block; color:white;">
+            <summary>What does the Digital Product Passport contain?</summary>
+            <p class="help-text">
+                The DPP will include essential details such as a unique product identifier, compliance documentation, and information on substances of concern. It will also provide user manuals, safety instructions, and guidance on product disposal. By offering a detailed digital record of a product’s lifecycle, the DPP will enhance supply chain management, ensure regulatory compliance, and help companies identify and mitigate risks related to authenticity and environmental impact. 
+            </p>
+        </details>
+        <br>
+        <details class="help-box" style="display:inline-block; color:white;">
+            <summary>How can this tool help me?</summary>
+            <p class="help-text">
+                This tool can generate a custom set of requirements based on your situation. 
+                Those requirements can give you a starting point in working with the Digital Product Passport.
+            </p>
+        </details>
+        <br>
+        <details class="help-box" style="display:inline-block; color:white;">
+            <summary>Disclaimer!</summary>
+            <p class="help-text">
+                Note that the DPP regulations are still bound to change. Hence, it is the users responsibility to keep track of these changes.
+                This set of requirements has been generated using a Large Language Model. Although the used LLM has access to a relevant set of documents about the Digital Product Passport, it is still sensitive to hallucinations. Hence, it is recommended to only use these requirements as a starting point in your journey with the DPP. No rights can be derived from this LLM output.
+
+            </p>
+        </details> -->
 
     </div>
 
-    <!-- MS Forms for Feedback -->
-    <!--
-    <div class="msforms">
-        <iframe id="ms-forms" width="640px" height="480px" src="https://forms.office.com/Pages/ResponsePage.aspx?id=ujzz4PV5YkaC5w5TbNoSMky758Gqz3BGmiRiauivYCNUOTJKSUhWSTFaOFlOVVNDOUlGTlpCTUE3Ni4u&embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border: none; max-width:100%; max-height:100vh" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
-    </div>-->
+
     
     <div class="footer">
-        <p style="color:grey">Version 1.0</p> 
-        Created by <strong>Isabel Rutten</strong> as thesis intern of <strong>TNO Vector</strong>. 
+        <p style="color:grey">Version 7.0</p> 
+        Created by <strong>Isabel Rutten</strong> as thesis intern of <strong>TNO Vector</strong>.
     </div>
-
-
-
-
-</body>
-
-</html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-

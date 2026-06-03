@@ -14,8 +14,11 @@
     <div class="header">
         <h1>DPPathfinder</h1>
         <h3>AI-Driven Support for Implementing the Digital Product Passport in your Organization</h3>
-        <p style="color:grey">Version 6.0 </p>
-        <p><a href="https://single-market-economy.ec.europa.eu/smes/sme-fundamentals/sme-definition_en" target="_blank" style="color:white">Starting in 2024,</a> the European Union will implement a new regulation requiring nearly all products sold in the EU to feature a Digital Product Passport (DPP). This initiative, part of the Ecodesign for Sustainable Products Regulation, aims to enhance transparency across product value chains by providing comprehensive information about each product’s origin, materials, environmental impact, and disposal recommendations. The DPP is designed to close the gap between consumer demands for transparency and the current lack of reliable product data. </p>
+        <p style="color:grey">Created by <strong>Isabel Rutten</strong> as thesis intern of <strong>TNO Vector</strong>.<br>Version 7.0</p>
+        <p>Fill in the following forms to find out how <em>your</em> organization can start participating in the DPP ecosystem.<br>
+            Note that the generated requirements are meant as a starting direction: you should still collaborate with a legal expert to ensure compliance.</p>
+
+        <!-- <p><a href="https://single-market-economy.ec.europa.eu/smes/sme-fundamentals/sme-definition_en" target="_blank" style="color:white">Starting in 2024,</a> the European Union will implement a new regulation requiring nearly all products sold in the EU to feature a Digital Product Passport (DPP). This initiative, part of the Ecodesign for Sustainable Products Regulation, aims to enhance transparency across product value chains by providing comprehensive information about each product’s origin, materials, environmental impact, and disposal recommendations. The DPP is designed to close the gap between consumer demands for transparency and the current lack of reliable product data. </p> -->
 
 
         <!-- <p style="color:grey">Version 1.0 <br> <a href="info.html" style="color:white; text-decoration:none">Information page</a> </p> -->
@@ -26,7 +29,7 @@
             <i> This set of requirements has been generated using a Large Language Model. Although the used LLM has access to a relevant set of documents about the Digital Product Passport, it is still sensitive to hallucinations. Hence, it is recommended to only use these requirements as a starting point in your journey with the DPP. </i> <b>No rights can be derived from this LLM output</b>. <br>
         </small> -->
 
-        <details class="help-box" style="display:inline-block; color:white;">
+        <!-- <details class="help-box" style="display:inline-block; color:white;">
             <summary>What does the Digital Product Passport contain?</summary>
             <p class="help-text">
                 The DPP will include essential details such as a unique product identifier, compliance documentation, and information on substances of concern. It will also provide user manuals, safety instructions, and guidance on product disposal. By offering a detailed digital record of a product’s lifecycle, the DPP will enhance supply chain management, ensure regulatory compliance, and help companies identify and mitigate risks related to authenticity and environmental impact. 
@@ -48,22 +51,37 @@
                 This set of requirements has been generated using a Large Language Model. Although the used LLM has access to a relevant set of documents about the Digital Product Passport, it is still sensitive to hallucinations. Hence, it is recommended to only use these requirements as a starting point in your journey with the DPP. No rights can be derived from this LLM output.
 
             </p>
-        </details>
+        </details> -->
 
     </div>
 
     <div class="container">
 
-        <p class="intro">
+        <!-- <p class="intro">
             Fill in the following forms to find out how <em>your</em> organization can start participating in the DPP ecosystem.<br>
             Note that the generated requirements are meant as a starting direction: you should still collaborate with a legal expert to ensure compliance.
-        </p>
+        </p> -->
+        <!-- <br> -->
+
+        <!-- Copy button -->
+        <button id="info" class="main-button" onclick="location.href='info.html'">
+            Return to Information Page
+        </button>
+
+        <br>
+        <br>
+
 
         <!-- 1. Sector -->
         <div class="form-group">
             <label for="sector">
                 1. What sector is your organization working in?
             </label>
+
+            <p>
+                If your sector is missing, this might mean that your organization is not directly affected yet.<br>
+                Please contact your national regulation authority for further information.
+            </p>
 
             <select id="sector" name="sector">
                 <option value="">Select a sector</option>
@@ -91,11 +109,15 @@
         <!-- 2. Company size -->
         <div class="form-group">
             <label>
-                2. What is your company size according to
+                2. What is your company size?
+            </label>
+
+            <p>
+                Categorization is based on
                 <a href="https://single-market-economy.ec.europa.eu/smes/sme-fundamentals/sme-definition_en" target="_blank">
                     EU regulations
-                </a>?
-            </label>
+                </a>.
+            </p>
 
             <select id="size" name="size"> 
                 <option value="">Select company size</option>
@@ -105,15 +127,15 @@
                 <option value="large">Large (250+ employees)</option>
             </select>
 
-            <details class="help-box">
-                <summary>View full EU SME classification table</summary>
+            <!-- <details class="help-box">
+                <summary><i><u>View full EU SME classification table</u></i></summary>
 
                 <img
                     src="SME-table.png"
                     alt="SME sizes according to EU regulations"
                     class="help-image"
                 >
-            </details>
+            </details> -->
         </div>
 
 
@@ -122,20 +144,14 @@
             <label for="role">
                 3. What role does your organization take in the
                 <a href="https://coe-dsc.nl/wp-content/uploads/2026/01/Dutch-Digital-Product-Passport-Landscape-Scan-Version-1.0-final-1.pdf" target="_blank">
-                    DPP ecosystem
-                </a>?
+                    DPP ecosystem?
+                </a>
             </label>
 
-            <select id="role" name="role">
-                <option value="">Select a role</option>
-                <option value="Economic operator">Manufacturer or Importer</option>
-                <option value="Supplier">Supplier</option>
-                <option value="Retailer">Retailer</option>
-                <option value="Independent operator">Repairer or Waste Manager</option>
-            </select>
+            <!-- <p>Note that this tool is currently limited to the supply chain network layer.</p> -->
 
             <details class="help-box">
-                <summary>View DPP ecosystem framework</summary>
+                <summary><i><u>View DPP ecosystem framework</u></i></summary>
 
                 <img
                     src="Ecosystem-framework.png"
@@ -143,6 +159,26 @@
                     class="help-image"
                 >
             </details>
+
+            <p>Note that this tool is currently limited to the supply chain network layer.</p>
+
+            <select id="role" name="role">
+                <option value="">Select a role</option>
+                <option value="Economic operator">Manufacturer/Importer (Economic Operator)</option>
+                <option value="Supplier">Supplier</option>
+                <option value="Retailer">Retailer</option>
+                <option value="Independent operator">Repairer/Waste Manager (Independent Operator)</option>
+            </select>
+
+            <!-- <details class="help-box">
+                <summary><i><u>View DPP ecosystem framework</u></i></summary>
+
+                <img
+                    src="Ecosystem-framework.png"
+                    alt="DPP Ecosystem Framework"
+                    class="help-image"
+                >
+            </details> -->
         </div>
 
 
@@ -157,34 +193,55 @@
                 4. How far along are you in your digitalization journey?
             </label>
 
-            <select id="maturity" name="maturity">
-                <option value="">Select maturity level</option>
-                <option value="incomplete">Digital tools are used in separate areas, but there is no clear organization-wide approach.</option>
-                <option value="performed">The organization has started planning and discussing how to improve digital ways of working.</option>
-                <option value="managed">Important daily processes are supported by digital systems and tools.</option>
-                <option value="established">Digital ways of working are clear, consistent, and followed across the organization.</option>
-                <option value="predictable">The organization uses data and real-time insights to measure performance and make improvements.</option>
-                <option value="optimizing">The organization continuously improves, innovates, and adapts using digital technology and data.</option>
-            </select>
 
             <details class="help-box">
-                <summary>How are the maturity levels defined?</summary>
+                <summary><i><u>How are the maturity levels defined? (from least to most advanced)</u></i></summary>
 
                 <p class="help-text">
-                    <strong>Incomplete:</strong> No digitalization activities.<br>
-                    <strong>Performed:</strong> Initial digital planning exists.<br>
-                    <strong>Managed:</strong> Existing processes are digitized.<br>
-                    <strong>Established:</strong> Transformation follows standards.<br>
-                    <strong>Predictable:</strong> Real-time analytics and quantitative optimization.<br>
-                    <strong>Optimizing:</strong> Continuous innovation and improvement.
+                    <strong>Incomplete:</strong> Digital tools are used in separate areas, but there is no clear organization-wide approach. <br>
+                    <strong>Performed:</strong> The organization has started planning and discussing how to improve digital ways of working.<br>
+                    <strong>Managed:</strong> Important daily processes are supported by digital systems and tools.<br>
+                    <strong>Established:</strong> Digital ways of working are clear, consistent, and followed across the organization.<br>
+                    <strong>Predictable:</strong> The organization uses data and real-time insights to measure performance and make improvements.<br>
+                    <strong>Optimizing:</strong> The organization continuously improves, innovates, and adapts using digital technology and data.
+                </p>
+
+                <!-- <img
+                    src="digital-maturity-model.png"
+                    alt="Digital Maturity Model"
+                    class="help-image small-image"
+                > -->
+            </details>
+            <br>
+
+            <select id="maturity" name="maturity">
+                <option value="">Select maturity level</option>
+                <option value="incomplete">Incomplete</option>
+                <option value="performed">Performed</option>
+                <option value="managed">Managed</option>
+                <option value="established">Established</option>
+                <option value="predictable">Predictable</option>
+                <option value="optimizing">Optimizing</option>
+            </select>
+<!-- 
+            <details class="help-box">
+                <summary><i><u>How are the maturity levels defined? (from least to most advanced)</u></i></summary>
+
+                <p class="help-text">
+                    <strong>Incomplete:</strong> Digital tools are used in separate areas, but there is no clear organization-wide approach. <br>
+                    <strong>Performed:</strong> The organization has started planning and discussing how to improve digital ways of working.<br>
+                    <strong>Managed:</strong> Important daily processes are supported by digital systems and tools.<br>
+                    <strong>Established:</strong> Digital ways of working are clear, consistent, and followed across the organization.<br>
+                    <strong>Predictable:</strong> The organization uses data and real-time insights to measure performance and make improvements.<br>
+                    <strong>Optimizing:</strong> The organization continuously improves, innovates, and adapts using digital technology and data.
                 </p>
 
                 <img
                     src="digital-maturity-model.png"
                     alt="Digital Maturity Model"
                     class="help-image small-image"
-                >
-            </details>
+                > -->
+            <!-- </details>  -->
         </div>
 
 
@@ -194,23 +251,48 @@
                 5. What are your organization’s goals for DPP implementation?
             </label>
 
+            <details class="help-box">
+                <summary><i><u>How are the implementation goals defined? (from least to most advanced)</u></i></summary>
+
+                <p class="help-text">
+                    <strong>Entity level compliance:</strong> Accept DPP in processes and <br>
+                    <strong>Ecosystem level compliance:</strong> Include DPP with supply-chain support, as ecosystem accepted and audited DPP regulation<br>
+                    <strong>Value adding:</strong> Leverage the DPP in product proposition for value creation<br>
+                    <strong>Competitive advantage:</strong> Be a key player with the DPP through innovation and collaboration<br>
+                </p>
+            </details>
+
+            <br>
+            <!-- <p>From basic compliance to advanced integration:</p> -->
+
             <select id="implementation" name="implementation">
                 <option value="">Select implementation level</option>
-                <option value="two">Accept DPP in processes</option>
-                <option value="three">Include DPP with supply-chain support</option>
-                <option value="four">Leverage the DPP in product proposition</option>
-                <option value="five">Be a key player with the DPP</option>
+                <option value="two">Entity level compliance</option>
+                <option value="three">Ecosystem level compliance</option>
+                <option value="four">Value adding</option>
+                <option value="five">Competitive advantage</option>
             </select>
 
-            <details class="help-box">
-                <summary>View DPP maturity model</summary>
+            <!-- <details class="help-box">
+                <summary><i><u>How are the implementation goals defined? (from least to most advanced)</u></i></summary>
 
-                <img
+                <p class="help-text">
+                    <strong>Entity level compliance:</strong> Accept DPP in processes and <br>
+                    <strong>Ecosystem level compliance:</strong> Include DPP with supply-chain support, as ecosystem accepted and audited DPP regulation<br>
+                    <strong>Value adding:</strong> Leverage the DPP in product proposition for value creation<br>
+                    <strong>Competitive advantage:</strong> Be a key player with the DPP through innovation and collaboration<br>
+                </p>
+            </details> -->
+
+            <!-- <details class="help-box">
+                <summary><i><u>View DPP maturity model</u></i></summary>-->
+
+                <!-- <img
                     src="DPP-maturity-model.png"
                     alt="DPP Maturity Model"
                     class="help-image"
-                >
-            </details>
+                > -->
+            <!-- </details> -->
         </div>
 
 
@@ -219,6 +301,8 @@
             <label for="perspective">
                 6. What perspective are you most interested in?
             </label>
+
+            <p>This will influence additional details for the requirements.</p>
 
             <select id="perspective" name="perspective">
                 <option value="">Select a perspective</option>
@@ -288,7 +372,7 @@
     </div>
     
     <div class="footer">
-        <p style="color:grey">Version 6.0</p> 
+        <p style="color:grey">Version 7.0</p> 
         Created by <strong>Isabel Rutten</strong> as thesis intern of <strong>TNO Vector</strong>.
     </div>
 
