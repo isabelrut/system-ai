@@ -291,7 +291,7 @@ app.post(
             Note that a good requirement includes the following:   
             -	ID (should be "ID X" with X as a number and first is X=1, allows for quick references);
             -	Title (short description, should be formatted with previous as "ID X: Title");
-            -	Statement (actual requirement): not explicit structure: [Condition] + [Subject] + “must” + [Action] + [Constraint] (with must from the MoSCoW method, that shows difference between requirements and recommendations);
+            -	Statement (actual requirement, but include "Statement:"): not explicit structure: [Condition] + [Subject] + “must” + [Action] + [Constraint] (with must from the MoSCoW method, that shows difference between requirements and recommendations);
             -	Risk (those existing up to the point of taking action);  
             -	Source (fully include source, link, and quote); 
             -	Details (should contain relevant information based on the perspective, e.g. financial details and business benefits for business, or technology implementation and validation criteria for ICT).
