@@ -353,7 +353,7 @@ ${userInput}
             Note that a good requirement includes the following:   
             -	ID (should be "ID X" with X as a number and numbering continues from the must requirements, allows for quick references);
             -	Title (short description, should be formatted with previous as "ID: Title");
-            -	Statement (actual requirement): not explicit structure: [Condition] + [Subject] + “should/could” + [Action] + [Constraint] (with should/could from the MoSCoW method, that shows difference between requirements and recommendations, but you do not have to use all verbs);
+            -	Statement (actual requirement, but include "Statement:"): not explicit structure: [Condition] + [Subject] + “should/could” + [Action] + [Constraint] (with should/could from the MoSCoW method, that shows difference between requirements and recommendations, but you do not have to use all verbs);
             -	Risk (those existing up to the point of taking action);  
             -	Source (fully include source, link, and quote); 
             -	Details (should contain relevant information based on the perspective, e.g. financial details and business benefits for business, or technology implementation and validation criteria for ICT).
